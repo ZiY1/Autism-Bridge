@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "104985150154",
+    "firebase_url": "https://autism-bridge-default-rtdb.firebaseio.com",
+    "project_id": "autism-bridge",
+    "storage_bucket": "autism-bridge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104985150154:android:1b8faede2a9706a5922a33",
+        "android_client_info": {
+          "package_name": "org.autismbridge.autism_bridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104985150154-8l3voghsbupv4aa50r94n8irk5jdaej3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfnCRvDKucxQ9DoYuPusw_r0DZrQVHJaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104985150154-8l3voghsbupv4aa50r94n8irk5jdaej3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

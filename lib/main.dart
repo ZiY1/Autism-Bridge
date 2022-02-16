@@ -38,7 +38,7 @@ class AutismBridgeApp extends StatelessWidget {
             DeviceType deviceType) {
           return MaterialApp(
             // /// One small problem of this responsive wrapper is the background is shown
-            // /// before the main screen (sizer is a better solution).
+            // /// before the main screen (using sizer package is a better solution).
             // builder: (context, widget) => ResponsiveWrapper.builder(
             //   ClampingScrollWrapper.builder(context, widget!),
             //   maxWidth: 1200,

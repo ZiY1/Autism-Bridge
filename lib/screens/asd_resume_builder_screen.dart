@@ -16,6 +16,7 @@ import 'package:autism_bridge/screens/asd_professional_summary_screen.dart';
 import 'package:autism_bridge/screens/asd_skills_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
+import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -89,6 +90,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
   bool isAutismChallengeComplete = false;
 
   List<AutismChallenge?>? userAutismChallengeList;
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -509,68 +512,71 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                     horizontal: 1.2.h,
                     vertical: 1.5.h,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                userPersonalDetails == null
-                                    ? 'Personal Details'
-                                    : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
-                                style: TextStyle(
-                                  color: kTitleBlack,
-                                  fontSize: 15.sp,
+                  child: IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  userPersonalDetails == null
+                                      ? 'Personal Details'
+                                      : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
+                                  style: TextStyle(
+                                    color: kTitleBlack,
+                                    fontSize: 15.sp,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 1.w,
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  personalDetailsBtnOnPressed(context);
-                                },
-                                icon: const Icon(
-                                  Icons.edit_outlined,
-                                  color: kTitleBlack,
-                                  size: 23.5,
+                                SizedBox(
+                                  width: 5.w,
                                 ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            userPersonalDetails == null
-                                ? 'Wanted Job Title • City'
-                                : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
-                            style: TextStyle(
-                                color: kRegistrationSubtitleGrey,
-                                fontSize: 10.sp),
-                          ),
-                        ],
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5.0), //or 15.0
-                        child: Container(
-                          height: 9.h,
-                          width: 9.h,
-                          color: kBackgroundRiceWhite,
-                          child: userPersonalDetails == null
-                              ? const Icon(
-                                  CupertinoIcons.person_alt,
-                                  color: Color(0xFFBEC4D5),
-                                  size: 40.0,
-                                )
-                              : FittedBox(
-                                  child: Image.file(
-                                      userPersonalDetails!.profileImage),
-                                  fit: BoxFit.fill,
+                                RoundedIconContainer(
+                                  onPressed: () {
+                                    personalDetailsBtnOnPressed(context);
+                                  },
+                                  childIcon: const Icon(
+                                    Icons.edit_rounded,
+                                    size: 18,
+                                    color: kClickableIconBlue,
+                                  ),
                                 ),
+                              ],
+                            ),
+                            Text(
+                              userPersonalDetails == null
+                                  ? 'Wanted Job Title • City'
+                                  : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
+                              style: TextStyle(
+                                  color: kRegistrationSubtitleGrey,
+                                  fontSize: 10.sp),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(5.0), //or 15.0
+                          child: Container(
+                            height: 9.h,
+                            width: 9.h,
+                            color: kBackgroundRiceWhite,
+                            child: userPersonalDetails == null
+                                ? const Icon(
+                                    CupertinoIcons.person_alt,
+                                    color: Color(0xFFBEC4D5),
+                                    size: 40.0,
+                                  )
+                                : FittedBox(
+                                    child: Image.file(
+                                        userPersonalDetails!.profileImage),
+                                    fit: BoxFit.fill,
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -599,15 +605,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               fontSize: 14.sp,
                             ),
                           ),
-                          IconButton(
-                            alignment: Alignment.centerRight,
+                          RoundedIconContainer(
                             onPressed: () {
                               professionalSummaryBtnOnPressed(context);
                             },
-                            icon: const Icon(
-                              Icons.edit_outlined,
-                              color: kTitleBlack,
-                              size: 22.5,
+                            childIcon: const Icon(
+                              Icons.edit_rounded,
+                              size: 18,
+                              color: kClickableIconBlue,
                             ),
                           ),
                         ],
@@ -656,15 +661,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               fontSize: 14.sp,
                             ),
                           ),
-                          IconButton(
-                            alignment: Alignment.centerRight,
+                          RoundedIconContainer(
                             onPressed: () {
                               employmentHistoryAddBtnOnPressed(context);
                             },
-                            icon: const Icon(
-                              Icons.add_circle_outline,
-                              color: kTitleBlack,
-                              size: 22.5,
+                            childIcon: const Icon(
+                              Icons.add_rounded,
+                              size: 26,
+                              color: kClickableIconBlue,
                             ),
                           ),
                         ],
@@ -766,15 +770,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               fontSize: 14.sp,
                             ),
                           ),
-                          IconButton(
-                            alignment: Alignment.centerRight,
+                          RoundedIconContainer(
                             onPressed: () {
                               educationAddBtnOnPressed(context);
                             },
-                            icon: const Icon(
-                              Icons.add_circle_outline,
-                              color: kTitleBlack,
-                              size: 22.5,
+                            childIcon: const Icon(
+                              Icons.add_rounded,
+                              size: 26,
+                              color: kClickableIconBlue,
                             ),
                           ),
                         ],
@@ -873,15 +876,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               fontSize: 14.sp,
                             ),
                           ),
-                          IconButton(
-                            alignment: Alignment.centerRight,
+                          RoundedIconContainer(
                             onPressed: () {
                               skillAddBtnOnPressed(context);
                             },
-                            icon: const Icon(
-                              Icons.add_circle_outline,
-                              color: kTitleBlack,
-                              size: 22.5,
+                            childIcon: const Icon(
+                              Icons.add_rounded,
+                              size: 26,
+                              color: kClickableIconBlue,
                             ),
                           ),
                         ],
@@ -980,15 +982,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               fontSize: 14.sp,
                             ),
                           ),
-                          IconButton(
-                            alignment: Alignment.centerRight,
+                          RoundedIconContainer(
                             onPressed: () {
                               autismChallengeAddBtnOnPressed(context);
                             },
-                            icon: const Icon(
-                              Icons.add_circle_outline,
-                              color: kTitleBlack,
-                              size: 22.5,
+                            childIcon: const Icon(
+                              Icons.add_rounded,
+                              size: 26,
+                              color: kClickableIconBlue,
                             ),
                           ),
                         ],
@@ -1076,6 +1077,10 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             height: 6.25.h,
             child: ResumeBuilderButton(
               onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
+
                 final Resume userResume = Resume(
                   userPersonalDetails: userPersonalDetails,
                   userProfessionalSummary: userProfessionalSummary,
@@ -1087,23 +1092,39 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
 
                 final resumePdfFile = await ResumePdfApi.generate(userResume);
 
+                setState(() {
+                  isLoading = false;
+                });
+
                 //PdfApi.openFile(resumePdfFile);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        AsdPdfViewerScreen(file: resumePdfFile),
+                    builder: (context) => AsdPdfViewerScreen(
+                      file: resumePdfFile,
+                      userResume: userResume,
+                    ),
                   ),
                 );
               },
               isHollow: false,
-              child: Text(
-                'Resume Preview',
-                style: TextStyle(
-                  fontSize: 12.5.sp,
-                  color: Colors.white,
-                ),
-              ),
+              child: isLoading
+                  ? SizedBox(
+                      width: 3.18.h,
+                      height: 3.18.h,
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(
+                          Colors.white,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      'Resume Preview',
+                      style: TextStyle(
+                        fontSize: 12.5.sp,
+                        color: Colors.white,
+                      ),
+                    ),
             ),
           ),
         ),

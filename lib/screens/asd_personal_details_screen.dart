@@ -430,7 +430,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0), //or 15.0
+                          borderRadius: BorderRadius.circular(5.0), //or 15.0
                           child: Container(
                             height: 8.h,
                             width: 8.h,

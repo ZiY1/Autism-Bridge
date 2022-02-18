@@ -13,12 +13,12 @@ class MyCardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF8A959E).withOpacity(0.2),
-            spreadRadius: 3.0,
-            blurRadius: 5.0,
+            spreadRadius: 0,
+            blurRadius: 30.0,
             //offset: Offset(0, 3), // changes position of shadow
           ),
         ],

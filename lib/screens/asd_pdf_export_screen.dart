@@ -10,9 +10,12 @@ import '../constants.dart';
 class AsdPdfExportScreen extends StatefulWidget {
   final File file;
 
+  final String fileName;
+
   const AsdPdfExportScreen({
     Key? key,
     required this.file,
+    required this.fileName,
   }) : super(key: key);
 
   @override
@@ -56,7 +59,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 4,
+                    flex: 5,
                     child: TextFormField(
                       onChanged: (email) {
                         if (!EmailValidator.validate(email)) {
@@ -115,7 +118,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 2.h,
+                    width: 1.5.h,
                   ),
                   Expanded(
                     flex: 1,
@@ -168,7 +171,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                   children: [
                     Image.asset(
                       'images/pdf_icon.png',
-                      scale: 4.2,
+                      scale: 4.0,
                     ),
                     SizedBox(width: 3.w),
                     Column(
@@ -176,7 +179,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Ziyi_Huang_resume.pdf',
+                          widget.fileName,
                           style:
                               TextStyle(color: Colors.black, fontSize: 12.5.sp),
                         ),

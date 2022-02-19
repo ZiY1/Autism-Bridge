@@ -81,6 +81,7 @@ flutter:
 
   assets:
     - images/
+    - images/Autism_Bridge_Icon_Logo.png
 
   fonts:
     - family: Poppins

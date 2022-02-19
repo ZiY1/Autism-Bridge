@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_pdf_export_screen.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,12 @@ import '../constants.dart';
 class AsdPdfViewerScreen extends StatefulWidget {
   final File file;
 
+  final Resume userResume;
+
   const AsdPdfViewerScreen({
     Key? key,
     required this.file,
+    required this.userResume,
   }) : super(key: key);
 
   @override
@@ -44,7 +48,12 @@ class _AsdPdfViewerScreenState extends State<AsdPdfViewerScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AsdPdfExportScreen(file: widget.file),
+                    builder: (context) => AsdPdfExportScreen(
+                      file: widget.file,
+                      fileName: widget.userResume.userPersonalDetails == null
+                          ? 'my_resume.pdf'
+                          : '${widget.userResume.userPersonalDetails!.firstName}_${widget.userResume.userPersonalDetails!.lastName}_resume.pdf',
+                    ),
                   ),
                 );
               },

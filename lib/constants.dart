@@ -17,3 +17,5 @@ const kCupertinoPickerBackgroundGrey = Color(0xFFD4D8DE);
 const kCupertinoPickerTopBarWhite = Color(0xFFF2F2F7);
 
 const kCupertinoPickerButtonBlue = Color(0xFF007AFF);
+
+const kClickableIconBlue = Color(0xFF4267B2);

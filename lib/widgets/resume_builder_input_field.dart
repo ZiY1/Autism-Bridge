@@ -65,25 +65,25 @@ class ResumeBuilderInputField extends StatelessWidget {
                 horizontal: 2.h,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(5.0),
                 borderSide: const BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(5.0),
                 borderSide: const BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(5.0),
                 borderSide: const BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(5.0),
                 borderSide: const BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),

@@ -55,7 +55,7 @@ class ResumeBuilderPicker extends StatelessWidget {
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
                 overlayColor: MaterialStateColor.resolveWith(

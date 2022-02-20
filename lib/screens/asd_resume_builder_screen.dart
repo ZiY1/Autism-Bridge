@@ -445,134 +445,212 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundRiceWhite,
-      appBar: AppBar(
-        elevation: 0.0,
-        // backgroundColor: kBackgroundRiceWhite,
-        backgroundColor: kAutismBridgeBlue,
-        title: const Text(
-          'Resume Builder',
-          // style: TextStyle(
-          //   fontWeight: FontWeight.w900,
-          //   letterSpacing: 0.6,
-          // ),
+    return Container(
+      //TODO: using linear gradient color rather than a fixed appbar color, is it better or not?
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [
+            0.01,
+            0.25,
+          ],
+          colors: [
+            Color(0xFFddeaf6),
+            //kAutismBridgeBlue,
+            kBackgroundRiceWhite,
+          ],
         ),
       ),
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(
-            horizontal: 1.5.h,
-            vertical: 0.5.h,
+      child: Scaffold(
+        //backgroundColor: kBackgroundRiceWhite,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          //backgroundColor: kBackgroundRiceWhite,
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Resume Builder',
+            style: TextStyle(
+                //fontWeight: FontWeight.w600,
+                //letterSpacing: 0.6,
+                color: kTitleBlack),
           ),
-          children: [
-            Padding(
-                padding: EdgeInsets.only(left: 1.h, top: 2.h),
-                child: Row(
-                  children: [
-                    Text(
-                      '${double.parse((profileCompleteness * 100).toStringAsFixed(1))} % ',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: kAutismBridgeBlue,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      ' Profile Completeness',
-                      style: TextStyle(
-                        fontSize: 9.5.sp,
-                        color: const Color(0xFF808080),
-                      ),
-                    ),
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.only(bottom: 1.5.h),
-              child: LinearPercentIndicator(
-                //backgroundColor: const Color(0xFFEFF2F9),
-                //width: MediaQuery.of(context).size.width - 40,
-                animation: true,
-                lineHeight: 1.h,
-                animationDuration: 900,
-                percent: profileCompleteness,
-                //center: Text("80.0%"),
-                barRadius: const Radius.circular(5.0),
-                progressColor: kAutismBridgeBlue,
-              ),
+          iconTheme: const IconThemeData(
+            color: kTitleBlack,
+          ),
+        ),
+        body: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: 1.5.h,
+              vertical: 0.5.h,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(left: 1.h, top: 2.h),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${double.parse((profileCompleteness * 100).toStringAsFixed(1))} % ',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: kAutismBridgeBlue,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        ' Profile Completeness',
+                        style: TextStyle(
+                          fontSize: 9.5.sp,
+                          color: const Color(0xFF808080),
+                        ),
+                      ),
+                    ],
+                  )),
+              Padding(
+                padding: EdgeInsets.only(bottom: 1.5.h),
+                child: LinearPercentIndicator(
+                  backgroundColor: kAutismBridgeBlue.withOpacity(0.17),
+                  //width: MediaQuery.of(context).size.width - 40,
+                  animation: true,
+                  lineHeight: 1.h,
+                  animationDuration: 900,
+                  percent: profileCompleteness,
+                  //center: Text("80.0%"),
+                  barRadius: const Radius.circular(5.0),
+                  progressColor: kAutismBridgeBlue,
+                ),
               ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 1.2.h,
-                    vertical: 1.5.h,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 1.2.h,
+                      vertical: 1.5.h,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    userPersonalDetails == null
+                                        ? 'Personal Details'
+                                        : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
+                                    style: TextStyle(
+                                      color: kTitleBlack,
+                                      fontSize: 15.sp,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  RoundedIconContainer(
+                                    onPressed: () {
+                                      personalDetailsBtnOnPressed(context);
+                                    },
+                                    childIcon: const Icon(
+                                      Icons.edit_rounded,
+                                      size: 18,
+                                      color: kClickableIconBlue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                userPersonalDetails == null
+                                    ? 'Wanted Job Title • City'
+                                    : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
+                                style: TextStyle(
+                                    color: kRegistrationSubtitleGrey,
+                                    fontSize: 10.sp),
+                              ),
+                            ],
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0), //or 15.0
+                            child: Container(
+                              height: 9.h,
+                              width: 9.h,
+                              color: kBackgroundRiceWhite,
+                              child: userPersonalDetails == null
+                                  ? const Icon(
+                                      CupertinoIcons.person_alt,
+                                      color: Color(0xFFBEC4D5),
+                                      size: 40.0,
+                                    )
+                                  : FittedBox(
+                                      child: Image.file(
+                                          userPersonalDetails!.profileImage),
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 1.2.h,
+                      right: 1.2.h,
+                      bottom: 1.5.h,
+                    ),
+                    child: Column(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  userPersonalDetails == null
-                                      ? 'Personal Details'
-                                      : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
-                                  style: TextStyle(
-                                    color: kTitleBlack,
-                                    fontSize: 15.sp,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                RoundedIconContainer(
-                                  onPressed: () {
-                                    personalDetailsBtnOnPressed(context);
-                                  },
-                                  childIcon: const Icon(
-                                    Icons.edit_rounded,
-                                    size: 18,
-                                    color: kClickableIconBlue,
-                                  ),
-                                ),
-                              ],
-                            ),
                             Text(
-                              userPersonalDetails == null
-                                  ? 'Wanted Job Title • City'
-                                  : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
+                              'Professional Summary',
                               style: TextStyle(
-                                  color: kRegistrationSubtitleGrey,
-                                  fontSize: 10.sp),
+                                color: kTitleBlack,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            RoundedIconContainer(
+                              onPressed: () {
+                                professionalSummaryBtnOnPressed(context);
+                              },
+                              childIcon: const Icon(
+                                Icons.edit_rounded,
+                                size: 18,
+                                color: kClickableIconBlue,
+                              ),
                             ),
                           ],
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0), //or 15.0
-                          child: Container(
-                            height: 9.h,
-                            width: 9.h,
-                            color: kBackgroundRiceWhite,
-                            child: userPersonalDetails == null
-                                ? const Icon(
-                                    CupertinoIcons.person_alt,
-                                    color: Color(0xFFBEC4D5),
-                                    size: 40.0,
-                                  )
-                                : FittedBox(
-                                    child: Image.file(
-                                        userPersonalDetails!.profileImage),
-                                    fit: BoxFit.fill,
-                                  ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            userProfessionalSummary == null
+                                ? 'Add your professional summary...'
+                                : userProfessionalSummary!.summaryText,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: kRegistrationSubtitleGrey,
+                                fontSize: 10.sp),
                           ),
                         ),
                       ],
@@ -580,551 +658,503 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
-              ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.2.h,
-                    right: 1.2.h,
-                    bottom: 1.5.h,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Professional Summary',
-                            style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 14.sp,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 1.2.h,
+                      right: 1.2.h,
+                      bottom: 1.5.h,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Employment History',
+                              style: TextStyle(
+                                color: kTitleBlack,
+                                fontSize: 14.sp,
+                              ),
                             ),
-                          ),
-                          RoundedIconContainer(
-                            onPressed: () {
-                              professionalSummaryBtnOnPressed(context);
-                            },
-                            childIcon: const Icon(
-                              Icons.edit_rounded,
-                              size: 18,
-                              color: kClickableIconBlue,
+                            RoundedIconContainer(
+                              onPressed: () {
+                                employmentHistoryAddBtnOnPressed(context);
+                              },
+                              childIcon: const Icon(
+                                Icons.add_rounded,
+                                size: 26,
+                                color: kClickableIconBlue,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          userProfessionalSummary == null
-                              ? 'Add your professional summary...'
-                              : userProfessionalSummary!.summaryText,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: kRegistrationSubtitleGrey,
-                              fontSize: 10.sp),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
-              ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.2.h,
-                    right: 1.2.h,
-                    bottom: 1.5.h,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Employment History',
-                            style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          RoundedIconContainer(
-                            onPressed: () {
-                              employmentHistoryAddBtnOnPressed(context);
-                            },
-                            childIcon: const Icon(
-                              Icons.add_rounded,
-                              size: 26,
-                              color: kClickableIconBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      userEmploymentHistoryList!.isNotEmpty
-                          ? ListView.builder(
-                              itemBuilder: (context, index) {
-                                final EmploymentHistory?
-                                    currentEmploymentHistory =
-                                    userEmploymentHistoryList![index];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            currentEmploymentHistory!.employer,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTitleBlack,
-                                              fontSize: 11.5.sp,
+                        userEmploymentHistoryList!.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  final EmploymentHistory?
+                                      currentEmploymentHistory =
+                                      userEmploymentHistoryList![index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              currentEmploymentHistory!
+                                                  .employer,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: kTitleBlack,
+                                                fontSize: 11.5.sp,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            '${currentEmploymentHistory.jobTitle} • ${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color:
-                                                    kRegistrationSubtitleGrey,
-                                                fontSize: 9.5.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                      alignment: Alignment.centerRight,
-                                      onPressed: () {
-                                        employmentHistoryUpdateBtnOnPressed(
-                                          context: context,
-                                          subCollectionId:
-                                              currentEmploymentHistory
-                                                  .subCollectionId,
-                                          listIndex: index,
-                                        );
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: kRegistrationSubtitleGrey,
-                                        size: 23.5,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: userEmploymentHistoryList!.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                            )
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Create your first employment history . . .',
-                                style: TextStyle(
-                                    color: kRegistrationSubtitleGrey,
-                                    fontSize: 9.5.sp),
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
-              ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.2.h,
-                    right: 1.2.h,
-                    bottom: 1.5.h,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Education',
-                            style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          RoundedIconContainer(
-                            onPressed: () {
-                              educationAddBtnOnPressed(context);
-                            },
-                            childIcon: const Icon(
-                              Icons.add_rounded,
-                              size: 26,
-                              color: kClickableIconBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      userEducationList!.isNotEmpty
-                          ? ListView.builder(
-                              itemBuilder: (context, index) {
-                                final Education? currentEducation =
-                                    userEducationList![index];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            currentEducation!.school,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTitleBlack,
-                                              fontSize: 11.5.sp,
+                                            Text(
+                                              '${currentEmploymentHistory.jobTitle} • ${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color:
+                                                      kRegistrationSubtitleGrey,
+                                                  fontSize: 9.5.sp),
                                             ),
-                                          ),
-                                          Text(
-                                            '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color:
-                                                    kRegistrationSubtitleGrey,
-                                                fontSize: 9.5.sp),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      alignment: Alignment.centerRight,
-                                      onPressed: () {
-                                        educationUpdateBtnOnPressed(
-                                            context: context,
-                                            subCollectionId: currentEducation
-                                                .subCollectionId,
-                                            listIndex: index);
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: kRegistrationSubtitleGrey,
-                                        size: 23.5,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: userEducationList!.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                            )
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Create your first education . . .',
-                                style: TextStyle(
-                                    color: kRegistrationSubtitleGrey,
-                                    fontSize: 9.5.sp),
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
-              ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.2.h,
-                    right: 1.2.h,
-                    bottom: 1.5.h,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Skills',
-                            style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          RoundedIconContainer(
-                            onPressed: () {
-                              skillAddBtnOnPressed(context);
-                            },
-                            childIcon: const Icon(
-                              Icons.add_rounded,
-                              size: 26,
-                              color: kClickableIconBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      userSkillList!.isNotEmpty
-                          ? ListView.builder(
-                              itemBuilder: (context, index) {
-                                final Skill? currentSkill =
-                                    userSkillList![index];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            currentSkill!.skillName,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTitleBlack,
-                                              fontSize: 11.5.sp,
-                                            ),
-                                          ),
-                                          Text(
-                                            currentSkill.skillLevel,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color:
-                                                    kRegistrationSubtitleGrey,
-                                                fontSize: 9.5.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                      alignment: Alignment.centerRight,
-                                      onPressed: () {
-                                        skillUpdateBtnOnPressed(
+                                      IconButton(
+                                        alignment: Alignment.centerRight,
+                                        onPressed: () {
+                                          employmentHistoryUpdateBtnOnPressed(
                                             context: context,
                                             subCollectionId:
-                                                currentSkill.subCollectionId,
-                                            listIndex: index);
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: kRegistrationSubtitleGrey,
-                                        size: 23.5,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: userSkillList!.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                            )
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Create your first skill . . .',
-                                style: TextStyle(
-                                    color: kRegistrationSubtitleGrey,
-                                    fontSize: 9.5.sp),
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 0.8.h,
-                vertical: 1.h,
-              ),
-              child: MyCardWidget(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.2.h,
-                    right: 1.2.h,
-                    bottom: 1.5.h,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Autism Challenges',
-                            style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          RoundedIconContainer(
-                            onPressed: () {
-                              autismChallengeAddBtnOnPressed(context);
-                            },
-                            childIcon: const Icon(
-                              Icons.add_rounded,
-                              size: 26,
-                              color: kClickableIconBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      userAutismChallengeList!.isNotEmpty
-                          ? ListView.builder(
-                              itemBuilder: (context, index) {
-                                final AutismChallenge? currentAutismChallenge =
-                                    userAutismChallengeList![index];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            currentAutismChallenge!
-                                                .challengeName,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTitleBlack,
-                                              fontSize: 11.5.sp,
-                                            ),
-                                          ),
-                                          Text(
-                                            currentAutismChallenge
-                                                .challengeLevel,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color:
-                                                    kRegistrationSubtitleGrey,
-                                                fontSize: 9.5.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                      alignment: Alignment.centerRight,
-                                      onPressed: () {
-                                        autismChallengeUpdateBtnOnPressed(
-                                            context: context,
-                                            subCollectionId:
-                                                currentAutismChallenge
+                                                currentEmploymentHistory
                                                     .subCollectionId,
-                                            listIndex: index);
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: kRegistrationSubtitleGrey,
-                                        size: 23.5,
+                                            listIndex: index,
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: kRegistrationSubtitleGrey,
+                                          size: 23.5,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: userAutismChallengeList!.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                            )
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Create your first autism challenge . . .',
-                                style: TextStyle(
-                                    color: kRegistrationSubtitleGrey,
-                                    fontSize: 9.5.sp),
+                                    ],
+                                  );
+                                },
+                                itemCount: userEmploymentHistoryList!.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                              )
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Create your first employment history . . .',
+                                  style: TextStyle(
+                                      color: kRegistrationSubtitleGrey,
+                                      fontSize: 9.5.sp),
+                                ),
                               ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
-          child: SizedBox(
-            height: 6.25.h,
-            child: ResumeBuilderButton(
-              onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
-
-                final Resume userResume = Resume(
-                  userPersonalDetails: userPersonalDetails,
-                  userProfessionalSummary: userProfessionalSummary,
-                  userEmploymentHistoryList: userEmploymentHistoryList!,
-                  userEducationList: userEducationList!,
-                  userSkillList: userSkillList!,
-                  userAutismChallengeList: userAutismChallengeList!,
-                );
-
-                final resumePdfFile = await ResumePdfApi.generate(userResume);
-
-                setState(() {
-                  isLoading = false;
-                });
-
-                //PdfApi.openFile(resumePdfFile);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AsdPdfViewerScreen(
-                      file: resumePdfFile,
-                      userResume: userResume,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 1.2.h,
+                      right: 1.2.h,
+                      bottom: 1.5.h,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Education',
+                              style: TextStyle(
+                                color: kTitleBlack,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            RoundedIconContainer(
+                              onPressed: () {
+                                educationAddBtnOnPressed(context);
+                              },
+                              childIcon: const Icon(
+                                Icons.add_rounded,
+                                size: 26,
+                                color: kClickableIconBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        userEducationList!.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  final Education? currentEducation =
+                                      userEducationList![index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              currentEducation!.school,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: kTitleBlack,
+                                                fontSize: 11.5.sp,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color:
+                                                      kRegistrationSubtitleGrey,
+                                                  fontSize: 9.5.sp),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        alignment: Alignment.centerRight,
+                                        onPressed: () {
+                                          educationUpdateBtnOnPressed(
+                                              context: context,
+                                              subCollectionId: currentEducation
+                                                  .subCollectionId,
+                                              listIndex: index);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: kRegistrationSubtitleGrey,
+                                          size: 23.5,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                itemCount: userEducationList!.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                              )
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Create your first education . . .',
+                                  style: TextStyle(
+                                      color: kRegistrationSubtitleGrey,
+                                      fontSize: 9.5.sp),
+                                ),
+                              ),
+                      ],
                     ),
                   ),
-                );
-              },
-              isHollow: false,
-              child: isLoading
-                  ? SizedBox(
-                      width: 3.18.h,
-                      height: 3.18.h,
-                      child: const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(
-                          Colors.white,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 1.2.h,
+                      right: 1.2.h,
+                      bottom: 1.5.h,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Skills',
+                              style: TextStyle(
+                                color: kTitleBlack,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            RoundedIconContainer(
+                              onPressed: () {
+                                skillAddBtnOnPressed(context);
+                              },
+                              childIcon: const Icon(
+                                Icons.add_rounded,
+                                size: 26,
+                                color: kClickableIconBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        userSkillList!.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  final Skill? currentSkill =
+                                      userSkillList![index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              currentSkill!.skillName,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: kTitleBlack,
+                                                fontSize: 11.5.sp,
+                                              ),
+                                            ),
+                                            Text(
+                                              currentSkill.skillLevel,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color:
+                                                      kRegistrationSubtitleGrey,
+                                                  fontSize: 9.5.sp),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        alignment: Alignment.centerRight,
+                                        onPressed: () {
+                                          skillUpdateBtnOnPressed(
+                                              context: context,
+                                              subCollectionId:
+                                                  currentSkill.subCollectionId,
+                                              listIndex: index);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: kRegistrationSubtitleGrey,
+                                          size: 23.5,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                itemCount: userSkillList!.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                              )
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Create your first skill . . .',
+                                  style: TextStyle(
+                                      color: kRegistrationSubtitleGrey,
+                                      fontSize: 9.5.sp),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 1.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 1.2.h,
+                      right: 1.2.h,
+                      bottom: 1.5.h,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Autism Challenges',
+                              style: TextStyle(
+                                color: kTitleBlack,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            RoundedIconContainer(
+                              onPressed: () {
+                                autismChallengeAddBtnOnPressed(context);
+                              },
+                              childIcon: const Icon(
+                                Icons.add_rounded,
+                                size: 26,
+                                color: kClickableIconBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        userAutismChallengeList!.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) {
+                                  final AutismChallenge?
+                                      currentAutismChallenge =
+                                      userAutismChallengeList![index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              currentAutismChallenge!
+                                                  .challengeName,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: kTitleBlack,
+                                                fontSize: 11.5.sp,
+                                              ),
+                                            ),
+                                            Text(
+                                              currentAutismChallenge
+                                                  .challengeLevel,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color:
+                                                      kRegistrationSubtitleGrey,
+                                                  fontSize: 9.5.sp),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        alignment: Alignment.centerRight,
+                                        onPressed: () {
+                                          autismChallengeUpdateBtnOnPressed(
+                                              context: context,
+                                              subCollectionId:
+                                                  currentAutismChallenge
+                                                      .subCollectionId,
+                                              listIndex: index);
+                                        },
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: kRegistrationSubtitleGrey,
+                                          size: 23.5,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                itemCount: userAutismChallengeList!.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                              )
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Create your first autism challenge . . .',
+                                  style: TextStyle(
+                                      color: kRegistrationSubtitleGrey,
+                                      fontSize: 9.5.sp),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
+            child: SizedBox(
+              height: 6.25.h,
+              child: ResumeBuilderButton(
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  final Resume userResume = Resume(
+                    userPersonalDetails: userPersonalDetails,
+                    userProfessionalSummary: userProfessionalSummary,
+                    userEmploymentHistoryList: userEmploymentHistoryList!,
+                    userEducationList: userEducationList!,
+                    userSkillList: userSkillList!,
+                    userAutismChallengeList: userAutismChallengeList!,
+                  );
+
+                  final resumePdfFile = await ResumePdfApi.generate(userResume);
+
+                  setState(() {
+                    isLoading = false;
+                  });
+
+                  //PdfApi.openFile(resumePdfFile);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AsdPdfViewerScreen(
+                        file: resumePdfFile,
+                        userResume: userResume,
+                        userId: widget.userId,
+                        userFirstName: widget.userFirstName,
+                        userLastName: widget.userLastName,
+                        userEmail: widget.userEmail,
+                      ),
+                      settings:
+                          const RouteSettings(name: AsdResumeBuilderScreen.id),
+                    ),
+                  );
+                },
+                isHollow: false,
+                child: isLoading
+                    ? SizedBox(
+                        width: 3.18.h,
+                        height: 3.18.h,
+                        child: const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                            Colors.white,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        'Resume Preview',
+                        style: TextStyle(
+                          fontSize: 12.5.sp,
+                          color: Colors.white,
                         ),
                       ),
-                    )
-                  : Text(
-                      'Resume Preview',
-                      style: TextStyle(
-                        fontSize: 12.5.sp,
-                        color: Colors.white,
-                      ),
-                    ),
+              ),
             ),
           ),
         ),

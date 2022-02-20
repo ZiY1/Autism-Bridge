@@ -58,6 +58,8 @@ dependencies:
 
   flutter_pdfview: ^1.2.1
 
+  mailer: ^5.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

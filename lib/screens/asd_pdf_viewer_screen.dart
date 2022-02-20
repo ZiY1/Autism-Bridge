@@ -13,10 +13,22 @@ class AsdPdfViewerScreen extends StatefulWidget {
 
   final Resume userResume;
 
+  final String userFirstName;
+
+  final String userLastName;
+
+  final String userEmail;
+
+  final String userId;
+
   const AsdPdfViewerScreen({
     Key? key,
     required this.file,
     required this.userResume,
+    required this.userFirstName,
+    required this.userLastName,
+    required this.userEmail,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -53,6 +65,10 @@ class _AsdPdfViewerScreenState extends State<AsdPdfViewerScreen> {
                       fileName: widget.userResume.userPersonalDetails == null
                           ? 'my_resume.pdf'
                           : '${widget.userResume.userPersonalDetails!.firstName}_${widget.userResume.userPersonalDetails!.lastName}_resume.pdf',
+                      userId: widget.userId,
+                      userFirstName: widget.userFirstName,
+                      userLastName: widget.userLastName,
+                      userEmail: widget.userEmail,
                     ),
                   ),
                 );

@@ -1,6 +1,9 @@
-import 'package:autism_bridge/apis/resume_pdf_api.dart';
+import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
+import 'package:autism_bridge/widgets/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import 'dart:io';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +15,22 @@ class AsdPdfExportScreen extends StatefulWidget {
 
   final String fileName;
 
+  final String userFirstName;
+
+  final String userLastName;
+
+  final String userEmail;
+
+  final String userId;
+
   const AsdPdfExportScreen({
     Key? key,
     required this.file,
     required this.fileName,
+    required this.userFirstName,
+    required this.userLastName,
+    required this.userEmail,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -38,6 +53,104 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
     super.dispose();
   }
 
+  /// This works with emailjs, however sending attachments is charged
+  // Future sendEmail(
+  //     {required String name,
+  //     required String email,
+  //     required String subject,
+  //     required String message}) async {
+  //   const serviceId = 'service_jw3wp5o';
+  //   const templateId = 'template_n4dj8eq';
+  //   const userId = 'user_cXTtBgxWArO3N7mt8zfcd';
+  //
+  //   try {
+  //     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  //     final response = await http.post(
+  //       url,
+  //       headers: {
+  //         'origin': 'http://localhost',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: json.encode({
+  //         'service_id': serviceId,
+  //         'template_id': templateId,
+  //         'user_id': userId,
+  //         'template_params': {
+  //           'user_name': name,
+  //           'user_email': email,
+  //           'user_subject': subject,
+  //           'user_message': message,
+  //         },
+  //       }),
+  //     );
+  //
+  //     emailController.clear();
+  //     isEmailFieldValid = false;
+  //
+  //     Utils.showSnackBar(
+  //       'Email send!',
+  //       const Icon(
+  //         Icons.mark_email_read_sharp,
+  //         color: Colors.green,
+  //         size: 30.0,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     Utils.showSnackBar(
+  //       e.toString(),
+  //       const Icon(
+  //         Icons.error_sharp,
+  //         color: Colors.red,
+  //         size: 30.0,
+  //       ),
+  //     );
+  //   }
+  //
+  //   //print(response.body);
+  // }
+
+  Future sendEmail(
+      {required String name,
+      required String email,
+      required String subject,
+      required String msgText}) async {
+    const emailSender = 'autismbridge@zahncenternyc.com';
+    const emailSenderPassword = 'Capstone123';
+
+    final smtpServer = gmail(emailSender, emailSenderPassword);
+    final message = Message()
+      ..from = const Address(emailSender, 'Autism Bridge Team')
+      ..recipients = [email]
+      ..subject = subject
+      ..text = msgText
+      ..attachments = [FileAttachment(widget.file)];
+
+    emailController.clear();
+    isEmailFieldValid = false;
+
+    Utils.showSnackBar(
+      'Email send!',
+      const Icon(
+        Icons.mark_email_read_sharp,
+        color: Colors.green,
+        size: 30.0,
+      ),
+    );
+
+    try {
+      await send(message, smtpServer);
+    } on MailerException catch (e) {
+      Utils.showSnackBar(
+        e.message,
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +160,18 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
         backgroundColor: kAutismBridgeBlue,
         title: const Text(
           'Export To Email',
+        ),
+        leading: BackButton(
+          onPressed: () {
+            //TODO: when pop, the pdf in the pdf viewer screen has been destroyed, bug needed a fix
+            //Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
+            //Navigator.pop(context);
+            // Navigator.popUntil(
+            //     context, ModalRoute.withName('asd_resume_builder_screen'));
+            // Navigator.popUntil(context,
+            //     (route) => route.settings.name == AsdResumeBuilderScreen.id);
+          },
         ),
       ),
       body: Padding(
@@ -61,6 +186,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                   Expanded(
                     flex: 5,
                     child: TextFormField(
+                      autofocus: true,
                       onChanged: (email) {
                         if (!EmailValidator.validate(email)) {
                           setState(() {
@@ -151,11 +277,17 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                       onPressed: isEmailFieldValid
                           ? () {
                               //TODO:
-                              print(widget.file.path.toString());
+                              //print(widget.file.path.toString());
                               // Check if inputs are valid
                               final isInputValid =
                                   formKey.currentState!.validate();
                               if (!isInputValid) return;
+                              sendEmail(
+                                  name:
+                                      '${widget.userFirstName} ${widget.userLastName}',
+                                  email: emailController.text.trim(),
+                                  subject: 'Resume Builder Export PDF Test',
+                                  msgText: 'This is a test');
                             }
                           : null,
                     ),

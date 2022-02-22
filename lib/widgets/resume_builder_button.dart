@@ -35,7 +35,7 @@ class ResumeBuilderButton extends StatelessWidget {
               ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
           ),
         ),
         side: isHollow

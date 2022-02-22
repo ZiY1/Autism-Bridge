@@ -10,18 +10,20 @@ class ResumeBuilderInputField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputAction textInputAction;
   final String? initialValue;
+  final bool? disableBorder;
 
-  const ResumeBuilderInputField(
-      {Key? key,
-      this.myController,
-      required this.title,
-      required this.hintText,
-      required this.keyboardType,
-      this.validator,
-      required this.textInputAction,
-      this.onChanged,
-      this.initialValue})
-      : super(key: key);
+  const ResumeBuilderInputField({
+    Key? key,
+    this.myController,
+    required this.title,
+    required this.hintText,
+    required this.keyboardType,
+    this.validator,
+    required this.textInputAction,
+    this.onChanged,
+    this.initialValue,
+    this.disableBorder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class ResumeBuilderInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 1.65.h, bottom: 0.3.h),
+          padding: EdgeInsets.only(
+            left: 1.85.h,
+          ),
           child: Text(
             title,
             style: TextStyle(
@@ -39,7 +43,7 @@ class ResumeBuilderInputField extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 1.5.h, right: 1.5.h),
+          padding: EdgeInsets.symmetric(horizontal: 1.7.h),
           child: TextFormField(
             initialValue: initialValue,
             onChanged: onChanged,
@@ -61,33 +65,60 @@ class ResumeBuilderInputField extends StatelessWidget {
                 color: Colors.grey.shade400,
               ),
               contentPadding: EdgeInsets.symmetric(
-                vertical: 1.h,
-                horizontal: 2.h,
+                horizontal: 0.2.h,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color(0xFFF0F0F2),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: disableBorder == true
+                      ? Colors.white
+                      : const Color(0xFFF0F0F2),
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color(0xFFF0F0F2),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: disableBorder == true
+                      ? Colors.white
+                      : const Color(0xFFF0F0F2),
                 ),
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color(0xFFF0F0F2),
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: disableBorder == true
+                      ? Colors.white
+                      : const Color(0xFFF0F0F2),
                 ),
               ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color(0xFFF0F0F2),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: disableBorder == true
+                      ? Colors.white
+                      : const Color(0xFFF0F0F2),
                 ),
               ),
+              // enabledBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // focusedBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // errorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // focusedErrorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
             ),
             textInputAction: textInputAction,
           ),

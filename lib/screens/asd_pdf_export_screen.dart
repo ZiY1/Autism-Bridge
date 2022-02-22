@@ -1,4 +1,4 @@
-import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
+import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +125,6 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
       ..text = msgText
       ..attachments = [FileAttachment(widget.file)];
 
-    emailController.clear();
     isEmailFieldValid = false;
 
     Utils.showSnackBar(
@@ -153,181 +152,207 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundRiceWhite,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: kAutismBridgeBlue,
-        title: const Text(
-          'Export To Email',
-        ),
-        leading: BackButton(
-          onPressed: () {
-            //TODO: when pop, the pdf in the pdf viewer screen has been destroyed, bug needed a fix
-            //Navigator.popUntil(context, (route) => route.isFirst);
-            Navigator.pop(context);
-            //Navigator.pop(context);
-            // Navigator.popUntil(
-            //     context, ModalRoute.withName('asd_resume_builder_screen'));
-            // Navigator.popUntil(context,
-            //     (route) => route.settings.name == AsdResumeBuilderScreen.id);
-          },
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [
+            0.01,
+            0.25,
+          ],
+          colors: [
+            Color(0xFFE7F0F9),
+            //kAutismBridgeBlue,
+            kBackgroundRiceWhite,
+          ],
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.h),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: TextFormField(
-                      autofocus: true,
-                      onChanged: (email) {
-                        if (!EmailValidator.validate(email)) {
-                          setState(() {
-                            isEmailFieldValid = false;
-                          });
-                        } else {
-                          setState(() {
-                            isEmailFieldValid = true;
-                          });
-                        }
-                      },
-                      controller: emailController,
-                      style: TextStyle(
-                          fontSize: 10.2.sp, color: const Color(0xFF1F1F39)),
-                      keyboardType: TextInputType.emailAddress,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (email) =>
-                          (email != null && !EmailValidator.validate(email))
-                              ? 'Enter a valid email'
-                              : null,
-                      decoration: InputDecoration(
-                        helperText: '',
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Enter the destination email address',
-                        hintStyle: TextStyle(
-                            fontSize: 8.7.sp, color: Colors.grey.shade400),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 2.3.h),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                            color: kBackgroundRiceWhite,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                            color: kBackgroundRiceWhite,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                            color: kBackgroundRiceWhite,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: const BorderSide(
-                            color: kBackgroundRiceWhite,
-                          ),
-                        ),
-                      ),
-                      textInputAction: TextInputAction.done,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 1.5.h,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TextButton(
-                      child: Text(
-                        'Send',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(1.45.h),
-                        ),
-                        backgroundColor: !isEmailFieldValid
-                            ? MaterialStateProperty.all<Color>(
-                                kAutismBridgeBlue.withOpacity(0.45),
-                              )
-                            : MaterialStateProperty.all<Color>(
-                                kAutismBridgeBlue,
-                              ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: isEmailFieldValid
-                          ? () {
-                              //TODO:
-                              //print(widget.file.path.toString());
-                              // Check if inputs are valid
-                              final isInputValid =
-                                  formKey.currentState!.validate();
-                              if (!isInputValid) return;
-                              sendEmail(
-                                  name:
-                                      '${widget.userFirstName} ${widget.userLastName}',
-                                  email: emailController.text.trim(),
-                                  subject: 'Resume Builder Export PDF Test',
-                                  msgText: 'This is a test');
-                            }
-                          : null,
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 0.4.h,
-              ),
-              IntrinsicHeight(
-                child: Row(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Export To Email',
+            style: TextStyle(
+              color: kTitleBlack,
+            ),
+          ),
+          iconTheme: const IconThemeData(
+            color: kTitleBlack,
+          ),
+          leading: RoundedIconContainer(
+            childIcon: const Icon(
+              Icons.close_rounded,
+              color: kTitleBlack,
+              size: 20,
+            ),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            margin: EdgeInsets.all(1.35.h),
+          ),
+          leadingWidth: 14.w,
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.h),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'images/pdf_icon.png',
-                      scale: 4.0,
-                    ),
-                    SizedBox(width: 3.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.fileName,
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 12.5.sp),
-                        ),
-                        Text(
-                          currentDate,
-                          style: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontSize: 9.sp,
+                    Expanded(
+                      flex: 5,
+                      child: TextFormField(
+                        autofocus: true,
+                        onChanged: (email) {
+                          if (!EmailValidator.validate(email)) {
+                            setState(() {
+                              isEmailFieldValid = false;
+                            });
+                          } else {
+                            setState(() {
+                              isEmailFieldValid = true;
+                            });
+                          }
+                        },
+                        controller: emailController,
+                        style: TextStyle(
+                            fontSize: 10.2.sp, color: const Color(0xFF1F1F39)),
+                        keyboardType: TextInputType.emailAddress,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (email) =>
+                            (email != null && !EmailValidator.validate(email))
+                                ? 'Enter a valid email'
+                                : null,
+                        decoration: InputDecoration(
+                          helperText: '',
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter the destination email address',
+                          hintStyle: TextStyle(
+                              fontSize: 8.7.sp, color: Colors.grey.shade400),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 2.3.h),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                              color: kBackgroundRiceWhite,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                              color: kBackgroundRiceWhite,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                              color: kBackgroundRiceWhite,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: const BorderSide(
+                              color: kBackgroundRiceWhite,
+                            ),
                           ),
                         ),
-                      ],
+                        textInputAction: TextInputAction.done,
+                      ),
                     ),
+                    SizedBox(
+                      width: 1.5.h,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        child: Text(
+                          'Send',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(1.45.h),
+                          ),
+                          backgroundColor: !isEmailFieldValid
+                              ? MaterialStateProperty.all<Color>(
+                                  kAutismBridgeBlue.withOpacity(0.45),
+                                )
+                              : MaterialStateProperty.all<Color>(
+                                  kAutismBridgeBlue,
+                                ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: isEmailFieldValid
+                            ? () {
+                                //TODO:
+                                //print(widget.file.path.toString());
+                                // Check if inputs are valid
+                                final isInputValid =
+                                    formKey.currentState!.validate();
+                                if (!isInputValid) return;
+                                sendEmail(
+                                    name:
+                                        '${widget.userFirstName} ${widget.userLastName}',
+                                    email: emailController.text.trim(),
+                                    subject: 'Resume Builder Export PDF Test',
+                                    msgText: 'This is a test');
+                              }
+                            : null,
+                      ),
+                    )
                   ],
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 0.4.h,
+                ),
+                IntrinsicHeight(
+                  child: Row(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'images/pdf_icon.png',
+                        scale: 4.0,
+                      ),
+                      SizedBox(width: 3.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.fileName,
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 12.5.sp),
+                          ),
+                          Text(
+                            currentDate,
+                            style: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontSize: 9.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

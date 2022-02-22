@@ -1,4 +1,5 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/firebase_helpers.dart';
 import 'package:autism_bridge/screens/asd_reset_password_screen.dart';
 import 'package:autism_bridge/screens/asd_signup_screen.dart';
 import 'package:autism_bridge/widgets/registration_input_field.dart';
@@ -59,20 +60,38 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
 
     Utils.showProgressIndicator(context);
 
+    // Firebase authentication validation
     try {
       // firebase auth method
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // Navigate to asd email verify screen
-      Navigator.pushNamedAndRemoveUntil(
-          context, AsdEmailVerifyScreen.id, (route) => false);
+      // Check if the user is in job_seeker_users collection
+      // ? I believe  userCredential.user will always be non-null here because if it was null, and exception will be caught
+      bool isJobSeekerUser = await FirebaseHelper.checkDocumentExists(
+          collectionName: 'job_seeker_users', docID: userCredential.user!.uid);
 
-      // // Navigate to asd user home screen
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, AsdHomeScreen.id, (route) => false);
+      if (isJobSeekerUser) {
+        // Navigate to asd email verify screen
+        Navigator.pushNamedAndRemoveUntil(
+            context, AsdEmailVerifyScreen.id, (route) => false);
+      } else {
+        navigatorKey.currentState!
+            .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+
+        Utils.showSnackBar(
+          'There is account is not registered as our job seeker account',
+          const Icon(
+            Icons.error_sharp,
+            color: Colors.red,
+            size: 30.0,
+          ),
+        );
+        return;
+      }
     } on FirebaseAuthException catch (e) {
       navigatorKey.currentState!
           .popUntil(ModalRoute.withName(AsdLoginScreen.id));

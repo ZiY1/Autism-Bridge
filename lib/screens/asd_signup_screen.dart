@@ -95,13 +95,23 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
         password: passwordController.text.trim(),
       );
 
-      // Store user info in firestore collection
+      // Store user info in firestore all_users collection
       User user = userCredential.user!;
       await FirebaseFirestore.instance
           .collection('all_users')
           .doc(user.uid)
           .set({
         'userType': 'JobSeeker',
+        'firstName': firstNameController.text.trim(),
+        'lastName': lastNameController.text.trim(),
+        'email': user.email,
+      });
+
+      // Store user info in firestore job_seeker_users collection
+      await FirebaseFirestore.instance
+          .collection('job_seeker_users')
+          .doc(user.uid)
+          .set({
         'firstName': firstNameController.text.trim(),
         'lastName': lastNameController.text.trim(),
         'email': user.email,

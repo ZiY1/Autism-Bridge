@@ -1,4 +1,3 @@
-import 'package:autism_bridge/apis/pdf_api.dart';
 import 'package:autism_bridge/apis/resume_pdf_api.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/education_data.dart';
@@ -456,18 +455,16 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             0.25,
           ],
           colors: [
-            Color(0xFFddeaf6),
+            Color(0xFFE7F0F9),
             //kAutismBridgeBlue,
             kBackgroundRiceWhite,
           ],
         ),
       ),
       child: Scaffold(
-        //backgroundColor: kBackgroundRiceWhite,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0.0,
-          //backgroundColor: kBackgroundRiceWhite,
           backgroundColor: Colors.transparent,
           title: const Text(
             'Resume Builder',
@@ -479,11 +476,24 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           iconTheme: const IconThemeData(
             color: kTitleBlack,
           ),
+          leading: RoundedIconContainer(
+            childIcon: const Icon(
+              Icons.arrow_back_ios_rounded,
+              color: kTitleBlack,
+              size: 20,
+            ),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            margin: EdgeInsets.all(1.35.h),
+          ),
+          leadingWidth: 14.w,
         ),
         body: SafeArea(
           child: ListView(
             padding: EdgeInsets.symmetric(
-              horizontal: 1.5.h,
+              horizontal: 1.h,
               vertical: 0.5.h,
             ),
             children: [
@@ -549,7 +559,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
                                     style: TextStyle(
                                       color: kTitleBlack,
-                                      fontSize: 15.sp,
+                                      fontSize: 13.5.sp,
                                     ),
                                   ),
                                   SizedBox(
@@ -564,6 +574,12 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                       size: 18,
                                       color: kClickableIconBlue,
                                     ),
+                                    color: const Color(0xFF000000)
+                                        .withOpacity(0.05),
+                                    margin: EdgeInsets.only(
+                                        top: 1.2.h,
+                                        bottom: 1.2.h,
+                                        right: 0.6.h),
                                   ),
                                 ],
                               ),
@@ -573,7 +589,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
                                 style: TextStyle(
                                     color: kRegistrationSubtitleGrey,
-                                    fontSize: 10.sp),
+                                    fontSize: 9.5.sp),
                               ),
                             ],
                           ),
@@ -623,7 +639,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Professional Summary',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 14.sp,
+                                fontSize: 13.5.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -635,6 +651,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 size: 18,
                                 color: kClickableIconBlue,
                               ),
+                              color: const Color(0xFF000000).withOpacity(0.05),
+                              margin: EdgeInsets.only(
+                                  top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
                             ),
                           ],
                         ),
@@ -650,7 +669,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: kRegistrationSubtitleGrey,
-                                fontSize: 10.sp),
+                                fontSize: 9.5.sp),
                           ),
                         ),
                       ],
@@ -679,7 +698,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Employment History',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 14.sp,
+                                fontSize: 13.5.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -691,6 +710,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 size: 26,
                                 color: kClickableIconBlue,
                               ),
+                              color: const Color(0xFF000000).withOpacity(0.05),
+                              margin: EdgeInsets.only(
+                                  top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
                             ),
                           ],
                         ),
@@ -789,7 +811,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Education',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 14.sp,
+                                fontSize: 13.5.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -801,6 +823,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 size: 26,
                                 color: kClickableIconBlue,
                               ),
+                              color: const Color(0xFF000000).withOpacity(0.05),
+                              margin: EdgeInsets.only(
+                                  top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
                             ),
                           ],
                         ),
@@ -895,7 +920,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Skills',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 14.sp,
+                                fontSize: 13.5.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -907,6 +932,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 size: 26,
                                 color: kClickableIconBlue,
                               ),
+                              color: const Color(0xFF000000).withOpacity(0.05),
+                              margin: EdgeInsets.only(
+                                  top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
                             ),
                           ],
                         ),
@@ -1001,7 +1029,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Autism Challenges',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 14.sp,
+                                fontSize: 13.5.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -1013,6 +1041,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 size: 26,
                                 color: kClickableIconBlue,
                               ),
+                              color: const Color(0xFF000000).withOpacity(0.05),
+                              margin: EdgeInsets.only(
+                                  top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
                             ),
                           ],
                         ),

@@ -6,10 +6,16 @@ class RoundedIconContainer extends StatelessWidget {
 
   final Function() onPressed;
 
+  final Color color;
+
+  final EdgeInsetsGeometry margin;
+
   const RoundedIconContainer({
     Key? key,
     required this.childIcon,
     required this.onPressed,
+    required this.color,
+    required this.margin,
   }) : super(key: key);
 
   @override
@@ -20,9 +26,9 @@ class RoundedIconContainer extends StatelessWidget {
         width: 3.8.h,
         height: 3.8.h,
         child: childIcon,
-        margin: EdgeInsets.only(top: 1.2.h, bottom: 1.2.h, right: 0.6.h),
+        margin: margin,
         decoration: BoxDecoration(
-          color: const Color(0xFF000000).withOpacity(0.05),
+          color: color,
           shape: BoxShape.circle,
         ),
       ),

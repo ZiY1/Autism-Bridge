@@ -1,10 +1,12 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +63,8 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
   String btnText = 'Add';
 
   bool isSaving = false;
+
+  final Widget seg = SizedBox(height: 1.h);
 
   @override
   void initState() {
@@ -213,13 +217,22 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
+                  ),
+                  color: kBackgroundRiceWhite,
+                ),
                 width: double.infinity,
-                color: kCupertinoPickerTopBarWhite,
                 child: CupertinoButton(
                   child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       'Done',
+                      style: TextStyle(
+                        color: kAutismBridgeBlue,
+                      ),
                     ),
                   ),
                   onPressed: () {
@@ -231,7 +244,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
               ),
               Container(
                 height: MediaQuery.of(context).copyWith().size.height * 0.25,
-                color: kCupertinoPickerBackgroundGrey,
+                color: kBackgroundRiceWhite,
                 child: CupertinoPicker(
                   itemExtent: 4.5.h,
                   onSelectedItemChanged: (int selectedItem) {
@@ -247,168 +260,248 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundRiceWhite,
-      appBar: AppBar(
-        elevation: 0.5,
-        //backgroundColor: kBackgroundRiceWhite,
-        backgroundColor: kAutismBridgeBlue,
-        title: const Text('Skills'),
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 0.5.h, vertical: 2.5.h),
-          children: [
-            ResumeBuilderInputField(
-              onChanged: (text) {
-                skillName = text;
-              },
-              initialValue: skillName,
-              title: 'Skill',
-              hintText: 'e.g. Drawing',
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-            ),
-            SizedBox(
-              height: 1.5.h,
-            ),
-            ResumeBuilderPicker(
-              onPressed: () {
-                skillLevel = skillList[0];
-                return showPicker();
-              },
-              title: 'Skill Level',
-              bodyText: skillLevel == null
-                  ? Text(
-                      'Select your skill level',
-                      style: TextStyle(
-                        fontSize: 9.5.sp,
-                        color: Colors.grey.shade400,
-                      ),
-                    )
-                  : Text(
-                      skillLevel!,
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        color: const Color(0xFF1F1F39),
-                      ),
-                    ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 1.5.h),
-              child: ResumeBuilderParagraphField(
-                initialValue: skillDescription,
-                title: 'Description',
-                onChanged: (text) {
-                  skillDescription = text;
-                  setState(() {
-                    textLen = text.length;
-                  });
-                },
-                autoFocus: false,
-                minLines: 5,
-                maxLines: 8,
-                hintText: 'Simply describe your skill',
-                scrollController: _scrollController,
-                textLen: textLen,
-              ),
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [
+            0.01,
+            0.25,
+          ],
+          colors: [
+            Color(0xFFE7F0F9),
+            //kAutismBridgeBlue,
+            kBackgroundRiceWhite,
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
-          child: SizedBox(
-            height: 6.25.h,
-            child: widget.isAddingNew
-                ? ResumeBuilderButton(
-                    child: isSaving
-                        ? SizedBox(
-                            width: 3.18.h,
-                            height: 3.18.h,
-                            child: const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(
-                                Colors.white,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Skills',
+            style: TextStyle(
+              color: kTitleBlack,
+            ),
+          ),
+          iconTheme: const IconThemeData(
+            color: kTitleBlack,
+          ),
+          leading: RoundedIconContainer(
+            childIcon: const Icon(
+              Icons.close_rounded,
+              color: kTitleBlack,
+              size: 20,
+            ),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            margin: EdgeInsets.all(1.35.h),
+          ),
+          leadingWidth: 14.w,
+        ),
+        body: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: 1.h,
+              vertical: 1.2.h,
+            ),
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 0.9.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      //horizontal: 1.5.h,
+                      vertical: 1.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        seg,
+                        ResumeBuilderInputField(
+                          onChanged: (text) {
+                            skillName = text;
+                          },
+                          initialValue: skillName,
+                          title: 'Skill',
+                          hintText: 'e.g. Drawing',
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                        ),
+                        seg,
+                        ResumeBuilderPicker(
+                          onPressed: () {
+                            skillLevel = skillList[0];
+                            return showPicker();
+                          },
+                          title: 'Skill Level',
+                          bodyText: skillLevel == null
+                              ? Text(
+                                  'Select your skill level',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  skillLevel!,
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
+                          disableBorder: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 0.8.h,
+                  vertical: 0.9.h,
+                ),
+                child: MyCardWidget(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      //horizontal: 1.5.h,
+                      vertical: 1.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        seg,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.h),
+                          child: ResumeBuilderParagraphField(
+                            initialValue: skillDescription,
+                            title: 'Description',
+                            onChanged: (text) {
+                              skillDescription = text;
+                              setState(() {
+                                textLen = text.length;
+                              });
+                            },
+                            autoFocus: false,
+                            minLines: 5,
+                            maxLines: 8,
+                            hintText: 'Simply describe your skill',
+                            scrollController: _scrollController,
+                            textLen: textLen,
+                          ),
+                        ),
+                        seg,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
+            child: SizedBox(
+              height: 6.25.h,
+              child: widget.isAddingNew
+                  ? ResumeBuilderButton(
+                      child: isSaving
+                          ? SizedBox(
+                              width: 3.18.h,
+                              height: 3.18.h,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              btnText,
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: Colors.white,
                               ),
                             ),
-                          )
-                        : Text(
-                            btnText,
-                            style: TextStyle(
-                              fontSize: 12.5.sp,
-                              color: Colors.white,
-                            ),
+                      onPressed: isSaving
+                          ? null
+                          : () {
+                              saveAddBtnOnPressed(context);
+                            },
+                      isHollow: false,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: isSaving
+                                ? SizedBox(
+                                    width: 3.18.h,
+                                    height: 3.18.h,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      fontSize: 12.5.sp,
+                                      color: kAutismBridgeBlue,
+                                    ),
+                                  ),
+                            onPressed: isSaving
+                                ? null
+                                : () {
+                                    deleteBtnOnPressed(context);
+                                  },
+                            isHollow: true,
                           ),
-                    onPressed: isSaving
-                        ? null
-                        : () {
-                            saveAddBtnOnPressed(context);
-                          },
-                    isHollow: false,
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: ResumeBuilderButton(
-                          child: isSaving
-                              ? SizedBox(
-                                  width: 3.18.h,
-                                  height: 3.18.h,
-                                  child: const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                      Colors.white,
+                        ),
+                        SizedBox(
+                          width: 4.w,
+                        ),
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: isSaving
+                                ? SizedBox(
+                                    width: 3.18.h,
+                                    height: 3.18.h,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    btnText,
+                                    style: TextStyle(
+                                      fontSize: 12.5.sp,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                )
-                              : Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                    fontSize: 12.5.sp,
-                                    color: kAutismBridgeBlue,
-                                  ),
-                                ),
-                          onPressed: isSaving
-                              ? null
-                              : () {
-                                  deleteBtnOnPressed(context);
-                                },
-                          isHollow: true,
+                            onPressed: isSaving
+                                ? null
+                                : () {
+                                    saveAddBtnOnPressed(context);
+                                  },
+                            isHollow: false,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Expanded(
-                        child: ResumeBuilderButton(
-                          child: isSaving
-                              ? SizedBox(
-                                  width: 3.18.h,
-                                  height: 3.18.h,
-                                  child: const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  btnText,
-                                  style: TextStyle(
-                                    fontSize: 12.5.sp,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                          onPressed: isSaving
-                              ? null
-                              : () {
-                                  saveAddBtnOnPressed(context);
-                                },
-                          isHollow: false,
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ),

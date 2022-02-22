@@ -53,7 +53,7 @@ class ResumeBuilderParagraphField extends StatelessWidget {
         ),
         Scrollbar(
           controller: _scrollController,
-          isAlwaysShown: true,
+          isAlwaysShown: false,
           child: TextFormField(
             initialValue: initialValue,
             onChanged: onChanged,
@@ -77,32 +77,52 @@ class ResumeBuilderParagraphField extends StatelessWidget {
               ),
               contentPadding: EdgeInsets.symmetric(
                 vertical: 2.h,
-                horizontal: 2.h,
+                horizontal: 0.2.h,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
+              errorBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
+              focusedErrorBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(
                   color: Color(0xFFF0F0F2),
                 ),
               ),
+              // enabledBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // focusedBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // errorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
+              // focusedErrorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+              //   borderSide: const BorderSide(
+              //     color: Color(0xFFF0F0F2),
+              //   ),
+              // ),
             ),
           ),
         ),

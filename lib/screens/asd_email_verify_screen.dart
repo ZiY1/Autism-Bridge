@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:autism_bridge/screens/asd_home_screen.dart';
+import 'package:autism_bridge/screens/determine_user_type_loading_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/registration_button.dart';
 import 'package:autism_bridge/widgets/registration_title.dart';
@@ -133,8 +132,9 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
     if (isEmailVerified) {
       timerCountdown?.cancel();
       timerCheckVerify?.cancel();
+
       Navigator.pushNamedAndRemoveUntil(
-          context, AsdHomeScreen.id, (route) => false);
+          context, DetermineUserTypeLoadingScreen.id, (route) => false);
     }
   }
 
@@ -158,7 +158,7 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
 
   @override
   Widget build(BuildContext context) => isEmailVerified
-      ? const AsdHomeScreen()
+      ? const DetermineUserTypeLoadingScreen()
       : Scaffold(
           backgroundColor: const Color(0xFFF0F0F2),
           body: SafeArea(

@@ -158,15 +158,16 @@ class ResumePdfApi {
             ),
           ],
         ),
-        pw.SizedBox(width: 8.w),
+        pw.SizedBox(width: 2.5.w),
         pw.SizedBox(
-          width: 15.h,
-          height: 15.h,
+          width: 13.h,
+          height: 13.h,
           child: pw.FittedBox(
             child: pw.Image(profileImage),
             fit: pw.BoxFit.cover,
           ),
         ),
+        //pw.SizedBox(width: 1.w),
       ],
     );
   }

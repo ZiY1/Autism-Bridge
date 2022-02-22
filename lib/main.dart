@@ -11,6 +11,7 @@ import 'package:autism_bridge/screens/asd_professional_summary_screen.dart';
 import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
 import 'package:autism_bridge/screens/asd_signup_screen.dart';
 import 'package:autism_bridge/screens/asd_skills_screen.dart';
+import 'package:autism_bridge/screens/determine_user_type_loading_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/is_log_in.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ import 'package:autism_bridge/widgets/dismiss_keyboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'widgets/utils.dart';
 import 'package:sizer/sizer.dart';
-
 
 import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
 import 'package:autism_bridge/screens/JoinInEmployerScreen.dart';
@@ -74,6 +74,8 @@ class AutismBridgeApp extends StatelessWidget {
             ),
             initialRoute: IsLogIn.id,
             routes: {
+              DetermineUserTypeLoadingScreen.id: (context) =>
+                  const DetermineUserTypeLoadingScreen(),
               IsLogIn.id: (context) => const IsLogIn(),
               '/': (context) => const WelcomeScreen(),
               WelcomeScreen.id: (context) => const WelcomeScreen(),
@@ -82,14 +84,22 @@ class AutismBridgeApp extends StatelessWidget {
               AsdEmailVerifyScreen.id: (context) =>
                   const AsdEmailVerifyScreen(),
               AsdHomeScreen.id: (context) => const AsdHomeScreen(),
-              SignInEmployerPage.nameRoute: (context) => const SignInEmployerPage(),
-              JoinInEmployerPage.nameRoute: (context) => const JoinInEmployerPage(),
-              JoinInEmployerSecondPage.nameRoute: (context) => const JoinInEmployerSecondPage(),
-              SignedEmployerHomeScreen.routeName: (context) => const SignedEmployerHomeScreen(),
-              EmployerProfilePage.routeName: (context) => const EmployerProfilePage(),
-              EmployerSettingsScreen.routeName: (context) => const EmployerSettingsScreen(),
-              EmployerMessagingScreen.nameRoute: (context) => const EmployerMessagingScreen(),
-              EmployerSendNewMessageScreen.routeName: (context) => const EmployerSendNewMessageScreen(),
+              SignInEmployerPage.nameRoute: (context) =>
+                  const SignInEmployerPage(),
+              JoinInEmployerPage.nameRoute: (context) =>
+                  const JoinInEmployerPage(),
+              JoinInEmployerSecondPage.nameRoute: (context) =>
+                  const JoinInEmployerSecondPage(),
+              SignedEmployerHomeScreen.routeName: (context) =>
+                  const SignedEmployerHomeScreen(),
+              EmployerProfilePage.routeName: (context) =>
+                  const EmployerProfilePage(),
+              EmployerSettingsScreen.routeName: (context) =>
+                  const EmployerSettingsScreen(),
+              EmployerMessagingScreen.nameRoute: (context) =>
+                  const EmployerMessagingScreen(),
+              EmployerSendNewMessageScreen.routeName: (context) =>
+                  const EmployerSendNewMessageScreen(),
               // AsdResumeBuilderScreen.id: (context) =>
               //     const AsdResumeBuilderScreen(),
               // AsdPersonalDetailsScreen.id: (context) =>

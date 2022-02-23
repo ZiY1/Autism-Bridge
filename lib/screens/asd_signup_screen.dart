@@ -49,6 +49,8 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
 
   final passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     firstNameController.dispose();
@@ -85,7 +87,10 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
     final isInputValid = formKey.currentState!.validate();
     if (!isInputValid) return;
 
-    Utils.showProgressIndicator(context);
+    //Utils.showProgressIndicator(context);
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       // firebase auth method to create user
@@ -127,8 +132,12 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
       // Navigator.pushNamedAndRemoveUntil(
       //     context, AsdHomeScreen.id, (route) => false);
     } on FirebaseAuthException catch (e) {
-      navigatorKey.currentState!
-          .popUntil(ModalRoute.withName(AsdSignupScreen.id));
+      // navigatorKey.currentState!
+      //     .popUntil(ModalRoute.withName(AsdSignupScreen.id));
+      setState(() {
+        isLoading = false;
+      });
+
       Utils.showSnackBar(
         e.message,
         const Icon(
@@ -297,13 +306,30 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                     padding: EdgeInsets.only(
                         left: 1.5.h, right: 1.5.h, top: 3.7.h, bottom: 2.h),
                     child: RegistrationButton(
-                      btnName: 'Create account',
                       onPressed: isFirstNameFieldValid &&
                               isLastNameFieldValid &&
                               isEmailFieldValid &&
-                              isPasswordFieldValid
+                              isPasswordFieldValid &&
+                              !isLoading
                           ? signUp
                           : null,
+                      child: isLoading
+                          ? SizedBox(
+                              width: 3.18.h,
+                              height: 3.18.h,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Create account',
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                   Padding(

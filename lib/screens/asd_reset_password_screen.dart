@@ -116,12 +116,18 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 1.5.h, right: 1.5.h, top: 3.h),
                   child: RegistrationButton(
-                    btnName: 'Send Email',
                     icon: const Icon(
                       Icons.email_sharp,
                       color: Colors.white,
                     ),
                     onPressed: isEmailFieldValid ? resetPassword : null,
+                    child: Text(
+                      'Send Email',
+                      style: TextStyle(
+                        fontSize: 12.5.sp,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],

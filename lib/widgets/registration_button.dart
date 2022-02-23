@@ -4,15 +4,15 @@ import 'package:sizer/sizer.dart';
 import '../constants.dart';
 
 class RegistrationButton extends StatelessWidget {
-  final String btnName;
   final Icon? icon;
   final Function()? onPressed;
+  final Widget child;
 
   const RegistrationButton({
     Key? key,
-    required this.btnName,
     this.icon,
     required this.onPressed,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -26,13 +26,7 @@ class RegistrationButton extends StatelessWidget {
             padding: icon == null ? null : EdgeInsets.only(right: 1.5.h),
             child: icon,
           ),
-          Text(
-            btnName,
-            style: TextStyle(
-              fontSize: 12.5.sp,
-              color: Colors.white,
-            ),
-          ),
+          child,
         ],
       ),
       style: ButtonStyle(

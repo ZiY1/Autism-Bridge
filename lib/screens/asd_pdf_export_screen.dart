@@ -195,7 +195,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
             },
             margin: EdgeInsets.all(1.35.h),
           ),
-          leadingWidth: 14.w,
+          leadingWidth: 14.8.w,
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 2.h),

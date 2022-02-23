@@ -488,7 +488,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             },
             margin: EdgeInsets.all(1.35.h),
           ),
-          leadingWidth: 14.w,
+          leadingWidth: 14.8.w,
         ),
         body: SafeArea(
           child: ListView(
@@ -559,7 +559,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
                                     style: TextStyle(
                                       color: kTitleBlack,
-                                      fontSize: 13.5.sp,
+                                      fontSize: 14.sp,
                                     ),
                                   ),
                                   SizedBox(
@@ -639,7 +639,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Professional Summary',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 13.5.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -698,7 +698,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Employment History',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 13.5.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -741,7 +741,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                               ),
                                             ),
                                             Text(
-                                              '${currentEmploymentHistory.jobTitle} • ${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
+                                              '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
                                               style: TextStyle(
@@ -811,7 +811,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Education',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 13.5.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -920,7 +920,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Skills',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 13.5.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -1029,7 +1029,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               'Autism Challenges',
                               style: TextStyle(
                                 color: kTitleBlack,
-                                fontSize: 13.5.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                             RoundedIconContainer(
@@ -1125,6 +1125,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: kBackgroundRiceWhite,
+          elevation: 0.0,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(

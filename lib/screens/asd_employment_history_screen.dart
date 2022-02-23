@@ -124,7 +124,7 @@ class _AsdEmploymentHistoryScreenState
   }
 
   Future<void> deleteBtnOnPressed(BuildContext context) async {
-    bool wantDelete = await Utils.showCupertinoDialog(context);
+    bool wantDelete = await Utils.showMyDialog(context);
 
     if (wantDelete) {
       setState(() {
@@ -386,7 +386,7 @@ class _AsdEmploymentHistoryScreenState
             },
             margin: EdgeInsets.all(1.35.h),
           ),
-          leadingWidth: 14.w,
+          leadingWidth: 14.8.w,
         ),
         body: SafeArea(
           child: ListView(
@@ -609,6 +609,8 @@ class _AsdEmploymentHistoryScreenState
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: kBackgroundRiceWhite,
+          elevation: 0.0,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(

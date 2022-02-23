@@ -49,12 +49,10 @@ class _DetermineUserTypeLoadingScreenState
               return const AsdHomeScreen();
             }
           } else {
-            return const Center(
-              child: Scaffold(
-                backgroundColor: kBackgroundRiceWhite,
-                body: Center(
-                  child: CupertinoActivityIndicator(),
-                ),
+            return const Scaffold(
+              backgroundColor: kBackgroundRiceWhite,
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
             );
           }

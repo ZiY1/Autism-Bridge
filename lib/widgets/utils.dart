@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -99,6 +100,95 @@ class Utils {
       ),
     );
 
+    return wantDelete;
+  }
+
+  static Future<bool> showMyDialog(BuildContext context) async {
+    bool wantDelete = false;
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.0),
+              ),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 8.h,
+              vertical: 6.h,
+            ),
+            backgroundColor: kBackgroundRiceWhite,
+            title: Text(
+              'Do you want to delete this record ?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: kTitleBlack,
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            // titleTextStyle: const TextStyle(
+            //     fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+            //actionsOverflowButtonSpacing: 20,
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 1.5.h, vertical: 1.h),
+                      child: SizedBox(
+                        height: 5.7.h,
+                        child: ResumeBuilderButton(
+                            disableBorder: true,
+                            onPressed: () {
+                              wantDelete = true;
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(
+                                color: kWelcomeSubtitleGrey,
+                                fontFamily: 'Poppins',
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                            isHollow: true),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 1.5.h,
+                        vertical: 1.h,
+                      ),
+                      child: SizedBox(
+                        height: 5.7.h,
+                        child: ResumeBuilderButton(
+                            onPressed: () {
+                              wantDelete = false;
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'No',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Poppins',
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                            isHollow: false),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ], //content: Text("Saved successfully"),
+          );
+        });
     return wantDelete;
   }
 }

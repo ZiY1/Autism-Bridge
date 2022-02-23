@@ -170,7 +170,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               );
             } else {
               return const Center(
-                child: CupertinoActivityIndicator(),
+                child: CircularProgressIndicator(),
               );
             }
           },

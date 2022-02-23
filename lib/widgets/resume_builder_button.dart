@@ -7,12 +7,14 @@ class ResumeBuilderButton extends StatelessWidget {
   final Function()? onPressed;
   final Widget child;
   final bool isHollow;
+  final bool? disableBorder;
 
   const ResumeBuilderButton({
     Key? key,
     required this.onPressed,
     required this.child,
     required this.isHollow,
+    this.disableBorder,
   }) : super(key: key);
 
   @override
@@ -40,8 +42,10 @@ class ResumeBuilderButton extends StatelessWidget {
         ),
         side: isHollow
             ? MaterialStateProperty.all<BorderSide>(
-                const BorderSide(
-                  color: kAutismBridgeBlue,
+                BorderSide(
+                  color: disableBorder == true
+                      ? Colors.transparent
+                      : kAutismBridgeBlue,
                 ),
               )
             : null,

@@ -179,21 +179,26 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
                     padding: EdgeInsets.only(
                         left: 1.5.h, right: 1.5.h, top: 1.5.h, bottom: 4.5.h),
                     child: RegistrationButton(
-                      btnName: canResendEmail
-                          ? 'Resend Email'
-                          : 'Resend Email ($seconds)',
                       icon: const Icon(
                         Icons.email_sharp,
                         color: Colors.white,
                       ),
                       onPressed: canResendEmail ? sendVerificationEmail : null,
+                      child: Text(
+                        canResendEmail
+                            ? 'Resend Email'
+                            : 'Resend Email ($seconds)',
+                        style: TextStyle(
+                          fontSize: 12.5.sp,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
                     padding:
                         EdgeInsets.only(left: 1.5.h, right: 1.5.h, top: 1.5.h),
                     child: RegistrationButton(
-                      btnName: 'Cancel',
                       icon: const Icon(
                         Icons.cancel_sharp,
                         color: Colors.white,
@@ -203,6 +208,13 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
                         Navigator.pushNamedAndRemoveUntil(
                             context, WelcomeScreen.id, (route) => false);
                       },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 12.5.sp,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],

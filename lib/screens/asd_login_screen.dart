@@ -37,6 +37,8 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
 
   final passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -58,7 +60,10 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
     final isInputValid = formKey.currentState!.validate();
     if (!isInputValid) return;
 
-    Utils.showProgressIndicator(context);
+    //Utils.showProgressIndicator(context);
+    setState(() {
+      isLoading = true;
+    });
 
     // Firebase authentication validation
     try {
@@ -79,8 +84,11 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
         Navigator.pushNamedAndRemoveUntil(
             context, AsdEmailVerifyScreen.id, (route) => false);
       } else {
-        navigatorKey.currentState!
-            .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+        // navigatorKey.currentState!
+        //     .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+        setState(() {
+          isLoading = false;
+        });
 
         Utils.showSnackBar(
           'There is account is not registered as our job seeker account',
@@ -93,8 +101,11 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
         return;
       }
     } on FirebaseAuthException catch (e) {
-      navigatorKey.currentState!
-          .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+      // navigatorKey.currentState!
+      //     .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+      setState(() {
+        isLoading = false;
+      });
 
       Utils.showSnackBar(
         e.message,
@@ -232,10 +243,28 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
                     padding: EdgeInsets.only(
                         left: 1.5.h, right: 1.5.h, top: 1.h, bottom: 3.5.h),
                     child: RegistrationButton(
-                      btnName: 'Log In',
-                      onPressed: isEmailFieldValid && isPasswordFieldValid
+                      onPressed: isEmailFieldValid &&
+                              isPasswordFieldValid &&
+                              !isLoading
                           ? logIn
                           : null,
+                      child: isLoading
+                          ? SizedBox(
+                              width: 3.18.h,
+                              height: 3.18.h,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Log In',
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                   RichText(

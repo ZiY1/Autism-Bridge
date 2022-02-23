@@ -448,7 +448,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
             },
             margin: EdgeInsets.all(1.35.h),
           ),
-          leadingWidth: 14.w,
+          leadingWidth: 14.8.w,
         ),
         body: SafeArea(
           child: ListView(
@@ -717,6 +717,8 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: kBackgroundRiceWhite,
+          elevation: 0.0,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(

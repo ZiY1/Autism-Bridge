@@ -4,6 +4,7 @@ import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/screens/asd_job_preference_screen.dart';
 import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/date_time_picker_widget.dart';
@@ -148,6 +149,22 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                       );
                     },
                     child: const Text('Resume Builder'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AsdJobPreferenceScreen(
+                            userFirstName: userFirstName!,
+                            userLastName: userLastName!,
+                            userEmail: userEmail!,
+                            userId: userId!,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('Job Preference'),
                   ),
                   ElevatedButton(
                     onPressed: () {

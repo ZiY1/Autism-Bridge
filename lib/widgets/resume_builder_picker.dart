@@ -62,7 +62,7 @@ class ResumeBuilderPicker extends StatelessWidget {
           child: GestureDetector(
             onTap: onPressed,
             child: Container(
-                height: 5.2.h,
+                height: 5.25.h,
                 padding: EdgeInsets.symmetric(vertical: 1.3.h),
                 decoration: BoxDecoration(
                   color: Colors.white,

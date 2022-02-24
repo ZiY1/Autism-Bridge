@@ -24,6 +24,8 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
 
   final emailController = TextEditingController();
 
+  bool isLoading = false;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -35,7 +37,10 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
     final isInputValid = formKey.currentState!.validate();
     if (!isInputValid) return;
 
-    Utils.showProgressIndicator(context);
+    //Utils.showProgressIndicator(context);
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       await FirebaseAuth.instance
@@ -53,8 +58,10 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
       navigatorKey.currentState!
           .popUntil(ModalRoute.withName(AsdLoginScreen.id));
     } on FirebaseAuthException catch (e) {
-      // Pop the progress indicator
-      Navigator.of(context).pop();
+      //Navigator.of(context).pop();
+      setState(() {
+        isLoading = false;
+      });
 
       Utils.showSnackBar(
         e.message,
@@ -116,18 +123,29 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 1.5.h, right: 1.5.h, top: 3.h),
                   child: RegistrationButton(
+                    greyBtn: !isEmailFieldValid,
                     icon: const Icon(
                       Icons.email_sharp,
                       color: Colors.white,
                     ),
                     onPressed: isEmailFieldValid ? resetPassword : null,
-                    child: Text(
-                      'Send Email',
-                      style: TextStyle(
-                        fontSize: 12.5.sp,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: isLoading
+                        ? SizedBox(
+                            width: 3.18.h,
+                            height: 3.18.h,
+                            child: const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            'Send Email',
+                            style: TextStyle(
+                              fontSize: 12.5.sp,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ],

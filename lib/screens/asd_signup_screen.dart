@@ -306,6 +306,10 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                     padding: EdgeInsets.only(
                         left: 1.5.h, right: 1.5.h, top: 3.7.h, bottom: 2.h),
                     child: RegistrationButton(
+                      greyBtn: !(isFirstNameFieldValid &&
+                          isLastNameFieldValid &&
+                          isEmailFieldValid &&
+                          isPasswordFieldValid),
                       onPressed: isFirstNameFieldValid &&
                               isLastNameFieldValid &&
                               isEmailFieldValid &&

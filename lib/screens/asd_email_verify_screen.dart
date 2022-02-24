@@ -179,6 +179,7 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
                     padding: EdgeInsets.only(
                         left: 1.5.h, right: 1.5.h, top: 1.5.h, bottom: 4.5.h),
                     child: RegistrationButton(
+                      greyBtn: !canResendEmail,
                       icon: const Icon(
                         Icons.email_sharp,
                         color: Colors.white,
@@ -199,6 +200,7 @@ class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
                     padding:
                         EdgeInsets.only(left: 1.5.h, right: 1.5.h, top: 1.5.h),
                     child: RegistrationButton(
+                      greyBtn: false,
                       icon: const Icon(
                         Icons.cancel_sharp,
                         color: Colors.white,

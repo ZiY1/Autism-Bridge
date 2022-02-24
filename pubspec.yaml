@@ -36,7 +36,7 @@ dependencies:
 
   email_validator: ^2.0.1
 
-  responsive_framework: ^0.1.5
+  # responsive_framework: ^0.1.5
 
   sizer: ^2.0.15
 
@@ -59,6 +59,12 @@ dependencies:
   flutter_pdfview: ^1.2.1
 
   mailer: ^5.1.0
+
+  country_state_city_picker: ^1.2.8
+
+  csc_picker: ^0.2.6
+
+  flutter_picker: ^2.0.3
 
 dev_dependencies:
   flutter_test:

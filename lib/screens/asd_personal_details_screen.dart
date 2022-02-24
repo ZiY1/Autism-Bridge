@@ -57,6 +57,8 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
   String? dateOfBirth;
 
+  String? dateOfBirthTemp;
+
   String? email;
 
   String? phone;
@@ -72,6 +74,8 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
   bool isSaving = false;
 
   DateTime selectedDate = DateTime.now();
+
+  DateTime selectedDateTemp = DateTime.now();
 
   final Widget seg = SizedBox(height: 1.h);
 
@@ -352,56 +356,34 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
   }
 
   void showDatePicker() {
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext builder) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                  ),
-                  color: kBackgroundRiceWhite,
-                ),
-                width: double.infinity,
-                child: CupertinoButton(
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                        color: kAutismBridgeBlue,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                ),
-                height: MediaQuery.of(context).copyWith().size.height * 0.06,
-              ),
-              Container(
-                height: MediaQuery.of(context).copyWith().size.height * 0.30,
-                color: kBackgroundRiceWhite,
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (dateValue) {
-                    selectedDate = dateValue;
-                    dateOfBirth = DateFormat('MM/dd/yyyy').format(dateValue);
-                  },
-                  initialDateTime: selectedDate,
-                  minimumYear: 1900,
-                  maximumYear: DateTime.now().year,
-                  // maximumDate: DateTime.now(),
-                ),
-              ),
-            ],
-          );
+    Utils.showMyDatePicker(
+      context: context,
+      child: Container(
+        height: MediaQuery.of(context).copyWith().size.height * 0.30,
+        color: kBackgroundRiceWhite,
+        child: CupertinoDatePicker(
+          mode: CupertinoDatePickerMode.date,
+          onDateTimeChanged: (dateValue) {
+            selectedDateTemp = dateValue;
+            dateOfBirthTemp = DateFormat('MM/dd/yyyy').format(dateValue);
+          },
+          initialDateTime: selectedDate,
+          minimumYear: 1900,
+          maximumYear: DateTime.now().year,
+          // maximumDate: DateTime.now(),
+        ),
+      ),
+      onCancel: () {
+        Navigator.pop(context);
+      },
+      onConfirm: () {
+        setState(() {
+          selectedDate = selectedDateTemp;
+          dateOfBirth = dateOfBirthTemp;
         });
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
@@ -598,8 +580,8 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                                   ),
                                 ),
                           onPressed: () {
-                            dateOfBirth =
-                                DateFormat('MM/dd/yyyy').format(selectedDate);
+                            dateOfBirthTemp = DateFormat('MM/dd/yyyy')
+                                .format(selectedDateTemp);
                             return showDatePicker();
                           },
                           disableBorder: true,

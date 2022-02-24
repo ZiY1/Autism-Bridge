@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
 class Utils {
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -50,59 +52,6 @@ class Utils {
       ..showSnackBar(snackBar);
   }
 
-  static showProgressIndicator(BuildContext context) {
-    if (Platform.isIOS) {
-      showDialog(
-        barrierColor: Colors.transparent,
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CupertinoActivityIndicator(),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(
-              kAutismBridgeBlue,
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  static Future<bool> showCupertinoDialog(BuildContext context) async {
-    bool wantDelete = false;
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Do you want to delete this record?'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            child: const Text('Yes'),
-            onPressed: () {
-              wantDelete = true;
-              Navigator.of(context).pop();
-            },
-          ),
-          CupertinoDialogAction(
-            child: const Text('No'),
-            onPressed: () {
-              wantDelete = false;
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
-
-    return wantDelete;
-  }
-
   static Future<bool> showMyDialog(BuildContext context) async {
     bool wantDelete = false;
     await showDialog(
@@ -126,7 +75,6 @@ class Utils {
                 fontFamily: 'Poppins',
                 color: kTitleBlack,
                 fontSize: 13.sp,
-                fontWeight: FontWeight.w600,
               ),
             ),
             // titleTextStyle: const TextStyle(
@@ -189,6 +137,158 @@ class Utils {
             ], //content: Text("Saved successfully"),
           );
         });
+    return wantDelete;
+  }
+
+  static void showMyDatePicker({
+    required BuildContext context,
+    required Widget child,
+    required Function() onCancel,
+    required Function() onConfirm,
+  }) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext builder) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
+                  ),
+                  color: kBackgroundRiceWhite,
+                ),
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CupertinoButton(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: kAutismBridgeBlue,
+                          fontSize: 11.sp,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      onPressed: onCancel,
+                    ),
+                    CupertinoButton(
+                      child: Text(
+                        'Confirm',
+                        style: TextStyle(
+                          color: kAutismBridgeBlue,
+                          fontSize: 11.sp,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      onPressed: onConfirm,
+                    ),
+                  ],
+                ),
+                height: MediaQuery.of(context).copyWith().size.height * 0.06,
+              ),
+              Container(
+                height: MediaQuery.of(context).copyWith().size.height * 0.30,
+                color: kBackgroundRiceWhite,
+                child: child,
+              ),
+            ],
+          );
+        });
+  }
+
+  static void showMyCustomizedPicker({
+    required BuildContext context,
+    required String pickerData,
+    required Function(Picker picker, List value) onConfirm,
+    required bool smallerText,
+  }) {
+    Picker(
+      height: 30.h,
+      itemExtent: 4.h,
+      magnification: 1.1,
+      confirmTextStyle: TextStyle(
+        color: kAutismBridgeBlue,
+        fontSize: 11.sp,
+      ),
+      cancelTextStyle: TextStyle(
+        color: kAutismBridgeBlue,
+        fontSize: 11.sp,
+      ),
+      textStyle:
+          smallerText ? TextStyle(fontSize: 12.sp, color: Colors.black) : null,
+      selectedTextStyle: smallerText ? TextStyle(fontSize: 12.sp) : null,
+      //textStyle: TextStyle(fontSize: 8.sp),
+      backgroundColor: kBackgroundRiceWhite,
+      headerDecoration: const BoxDecoration(
+        color: kBackgroundRiceWhite,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.0),
+          topRight: Radius.circular(12.0),
+        ),
+      ),
+      adapter: PickerDataAdapter<String>(
+          pickerdata: const JsonDecoder().convert(pickerData)),
+      changeToFirst: true,
+      hideHeader: false,
+      onConfirm: onConfirm,
+    ).showModal(context);
+  }
+
+  // Unused Utils
+  static showProgressIndicator(BuildContext context) {
+    if (Platform.isIOS) {
+      showDialog(
+        barrierColor: Colors.transparent,
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(
+              kAutismBridgeBlue,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  static Future<bool> showCupertinoDialog(BuildContext context) async {
+    bool wantDelete = false;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Do you want to delete this record?'),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            onPressed: () {
+              wantDelete = true;
+              Navigator.of(context).pop();
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('No'),
+            onPressed: () {
+              wantDelete = false;
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+
     return wantDelete;
   }
 }

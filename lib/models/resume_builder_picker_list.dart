@@ -1,23 +1,21 @@
-const List<String> levelList = [
-  'Level 1',
-  'Level 2',
-  'Level 3',
-  'Level 4',
-  'Level 5',
-];
+const conditionList = '''[
+  "Mild",
+  "Moderate",
+  "Severe"
+]''';
 
-const List<String> degreeList = [
-  'High School',
-  'Associate',
-  'Bachelor',
-  'Master',
-  'Doctor',
-];
+const degreeList = '''[
+  "High School",
+  "Associate",
+  "Bachelor",
+  "Master",
+  "Doctor"
+]''';
 
-const List<String> skillList = [
-  'Novice',
-  'Beginner',
-  'Skillful',
-  'Experienced',
-  'Expert',
-];
+const skillList = '''[
+  "Novice",
+  "Beginner",
+  "Skillful",
+  "Experienced",
+  "Expert"
+]''';

@@ -11,12 +11,13 @@ import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:autism_bridge/widgets/cupertino_picker_extended.dart'
     as cupertino_extended;
 
-enum Picker {
+enum PickerPosition {
   left,
   right,
 }
@@ -69,7 +70,11 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
   String? startDate;
 
+  String? startDateTemp;
+
   String? endDate;
+
+  String? endDateTemp;
 
   String? city;
 
@@ -81,7 +86,11 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
   DateTime leftSelectedDate = DateTime.now();
 
+  DateTime leftSelectedDateTemp = DateTime.now();
+
   DateTime rightSelectedDate = DateTime.now();
+
+  DateTime rightSelectedDateTemp = DateTime.now();
 
   String btnText = 'Add';
 
@@ -289,122 +298,68 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
     }
   }
 
-  void showDatePicker(Picker myPicker) {
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext builder) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                  ),
-                  color: kBackgroundRiceWhite,
-                ),
-                width: double.infinity,
-                child: CupertinoButton(
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Done',
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                ),
-                height: MediaQuery.of(context).copyWith().size.height * 0.06,
-              ),
-              Container(
-                height: MediaQuery.of(context).copyWith().size.height * 0.30,
-                color: kBackgroundRiceWhite,
-                child: cupertino_extended.CupertinoDatePicker(
-                  mode: cupertino_extended.CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (dateValue) {
-                    myPicker == Picker.left
-                        ? startDateOnChanged(dateValue)
-                        : endDateOnChanged(dateValue);
-                  },
-                  initialDateTime: myPicker == Picker.left
-                      ? leftSelectedDate
-                      : rightSelectedDate,
-                  minimumYear: 1950,
-                  maximumYear: 2040,
-                  // maximumDate: DateTime.now(),
-                ),
-              ),
-            ],
-          );
+  void showDatePicker(PickerPosition myPicker) {
+    Utils.showMyDatePicker(
+      context: context,
+      child: Container(
+        height: MediaQuery.of(context).copyWith().size.height * 0.30,
+        color: kBackgroundRiceWhite,
+        child: cupertino_extended.CupertinoDatePicker(
+          mode: cupertino_extended.CupertinoDatePickerMode.date,
+          onDateTimeChanged: (dateValue) {
+            myPicker == PickerPosition.left
+                ? startDateOnChanged(dateValue)
+                : endDateOnChanged(dateValue);
+          },
+          initialDateTime: myPicker == PickerPosition.left
+              ? leftSelectedDate
+              : rightSelectedDate,
+          minimumYear: 1950,
+          maximumYear: 2040,
+          // maximumDate: DateTime.now(),
+        ),
+      ),
+      onCancel: () {
+        Navigator.pop(context);
+      },
+      onConfirm: () {
+        setState(() {
+          if (myPicker == PickerPosition.left) {
+            leftSelectedDate = leftSelectedDateTemp;
+            startDate = startDateTemp;
+          } else {
+            rightSelectedDate = rightSelectedDateTemp;
+            endDate = endDateTemp;
+          }
         });
+        Navigator.pop(context);
+      },
+    );
   }
 
   void showDegreePicker() {
-    List<Text> cupertinoPickerList = [];
-
-    for (String name in degreeList) {
-      cupertinoPickerList.add(Text(name));
-    }
-
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext builder) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                  ),
-                  color: kBackgroundRiceWhite,
-                ),
-                width: double.infinity,
-                child: CupertinoButton(
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                        color: kAutismBridgeBlue,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                ),
-                height: MediaQuery.of(context).copyWith().size.height * 0.06,
-              ),
-              Container(
-                height: MediaQuery.of(context).copyWith().size.height * 0.25,
-                color: kBackgroundRiceWhite,
-                child: CupertinoPicker(
-                  itemExtent: 4.5.h,
-                  onSelectedItemChanged: (int selectedItem) {
-                    degree = degreeList[selectedItem];
-                  },
-                  children: cupertinoPickerList,
-                ),
-              ),
-            ],
-          );
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: degreeList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+        setState(() {
+          degree = strTempRemovedBracket;
         });
+      },
+      smallerText: false,
+    );
   }
 
   void startDateOnChanged(dateValue) {
-    leftSelectedDate = dateValue;
-    startDate = DateFormat('MM/yyyy').format(dateValue);
+    leftSelectedDateTemp = dateValue;
+    startDateTemp = DateFormat('MM/yyyy').format(dateValue);
   }
 
   void endDateOnChanged(dateValue) {
-    rightSelectedDate = dateValue;
-    endDate = DateFormat('MM/yyyy').format(dateValue);
+    rightSelectedDateTemp = dateValue;
+    endDateTemp = DateFormat('MM/yyyy').format(dateValue);
   }
 
   @override
@@ -499,7 +454,6 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            degree = degreeList[0];
                             showDegreePicker();
                           },
                           title: 'Degree',
@@ -545,9 +499,9 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                             Expanded(
                               child: ResumeBuilderPicker(
                                 onPressed: () {
-                                  startDate = DateFormat('MM/yyyy')
-                                      .format(leftSelectedDate);
-                                  return showDatePicker(Picker.left);
+                                  startDateTemp = DateFormat('MM/yyyy')
+                                      .format(leftSelectedDateTemp);
+                                  return showDatePicker(PickerPosition.left);
                                 },
                                 title: 'Start Date',
                                 bodyText: startDate == null
@@ -574,9 +528,9 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                                   if (isDatePresent) {
                                     return;
                                   } else {
-                                    endDate = DateFormat('MM/yyyy')
-                                        .format(rightSelectedDate);
-                                    return showDatePicker(Picker.right);
+                                    endDateTemp = DateFormat('MM/yyyy')
+                                        .format(rightSelectedDateTemp);
+                                    return showDatePicker(PickerPosition.right);
                                   }
                                 },
                                 title: 'End Date',

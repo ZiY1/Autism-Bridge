@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:autism_bridge/models/personal_details_data.dart';
+import 'package:autism_bridge/models/resume_builder_picker_list.dart';
+import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
+import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import '../constants.dart';
 import '../firebase_helpers.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
 class AsdJobPreferenceScreen extends StatefulWidget {
   static const id = 'asd_job_preference_screen';
@@ -43,13 +50,19 @@ class AsdJobPreferenceScreen extends StatefulWidget {
 class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
   //PersonalDetails? userPersonalDetails;
 
+  String? preferredEmploymentType;
+
   String? preferredJobTitle;
 
-  //String? preferredField;
+  String? preferredJobCategory;
+
+  String? preferredState;
 
   String? preferredCity;
 
-  String? preferredSalary;
+  String? preferredMinSalary;
+
+  String? preferredMaxSalary;
 
   bool isSaving = false;
 
@@ -179,6 +192,87 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
   //   userPersonalDetails = personalDetails;
   // }
 
+  void showEmpTypePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: employmentTypeList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+        setState(() {
+          preferredEmploymentType = strTempRemovedBracket;
+        });
+      },
+      smallerText: false,
+    );
+  }
+
+  void showJobTitlePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: jobTitleCategoriesList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          preferredJobCategory = leftValueTemp;
+          preferredJobTitle = rightValueTemp;
+        });
+      },
+      smallerText: true,
+    );
+  }
+
+  void showCityStatePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: usStatesCitiesList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          preferredState = leftValueTemp;
+          preferredCity = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
+  }
+
+  void showSalaryRangePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: salaryRageList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          preferredMinSalary = leftValueTemp;
+          preferredMaxSalary = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -254,10 +348,10 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                     padding:
                         EdgeInsets.only(left: 1.h, right: 1.h, bottom: 1.h),
                     child: Text(
-                      'We will recommend various job positions based on your job preference',
+                      'We will recommend various job positions \nbased on your job preference',
                       style: TextStyle(
                         color: kRegistrationSubtitleGrey,
-                        fontSize: 9.sp,
+                        fontSize: 9.5.sp,
                       ),
                     ),
                   ),
@@ -280,61 +374,98 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            //TODO:
+                            showEmpTypePicker();
                           },
-                          title: 'Preferred Job Field',
-                          bodyText: Text(
-                            'Select your preferred job field',
-                            style: TextStyle(
-                              fontSize: 9.5.sp,
-                              color: Colors.grey.shade400,
-                            ),
-                          ),
+                          title: 'Preferred Employment Type',
+                          bodyText: preferredEmploymentType == null
+                              ? Text(
+                                  'Select your employment type',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  preferredEmploymentType!,
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: false,
                         ),
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            //TODO:
+                            showJobTitlePicker();
                           },
-                          title: 'Preferred Job Title',
-                          bodyText: Text(
-                            'Select your preferred job title',
-                            style: TextStyle(
-                              fontSize: 9.5.sp,
-                              color: Colors.grey.shade400,
-                            ),
-                          ),
+                          title: 'Preferred Job Category & Title',
+                          bodyText: preferredJobCategory == null &&
+                                  preferredJobTitle == null
+                              ? Text(
+                                  'Select your preferred category & job title',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  "${preferredJobCategory!} , ${preferredJobTitle!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: false,
                         ),
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            //TODO:
+                            showCityStatePicker();
                           },
-                          title: 'Preferred City',
-                          bodyText: Text(
-                            'Select your preferred city to work',
-                            style: TextStyle(
-                              fontSize: 9.5.sp,
-                              color: Colors.grey.shade400,
-                            ),
-                          ),
+                          title: 'Preferred Job State & City',
+                          bodyText:
+                              preferredState == null && preferredCity == null
+                                  ? Text(
+                                      'Select your job state & city',
+                                      style: TextStyle(
+                                        fontSize: 9.5.sp,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                    )
+                                  : Text(
+                                      "${preferredState!} , ${preferredCity!}",
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: const Color(0xFF1F1F39),
+                                      ),
+                                    ),
                           disableBorder: false,
                         ),
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            //TODO:
+                            showSalaryRangePicker();
                           },
                           title: 'Preferred Salary',
-                          bodyText: Text(
-                            'Select your preferred salary range',
-                            style: TextStyle(
-                              fontSize: 9.5.sp,
-                              color: Colors.grey.shade400,
-                            ),
-                          ),
+                          bodyText: preferredMinSalary == null &&
+                                  preferredMaxSalary == null
+                              ? Text(
+                                  'Select your preferred monthly salary range',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  preferredMaxSalary!.isEmpty
+                                      ? preferredMinSalary!
+                                      : "${preferredMinSalary!} - ${preferredMaxSalary!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: true,
                         ),
                       ],

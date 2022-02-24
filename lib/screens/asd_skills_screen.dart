@@ -10,6 +10,7 @@ import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';
 
 class AsdSkillsScreen extends StatefulWidget {
@@ -204,58 +205,18 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
   }
 
   void showPicker() {
-    List<Text> cupertinoPickerList = [];
-
-    for (String name in skillList) {
-      cupertinoPickerList.add(Text(name));
-    }
-
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext builder) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                  ),
-                  color: kBackgroundRiceWhite,
-                ),
-                width: double.infinity,
-                child: CupertinoButton(
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                        color: kAutismBridgeBlue,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                ),
-                height: MediaQuery.of(context).copyWith().size.height * 0.06,
-              ),
-              Container(
-                height: MediaQuery.of(context).copyWith().size.height * 0.25,
-                color: kBackgroundRiceWhite,
-                child: CupertinoPicker(
-                  itemExtent: 4.5.h,
-                  onSelectedItemChanged: (int selectedItem) {
-                    skillLevel = skillList[selectedItem];
-                  },
-                  children: cupertinoPickerList,
-                ),
-              ),
-            ],
-          );
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: skillList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+        setState(() {
+          skillLevel = strTempRemovedBracket;
         });
+      },
+      smallerText: false,
+    );
   }
 
   @override
@@ -339,7 +300,6 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                         seg,
                         ResumeBuilderPicker(
                           onPressed: () {
-                            skillLevel = skillList[0];
                             return showPicker();
                           },
                           title: 'Skill Level',

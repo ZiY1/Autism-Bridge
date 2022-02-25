@@ -18,6 +18,7 @@ import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../constants.dart';
@@ -444,6 +445,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget seg = SizedBox(height: 1.5.h);
+    final Widget littleSeg = SizedBox(height: 0.3.h);
     return Container(
       //TODO: using linear gradient color rather than a fixed appbar color, is it better or not?
       decoration: const BoxDecoration(
@@ -535,20 +538,17 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 1.2.h,
+                      horizontal: 1.5.h,
                       vertical: 1.5.h,
                     ),
                     child: IntrinsicHeight(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
@@ -583,51 +583,155 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                   ),
                                 ],
                               ),
-                              Text(
-                                userPersonalDetails == null
-                                    ? 'Wanted Job Title • City'
-                                    : '${userPersonalDetails!.wantedJobTitle} • ${userPersonalDetails!.city}',
-                                style: TextStyle(
-                                    color: kRegistrationSubtitleGrey,
-                                    fontSize: 9.5.sp),
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(5.0), //or 15.0
+                                child: Container(
+                                  height: 9.h,
+                                  width: 9.h,
+                                  color: kBackgroundRiceWhite,
+                                  child: userPersonalDetails == null
+                                      ? const Icon(
+                                          CupertinoIcons.person_alt,
+                                          color: Color(0xFFBEC4D5),
+                                          size: 40.0,
+                                        )
+                                      : FittedBox(
+                                          child: Image.file(userPersonalDetails!
+                                              .profileImage),
+                                          fit: BoxFit.fill,
+                                        ),
+                                ),
                               ),
                             ],
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0), //or 15.0
-                            child: Container(
-                              height: 9.h,
-                              width: 9.h,
-                              color: kBackgroundRiceWhite,
-                              child: userPersonalDetails == null
-                                  ? const Icon(
-                                      CupertinoIcons.person_alt,
-                                      color: Color(0xFFBEC4D5),
-                                      size: 40.0,
-                                    )
-                                  : FittedBox(
-                                      child: Image.file(
-                                          userPersonalDetails!.profileImage),
-                                      fit: BoxFit.fill,
+                          userPersonalDetails == null
+                              ? const SizedBox.shrink()
+                              : Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Date of Birth',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'Phone Number',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'Email Address',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'Current City',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                      ],
                                     ),
-                            ),
-                          ),
+                                    SizedBox(
+                                      width: 0.6.h,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ':',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          ':',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          ':',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          ':',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 0.6.h,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          userPersonalDetails!.dateOfBirth,
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          userPersonalDetails!.phone,
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          userPersonalDetails!.email,
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          '${userPersonalDetails!.city}, ${userPersonalDetails!.state}',
+                                          style: TextStyle(
+                                              color: kRegistrationSubtitleGrey,
+                                              fontSize: 9.5.sp),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )
                         ],
                       ),
                     ),
                   ),
                 ),
               ),
+              seg,
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: 1.2.h,
-                      right: 1.2.h,
+                      left: 1.5.h,
+                      right: 1.5.h,
                       bottom: 1.5.h,
                     ),
                     child: Column(
@@ -666,6 +770,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             userProfessionalSummary == null
                                 ? 'Add your professional summary...'
                                 : userProfessionalSummary!.summaryText,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: kRegistrationSubtitleGrey,
@@ -677,16 +782,16 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                   ),
                 ),
               ),
+              seg,
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: 1.2.h,
-                      right: 1.2.h,
+                      left: 1.5.h,
+                      right: 1.5.h,
                       bottom: 1.5.h,
                     ),
                     child: Column(
@@ -722,54 +827,61 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                   final EmploymentHistory?
                                       currentEmploymentHistory =
                                       userEmploymentHistoryList![index];
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              currentEmploymentHistory!
-                                                  .employer,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: kTitleBlack,
-                                                fontSize: 11.5.sp,
+                                  return Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.zero
+                                        : EdgeInsets.only(
+                                            top: 0.75.h,
+                                          ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                currentEmploymentHistory!
+                                                    .employer,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: kTitleBlack,
+                                                  fontSize: 11.5.sp,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color:
-                                                      kRegistrationSubtitleGrey,
-                                                  fontSize: 9.5.sp),
-                                            ),
-                                          ],
+                                              Text(
+                                                '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color:
+                                                        kRegistrationSubtitleGrey,
+                                                    fontSize: 9.5.sp),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        alignment: Alignment.centerRight,
-                                        onPressed: () {
-                                          employmentHistoryUpdateBtnOnPressed(
-                                            context: context,
-                                            subCollectionId:
-                                                currentEmploymentHistory
-                                                    .subCollectionId,
-                                            listIndex: index,
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: kRegistrationSubtitleGrey,
-                                          size: 23.5,
+                                        IconButton(
+                                          alignment: Alignment.centerRight,
+                                          onPressed: () {
+                                            employmentHistoryUpdateBtnOnPressed(
+                                              context: context,
+                                              subCollectionId:
+                                                  currentEmploymentHistory
+                                                      .subCollectionId,
+                                              listIndex: index,
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 23.5,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 },
                                 itemCount: userEmploymentHistoryList!.length,
@@ -790,16 +902,16 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                   ),
                 ),
               ),
+              seg,
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: 1.2.h,
-                      right: 1.2.h,
+                      left: 1.5.h,
+                      right: 1.5.h,
                       bottom: 1.5.h,
                     ),
                     child: Column(
@@ -834,51 +946,59 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 itemBuilder: (context, index) {
                                   final Education? currentEducation =
                                       userEducationList![index];
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              currentEducation!.school,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: kTitleBlack,
-                                                fontSize: 11.5.sp,
+                                  return Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.zero
+                                        : EdgeInsets.only(
+                                            top: 0.75.h,
+                                          ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                currentEducation!.school,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: kTitleBlack,
+                                                  fontSize: 11.5.sp,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color:
-                                                      kRegistrationSubtitleGrey,
-                                                  fontSize: 9.5.sp),
-                                            ),
-                                          ],
+                                              Text(
+                                                '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color:
+                                                        kRegistrationSubtitleGrey,
+                                                    fontSize: 9.5.sp),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        alignment: Alignment.centerRight,
-                                        onPressed: () {
-                                          educationUpdateBtnOnPressed(
-                                              context: context,
-                                              subCollectionId: currentEducation
-                                                  .subCollectionId,
-                                              listIndex: index);
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: kRegistrationSubtitleGrey,
-                                          size: 23.5,
+                                        IconButton(
+                                          alignment: Alignment.centerRight,
+                                          onPressed: () {
+                                            educationUpdateBtnOnPressed(
+                                                context: context,
+                                                subCollectionId:
+                                                    currentEducation
+                                                        .subCollectionId,
+                                                listIndex: index);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 23.5,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 },
                                 itemCount: userEducationList!.length,
@@ -899,16 +1019,16 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                   ),
                 ),
               ),
+              seg,
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: 1.2.h,
-                      right: 1.2.h,
+                      left: 1.5.h,
+                      right: 1.5.h,
                       bottom: 1.5.h,
                     ),
                     child: Column(
@@ -943,51 +1063,58 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 itemBuilder: (context, index) {
                                   final Skill? currentSkill =
                                       userSkillList![index];
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              currentSkill!.skillName,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: kTitleBlack,
-                                                fontSize: 11.5.sp,
+                                  return Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.zero
+                                        : EdgeInsets.only(
+                                            top: 0.75.h,
+                                          ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                currentSkill!.skillName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: kTitleBlack,
+                                                  fontSize: 11.5.sp,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              currentSkill.skillLevel,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color:
-                                                      kRegistrationSubtitleGrey,
-                                                  fontSize: 9.5.sp),
-                                            ),
-                                          ],
+                                              Text(
+                                                currentSkill.skillLevel,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color:
+                                                        kRegistrationSubtitleGrey,
+                                                    fontSize: 9.5.sp),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        alignment: Alignment.centerRight,
-                                        onPressed: () {
-                                          skillUpdateBtnOnPressed(
-                                              context: context,
-                                              subCollectionId:
-                                                  currentSkill.subCollectionId,
-                                              listIndex: index);
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: kRegistrationSubtitleGrey,
-                                          size: 23.5,
+                                        IconButton(
+                                          alignment: Alignment.centerRight,
+                                          onPressed: () {
+                                            skillUpdateBtnOnPressed(
+                                                context: context,
+                                                subCollectionId: currentSkill
+                                                    .subCollectionId,
+                                                listIndex: index);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 23.5,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 },
                                 itemCount: userSkillList!.length,
@@ -1008,16 +1135,16 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                   ),
                 ),
               ),
+              seg,
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
-                  vertical: 1.h,
                 ),
                 child: MyCardWidget(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: 1.2.h,
-                      right: 1.2.h,
+                      left: 1.5.h,
+                      right: 1.5.h,
                       bottom: 1.5.h,
                     ),
                     child: Column(
@@ -1053,54 +1180,61 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                   final AutismChallenge?
                                       currentAutismChallenge =
                                       userAutismChallengeList![index];
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              currentAutismChallenge!
-                                                  .challengeName,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: kTitleBlack,
-                                                fontSize: 11.5.sp,
+                                  return Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.zero
+                                        : EdgeInsets.only(
+                                            top: 0.75.h,
+                                          ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                currentAutismChallenge!
+                                                    .challengeName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: kTitleBlack,
+                                                  fontSize: 11.5.sp,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              currentAutismChallenge
-                                                  .challengeLevel,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color:
-                                                      kRegistrationSubtitleGrey,
-                                                  fontSize: 9.5.sp),
-                                            ),
-                                          ],
+                                              Text(
+                                                currentAutismChallenge
+                                                    .challengeLevel,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    color:
+                                                        kRegistrationSubtitleGrey,
+                                                    fontSize: 9.5.sp),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        alignment: Alignment.centerRight,
-                                        onPressed: () {
-                                          autismChallengeUpdateBtnOnPressed(
-                                              context: context,
-                                              subCollectionId:
-                                                  currentAutismChallenge
-                                                      .subCollectionId,
-                                              listIndex: index);
-                                        },
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: kRegistrationSubtitleGrey,
-                                          size: 23.5,
+                                        IconButton(
+                                          alignment: Alignment.centerRight,
+                                          onPressed: () {
+                                            autismChallengeUpdateBtnOnPressed(
+                                                context: context,
+                                                subCollectionId:
+                                                    currentAutismChallenge
+                                                        .subCollectionId,
+                                                listIndex: index);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 23.5,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 },
                                 itemCount: userAutismChallengeList!.length,

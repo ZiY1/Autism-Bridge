@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class PersonalDetails {
   final String userId;
-  final String wantedJobTitle;
   final File profileImage;
   final String profileImageUrl;
   final String firstName;
@@ -13,14 +12,13 @@ class PersonalDetails {
   final String dateOfBirth;
   final String email;
   final String phone;
-  final String country;
+  final String state;
   final String city;
   final String address;
   final String postalCode;
 
   PersonalDetails({
     required this.userId,
-    required this.wantedJobTitle,
     required this.profileImage,
     required this.profileImageUrl,
     required this.firstName,
@@ -28,7 +26,7 @@ class PersonalDetails {
     required this.dateOfBirth,
     required this.email,
     required this.phone,
-    required this.country,
+    required this.state,
     required this.city,
     required this.address,
     required this.postalCode,
@@ -40,14 +38,13 @@ class PersonalDetails {
         .collection('cv_personal_details')
         .doc(userId)
         .set({
-      'wantedJobTitle': '',
       'profileImageUrl': '',
       'firstName': '',
       'lastName': '',
       'dateOfBirth': '',
       'email': '',
       'phone': '',
-      'country': '',
+      'state': '',
       'city': '',
       'address': '',
       'postalCode': '',
@@ -66,14 +63,13 @@ class PersonalDetails {
       if (documentSnapshot.exists) {
         Map<String, dynamic> data =
             documentSnapshot.data() as Map<String, dynamic>;
-        final String wantedJobTitle = data['wantedJobTitle'];
         final String profileImageUrl = data['profileImageUrl'];
         final String firstName = data['firstName'];
         final String lastName = data['lastName'];
         final String dateOfBirth = data['dateOfBirth'];
         final String email = data['email'];
         final String phone = data['phone'];
-        final String country = data['country'];
+        final String state = data['state'];
         final String city = data['city'];
         final String address = data['address'];
         final String postalCode = data['postalCode'];
@@ -82,7 +78,6 @@ class PersonalDetails {
 
         personalDetails = PersonalDetails(
           userId: userId,
-          wantedJobTitle: wantedJobTitle,
           profileImage: profileImage,
           profileImageUrl: profileImageUrl,
           firstName: firstName,
@@ -90,7 +85,7 @@ class PersonalDetails {
           dateOfBirth: dateOfBirth,
           email: email,
           phone: phone,
-          country: country,
+          state: state,
           city: city,
           address: address,
           postalCode: postalCode,
@@ -120,14 +115,13 @@ class PersonalDetails {
         .collection('cv_personal_details')
         .doc(userId)
         .update({
-      'wantedJobTitle': wantedJobTitle,
       'profileImageUrl': profileImageUrl,
       'firstName': firstName,
       'lastName': lastName,
       'dateOfBirth': dateOfBirth,
       'email': email,
       'phone': phone,
-      'country': country,
+      'state': state,
       'city': city,
       'address': address,
       'postalCode': postalCode,

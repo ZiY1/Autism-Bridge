@@ -8,6 +8,7 @@ class Education {
   final String degree;
   final String startDate;
   final String endDate;
+  final String state;
   final String city;
   final String description;
 
@@ -19,6 +20,7 @@ class Education {
     required this.degree,
     required this.startDate,
     required this.endDate,
+    required this.state,
     required this.city,
     required this.description,
   });
@@ -39,6 +41,7 @@ class Education {
     String degree;
     String startDate;
     String endDate;
+    String state;
     String city;
     String description;
 
@@ -58,6 +61,7 @@ class Education {
         degree = data['degree'];
         startDate = data['startDate'];
         endDate = data['endDate'];
+        state = data['state'];
         city = data['city'];
         description = data['description'];
 
@@ -69,6 +73,7 @@ class Education {
           degree: degree,
           startDate: startDate,
           endDate: endDate,
+          state: state,
           city: city,
           description: description,
         );
@@ -103,6 +108,7 @@ class Education {
       'degree': degree,
       'startDate': startDate,
       'endDate': endDate,
+      'state': state,
       'city': city,
       'description': description,
     });
@@ -121,6 +127,7 @@ class Education {
       'degree': degree,
       'startDate': startDate,
       'endDate': endDate,
+      'state': state,
       'city': city,
       'description': description,
     });

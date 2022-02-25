@@ -1,5 +1,6 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
+import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
@@ -10,6 +11,7 @@ import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:autism_bridge/widgets/cupertino_picker_extended.dart'
@@ -86,6 +88,10 @@ class _AsdEmploymentHistoryScreenState
 
   String? employer;
 
+  String? employmentType;
+
+  String? state;
+
   String? city;
 
   String? description;
@@ -114,8 +120,10 @@ class _AsdEmploymentHistoryScreenState
 
         jobTitle = employmentHistoryTemp!.jobTitle;
         employer = employmentHistoryTemp.employer;
+        employmentType = employmentHistoryTemp.employmentType;
         startDate = employmentHistoryTemp.startDate;
         endDate = employmentHistoryTemp.endDate;
+        state = employmentHistoryTemp.state;
         city = employmentHistoryTemp.city;
         description = employmentHistoryTemp.description;
 
@@ -178,6 +186,17 @@ class _AsdEmploymentHistoryScreenState
       );
       return;
     }
+    if (employmentType == null || employmentType!.isEmpty) {
+      Utils.showSnackBar(
+        'Please select your employment type',
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+      return;
+    }
     if (startDate == null || startDate!.isEmpty) {
       Utils.showSnackBar(
         'Please select your start date',
@@ -200,9 +219,9 @@ class _AsdEmploymentHistoryScreenState
       );
       return;
     }
-    if (city == null || city!.isEmpty) {
+    if (city == null || city!.isEmpty || state == null || state!.isEmpty) {
       Utils.showSnackBar(
-        'Please enter your email',
+        'Please select your work city',
         const Icon(
           Icons.error_sharp,
           color: Colors.red,
@@ -249,8 +268,10 @@ class _AsdEmploymentHistoryScreenState
         subCollectionId: DateTime.now().microsecondsSinceEpoch.toString(),
         jobTitle: jobTitle!,
         employer: employer!,
+        employmentType: employmentType!,
         startDate: startDate!,
         endDate: endDate!,
+        state: state!,
         city: city!,
         description: description!,
       );
@@ -270,8 +291,10 @@ class _AsdEmploymentHistoryScreenState
         subCollectionId: widget.subCollectionId!,
         jobTitle: jobTitle!,
         employer: employer!,
+        employmentType: employmentType!,
         startDate: startDate!,
         endDate: endDate!,
+        state: state!,
         city: city!,
         description: description!,
       );
@@ -331,6 +354,43 @@ class _AsdEmploymentHistoryScreenState
   void endDateOnChanged(dateValue) {
     rightSelectedDateTemp = dateValue;
     endDateTemp = DateFormat('MM/yyyy').format(dateValue);
+  }
+
+  void showEmpTypePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: employmentTypeList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+        setState(() {
+          employmentType = strTempRemovedBracket;
+        });
+      },
+      smallerText: false,
+    );
+  }
+
+  void showCityStatePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: usStatesCitiesList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          state = leftValueTemp;
+          city = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
   }
 
   @override
@@ -421,6 +481,29 @@ class _AsdEmploymentHistoryScreenState
                           hintText: 'e.g. Google',
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
+                          disableBorder: false,
+                        ),
+                        seg,
+                        ResumeBuilderPicker(
+                          onPressed: () {
+                            showEmpTypePicker();
+                          },
+                          title: 'Employment Type',
+                          bodyText: employmentType == null
+                              ? Text(
+                                  'Select your employment type',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  employmentType!,
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: true,
                         ),
                       ],
@@ -540,15 +623,26 @@ class _AsdEmploymentHistoryScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            city = text;
+                        ResumeBuilderPicker(
+                          onPressed: () {
+                            showCityStatePicker();
                           },
-                          initialValue: city,
-                          title: 'City',
-                          hintText: 'e.g. New York',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          title: 'City & State',
+                          bodyText: state == null && city == null
+                              ? Text(
+                                  'Select your work city & state',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  "${city!} , ${state!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: true,
                         ),
                       ],

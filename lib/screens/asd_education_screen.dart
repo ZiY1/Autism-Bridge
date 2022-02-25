@@ -1,5 +1,6 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/education_data.dart';
+import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -76,6 +77,8 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
   String? endDateTemp;
 
+  String? state;
+
   String? city;
 
   String? description;
@@ -117,6 +120,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
         degree = educationTemp.degree;
         startDate = educationTemp.startDate;
         endDate = educationTemp.endDate;
+        state = educationTemp.state;
         city = educationTemp.city;
         description = educationTemp.description;
 
@@ -212,9 +216,9 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
       );
       return;
     }
-    if (city == null || city!.isEmpty) {
+    if (city == null || city!.isEmpty || state == null || state!.isEmpty) {
       Utils.showSnackBar(
-        'Please enter your email',
+        'Please enter your study city',
         const Icon(
           Icons.error_sharp,
           color: Colors.red,
@@ -264,6 +268,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
         degree: degree!,
         startDate: startDate!,
         endDate: endDate!,
+        state: state!,
         city: city!,
         description: description!,
       );
@@ -286,6 +291,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
         degree: degree!,
         startDate: startDate!,
         endDate: endDate!,
+        state: state!,
         city: city!,
         description: description!,
       );
@@ -360,6 +366,28 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
   void endDateOnChanged(dateValue) {
     rightSelectedDateTemp = dateValue;
     endDateTemp = DateFormat('MM/yyyy').format(dateValue);
+  }
+
+  void showCityStatePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: usStatesCitiesList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          state = leftValueTemp;
+          city = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
   }
 
   @override
@@ -591,15 +619,26 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            city = text;
+                        ResumeBuilderPicker(
+                          onPressed: () {
+                            showCityStatePicker();
                           },
-                          initialValue: city,
-                          title: 'City',
-                          hintText: 'e.g. New York',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          title: 'City & State',
+                          bodyText: state == null && city == null
+                              ? Text(
+                                  'Select your work city & state',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  "${city!} , ${state!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
                           disableBorder: true,
                         ),
                       ],

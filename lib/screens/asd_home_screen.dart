@@ -14,6 +14,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'asd_manage_job_preference_screen.dart';
+
 final _firestore = FirebaseFirestore.instance;
 
 class AsdHomeScreen extends StatefulWidget {
@@ -155,7 +157,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AsdJobPreferenceScreen(
+                          builder: (context) => AsdManageJobPreferenceScreen(
                             userFirstName: userFirstName!,
                             userLastName: userLastName!,
                             userEmail: userEmail!,

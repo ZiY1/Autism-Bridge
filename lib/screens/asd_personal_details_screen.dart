@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -8,6 +9,7 @@ import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -45,8 +47,6 @@ class AsdPersonalDetailsScreen extends StatefulWidget {
 class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
   PersonalDetails? userPersonalDetails;
 
-  String? wantedJobTitle;
-
   File? profileImage;
 
   String? profileImageUrl;
@@ -63,7 +63,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
   String? phone;
 
-  String? country;
+  String? state;
 
   String? city;
 
@@ -86,7 +86,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     PersonalDetails? personalDetailsTemp = widget.userPersonalDetails;
     if (personalDetailsTemp != null) {
       userPersonalDetails = personalDetailsTemp;
-      wantedJobTitle = personalDetailsTemp.wantedJobTitle;
       profileImage = personalDetailsTemp.profileImage;
       profileImageUrl = personalDetailsTemp.profileImageUrl;
       firstName = personalDetailsTemp.firstName;
@@ -94,7 +93,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       dateOfBirth = personalDetailsTemp.dateOfBirth;
       email = personalDetailsTemp.email;
       phone = personalDetailsTemp.phone;
-      country = personalDetailsTemp.country;
+      state = personalDetailsTemp.state;
       city = personalDetailsTemp.city;
       address = personalDetailsTemp.address;
       postalCode = personalDetailsTemp.postalCode;
@@ -105,17 +104,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
   Future<void> saveButtonOnPressed() async {
     // Ensure all fields are not null
-    if (wantedJobTitle == null || wantedJobTitle!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your wanted job title',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
     if (profileImage == null) {
       Utils.showSnackBar(
         'Please upload your profile photo',
@@ -183,20 +171,9 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       );
       return;
     }
-    if (country == null || country!.isEmpty) {
+    if (city == null || city!.isEmpty || state == null || state!.isEmpty) {
       Utils.showSnackBar(
-        'Please enter your country',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
-    if (city == null || city!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your city',
+        'Please select your living city',
         const Icon(
           Icons.error_sharp,
           color: Colors.red,
@@ -252,7 +229,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     // Create the PersonalDetails class
     PersonalDetails personalDetails = PersonalDetails(
       userId: widget.userId,
-      wantedJobTitle: wantedJobTitle!,
       profileImage: profileImage!,
       profileImageUrl: profileImageUrlTemp,
       firstName: firstName!,
@@ -260,7 +236,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       dateOfBirth: dateOfBirth!,
       email: email!,
       phone: phone!,
-      country: country!,
+      state: state!,
       city: city!,
       address: address!,
       postalCode: postalCode!,
@@ -268,8 +244,9 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
     // Check if userId's document exists, if no, create one
     bool docExists = await FirebaseHelper.checkDocumentExists(
-        collectionName: 'cv_professional_summary', docID: widget.userId);
+        collectionName: 'cv_personal_details', docID: widget.userId);
     if (!docExists) {
+      print('no');
       PersonalDetails.createPersonalDetailsInFirestore(userId: widget.userId);
     }
 
@@ -386,6 +363,28 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     );
   }
 
+  void showCityStatePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: usStatesCitiesList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          state = leftValueTemp;
+          city = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -453,16 +452,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        seg,
-                        ResumeBuilderInputField(
-                            onChanged: (text) {
-                              wantedJobTitle = text;
-                            },
-                            initialValue: wantedJobTitle,
-                            title: 'Wanted Job Title',
-                            hintText: 'e.g. Teacher',
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next),
                         seg,
                         Padding(
                           padding: EdgeInsets.only(left: 1.85.h, bottom: 0.3.h),
@@ -646,26 +635,27 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            country = text;
+                        ResumeBuilderPicker(
+                          onPressed: () {
+                            showCityStatePicker();
                           },
-                          initialValue: country,
-                          title: 'Country',
-                          hintText: 'Enter your country',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                        ),
-                        seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            city = text;
-                          },
-                          initialValue: city,
-                          title: 'City',
-                          hintText: 'Enter your city',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          title: 'Current Living City & State',
+                          bodyText: state == null && city == null
+                              ? Text(
+                                  'Select your living state & city',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  "${city!} , ${state!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
+                          disableBorder: false,
                         ),
                         seg,
                         ResumeBuilderInputField(

@@ -5,8 +5,10 @@ class EmploymentHistory {
   final String subCollectionId;
   final String jobTitle;
   final String employer;
+  final String employmentType;
   final String startDate;
   final String endDate;
+  final String state;
   final String city;
   final String description;
 
@@ -15,9 +17,11 @@ class EmploymentHistory {
     required this.subCollectionId,
     required this.jobTitle,
     required this.employer,
+    required this.employmentType,
     required this.startDate,
     required this.endDate,
     required this.city,
+    required this.state,
     required this.description,
   });
 
@@ -35,8 +39,10 @@ class EmploymentHistory {
     String subCollectionId;
     String jobTitle;
     String employer;
+    String employmentType;
     String startDate;
     String endDate;
+    String state;
     String city;
     String description;
 
@@ -52,8 +58,10 @@ class EmploymentHistory {
         subCollectionId = data['subCollectionId'];
         jobTitle = data['jobTitle'];
         employer = data['employer'];
+        employmentType = data['employmentType'];
         startDate = data['startDate'];
         endDate = data['endDate'];
+        state = data['state'];
         city = data['city'];
         description = data['description'];
 
@@ -62,8 +70,10 @@ class EmploymentHistory {
           userId: userId,
           jobTitle: jobTitle,
           employer: employer,
+          employmentType: employmentType,
           startDate: startDate,
           endDate: endDate,
+          state: state,
           city: city,
           description: description,
         );
@@ -95,8 +105,10 @@ class EmploymentHistory {
       'subCollectionId': subCollectionId,
       'jobTitle': jobTitle,
       'employer': employer,
+      'employmentType': employmentType,
       'startDate': startDate,
       'endDate': endDate,
+      'state': state,
       'city': city,
       'description': description,
     });
@@ -112,8 +124,10 @@ class EmploymentHistory {
       'subCollectionId': subCollectionId,
       'jobTitle': jobTitle,
       'employer': employer,
+      'employmentType': employmentType,
       'startDate': startDate,
       'endDate': endDate,
+      'state': state,
       'city': city,
       'description': description,
     });

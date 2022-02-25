@@ -66,8 +66,6 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
 
   bool isSaving = false;
 
-  final Widget seg = SizedBox(height: 1.h);
-
   @override
   void initState() {
     super.initState();
@@ -275,6 +273,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget seg = SizedBox(height: 1.h);
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -423,18 +422,18 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           onPressed: () {
                             showCityStatePicker();
                           },
-                          title: 'Preferred Job State & City',
+                          title: 'Preferred Job City & State',
                           bodyText:
                               preferredState == null && preferredCity == null
                                   ? Text(
-                                      'Select your job state & city',
+                                      'Select your job city & state',
                                       style: TextStyle(
                                         fontSize: 9.5.sp,
                                         color: Colors.grey.shade400,
                                       ),
                                     )
                                   : Text(
-                                      "${preferredState!} , ${preferredCity!}",
+                                      "${preferredCity!} , ${preferredState!}",
                                       style: TextStyle(
                                         fontSize: 11.sp,
                                         color: const Color(0xFF1F1F39),

@@ -1,6 +1,8 @@
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
+import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
@@ -16,12 +18,13 @@ import 'package:flutter/material.dart';
 
 import 'asd_manage_job_preference_screen.dart';
 
-final _firestore = FirebaseFirestore.instance;
-
 class AsdHomeScreen extends StatefulWidget {
   static const id = 'asd_home_screen';
 
-  const AsdHomeScreen({Key? key}) : super(key: key);
+  final AsdUserCredentials asdUserCredentials;
+
+  const AsdHomeScreen({Key? key, required this.asdUserCredentials})
+      : super(key: key);
 
   @override
   State<AsdHomeScreen> createState() => _AsdHomeScreenState();
@@ -30,170 +33,173 @@ class AsdHomeScreen extends StatefulWidget {
 class _AsdHomeScreenState extends State<AsdHomeScreen> {
   final _auth = FirebaseAuth.instance;
 
-  String? userFirstName;
+  final _firestore = FirebaseFirestore.instance;
 
-  String? userLastName;
+  Future<void> resumeBuilderBtnOnPressed() async {
+    PersonalDetails? userPersonalDetails =
+        await PersonalDetails.readPersonalDetailsDataFromFirestore(
+            widget.asdUserCredentials.userId);
 
-  String? userEmail;
+    ProfessionalSummary? userProfessionalSummary =
+        await ProfessionalSummary.readProfessionalSummaryDataFromFirestore(
+            widget.asdUserCredentials.userId);
 
-  String? userId;
+    // try to read cv_employment_history of current users' subcollection employment_histories in firestore
+    // Store it/them in List<EmploymentHistory?> userEmploymentHistory
+    // Two Cases:
+    // 1. has no data, so userEmploymentHistory has a list of null
+    // 2. has data, so userEmploymentHistory has a list of EmploymentHistory obj
 
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
+    List<EmploymentHistory?> userEmploymentHistoryList =
+        await EmploymentHistory.readAllEmploymentHistoryDataFromFirestore(
+            userId: widget.asdUserCredentials.userId);
+
+    List<Education?> userEducationList =
+        await Education.readAllEducationDataFromFirestore(
+            userId: widget.asdUserCredentials.userId);
+
+    List<Skill?> userSkillList = await Skill.readAllSkillDataFromFirestore(
+        userId: widget.asdUserCredentials.userId);
+
+    List<AutismChallenge?> userAutismChallengeList =
+        await AutismChallenge.readAllAutismChallengeDataFromFirestore(
+            userId: widget.asdUserCredentials.userId);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AsdResumeBuilderScreen(
+          asdUserCredentials: widget.asdUserCredentials,
+          userPersonalDetails: userPersonalDetails,
+          userProfessionalSummary: userProfessionalSummary,
+          userEmploymentHistoryList: userEmploymentHistoryList,
+          userEducationList: userEducationList,
+          userSkillList: userSkillList,
+          userAutismChallengeList: userAutismChallengeList,
+        ),
+      ),
+    );
   }
 
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        userEmail = user.email!;
-        userId = user.uid;
-        getUsername();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> getUsername() async {
-    await _firestore
-        .collection('all_users')
-        .doc(userId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        userFirstName = data['firstName'];
-        userLastName = data['lastName'];
-        //print(userFirstName);
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
+  Future<void> jobPreferenceBtnOnPressed() async {
+    List<JobPreference?> userJobPreferenceList =
+        await JobPreference.readAllJobPreferenceDataFromFirestore(
+            userId: widget.asdUserCredentials.userId);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AsdManageJobPreferenceScreen(
+          asdUserCredentials: widget.asdUserCredentials,
+          userJobPreferenceList: userJobPreferenceList,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder(
-          future: getUsername(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Column(
-                children: [
-                  Text(userEmail!),
-                  Text(userId!),
-                  Text('$userFirstName $userLastName'),
-                  ElevatedButton(
-                    onPressed: () {
-                      _auth.signOut();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, WelcomeScreen.id, (route) => false);
-                    },
-                    child: const Text('Sign Out'),
+        child: Column(
+          children: [
+            Text(widget.asdUserCredentials.userEmail),
+            Text(widget.asdUserCredentials.userId),
+            Text(
+                '${widget.asdUserCredentials.userFirstName} ${widget.asdUserCredentials.userLastName}'),
+            ElevatedButton(
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, WelcomeScreen.id, (route) => false);
+              },
+              child: const Text('Sign Out'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                resumeBuilderBtnOnPressed();
+              },
+              child: const Text('Resume Builder'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                jobPreferenceBtnOnPressed();
+              },
+              child: const Text('Job Preference'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Utils.showProgressIndicator(context);
+              },
+              child: const Text('Progress Indicator Test'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DateTimePicker(),
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      PersonalDetails? userPersonalDetails =
-                          await PersonalDetails
-                              .readPersonalDetailsDataFromFirestore(userId!);
-
-                      ProfessionalSummary? userProfessionalSummary =
-                          await ProfessionalSummary
-                              .readProfessionalSummaryDataFromFirestore(
-                                  userId!);
-
-                      // try to read cv_employment_history of current users' subcollection employment_histories in firestore
-                      // Store it/them in List<EmploymentHistory?> userEmploymentHistory
-                      // Two Cases:
-                      // 1. has no data, so userEmploymentHistory has a list of null
-                      // 2. has data, so userEmploymentHistory has a list of EmploymentHistory obj
-
-                      List<EmploymentHistory?> userEmploymentHistoryList =
-                          await EmploymentHistory
-                              .readAllEmploymentHistoryDataFromFirestore(
-                                  userId: userId!);
-
-                      List<Education?> userEducationList =
-                          await Education.readAllEducationDataFromFirestore(
-                              userId: userId!);
-
-                      List<Skill?> userSkillList =
-                          await Skill.readAllSkillDataFromFirestore(
-                              userId: userId!);
-
-                      List<AutismChallenge?> userAutismChallengeList =
-                          await AutismChallenge
-                              .readAllAutismChallengeDataFromFirestore(
-                                  userId: userId!);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AsdResumeBuilderScreen(
-                            userFirstName: userFirstName!,
-                            userLastName: userLastName!,
-                            userEmail: userEmail!,
-                            userId: userId!,
-                            userPersonalDetails: userPersonalDetails,
-                            userProfessionalSummary: userProfessionalSummary,
-                            userEmploymentHistoryList:
-                                userEmploymentHistoryList,
-                            userEducationList: userEducationList,
-                            userSkillList: userSkillList,
-                            userAutismChallengeList: userAutismChallengeList,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text('Resume Builder'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AsdManageJobPreferenceScreen(
-                            userFirstName: userFirstName!,
-                            userLastName: userLastName!,
-                            userEmail: userEmail!,
-                            userId: userId!,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text('Job Preference'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Utils.showProgressIndicator(context);
-                    },
-                    child: const Text('Progress Indicator Test'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DateTimePicker(),
-                        ),
-                      );
-                    },
-                    child: const Text('Date Time Test'),
-                  ),
-                ],
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+                );
+              },
+              child: const Text('Date Time Test'),
+            ),
+          ],
         ),
+        // child: FutureBuilder(
+        //   future: getUsername(),
+        //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.done) {
+        //       return Column(
+        //         children: [
+        //           Text(userEmail!),
+        //           Text(userId!),
+        //           Text('$userFirstName $userLastName'),
+        //           ElevatedButton(
+        //             onPressed: () {
+        //               _auth.signOut();
+        //               Navigator.pushNamedAndRemoveUntil(
+        //                   context, WelcomeScreen.id, (route) => false);
+        //             },
+        //             child: const Text('Sign Out'),
+        //           ),
+        //           ElevatedButton(
+        //             onPressed: () {
+        //               resumeBuilderBtnOnPressed();
+        //             },
+        //             child: const Text('Resume Builder'),
+        //           ),
+        //           ElevatedButton(
+        //             onPressed: () {
+        //               jobPreferenceBtnOnPressed();
+        //             },
+        //             child: const Text('Job Preference'),
+        //           ),
+        //           ElevatedButton(
+        //             onPressed: () {
+        //               Utils.showProgressIndicator(context);
+        //             },
+        //             child: const Text('Progress Indicator Test'),
+        //           ),
+        //           ElevatedButton(
+        //             onPressed: () {
+        //               Navigator.push(
+        //                 context,
+        //                 MaterialPageRoute(
+        //                   builder: (context) => DateTimePicker(),
+        //                 ),
+        //               );
+        //             },
+        //             child: const Text('Date Time Test'),
+        //           ),
+        //         ],
+        //       );
+        //     } else {
+        //       return const Center(
+        //         child: CircularProgressIndicator(),
+        //       );
+        //     }
+        //   },
+        // ),
       ),
     );
   }

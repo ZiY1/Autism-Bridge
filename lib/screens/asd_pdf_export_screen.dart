@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:email_validator/email_validator.dart';
@@ -11,26 +12,17 @@ import 'package:intl/intl.dart';
 import '../constants.dart';
 
 class AsdPdfExportScreen extends StatefulWidget {
+  final AsdUserCredentials asdUserCredentials;
+
   final File file;
 
   final String fileName;
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
-
   const AsdPdfExportScreen({
     Key? key,
+    required this.asdUserCredentials,
     required this.file,
     required this.fileName,
-    required this.userFirstName,
-    required this.userLastName,
-    required this.userEmail,
-    required this.userId,
   }) : super(key: key);
 
   @override
@@ -308,7 +300,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                                 if (!isInputValid) return;
                                 sendEmail(
                                     name:
-                                        '${widget.userFirstName} ${widget.userLastName}',
+                                        '${widget.asdUserCredentials.userFirstName} ${widget.asdUserCredentials.userLastName}',
                                     email: emailController.text.trim(),
                                     subject: 'Resume Builder Export PDF Test',
                                     msgText: 'This is a test');

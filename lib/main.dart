@@ -83,7 +83,7 @@ class AutismBridgeApp extends StatelessWidget {
               AsdSignupScreen.id: (context) => const AsdSignupScreen(),
               AsdEmailVerifyScreen.id: (context) =>
                   const AsdEmailVerifyScreen(),
-              AsdHomeScreen.id: (context) => const AsdHomeScreen(),
+              //AsdHomeScreen.id: (context) => const AsdHomeScreen(),
               SignInEmployerPage.nameRoute: (context) =>
                   const SignInEmployerPage(),
               JoinInEmployerPage.nameRoute: (context) =>

@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -20,22 +21,13 @@ import '../firebase_helpers.dart';
 class AsdPersonalDetailsScreen extends StatefulWidget {
   static const id = 'asd_personal_details_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final PersonalDetails? userPersonalDetails;
 
   const AsdPersonalDetailsScreen(
       {Key? key,
-      required this.userFirstName,
-      required this.userLastName,
-      required this.userEmail,
-      required this.userId,
+      required this.asdUserCredentials,
       required this.userPersonalDetails})
       : super(key: key);
 
@@ -224,11 +216,12 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     // Upload the profile image in storage and return the image url
     String profileImageUrlTemp =
         await PersonalDetails.uploadProfileImageInStorage(
-            userId: widget.userId, profileImage: profileImage!);
+            userId: widget.asdUserCredentials.userId,
+            profileImage: profileImage!);
 
     // Create the PersonalDetails class
     PersonalDetails personalDetails = PersonalDetails(
-      userId: widget.userId,
+      userId: widget.asdUserCredentials.userId,
       profileImage: profileImage!,
       profileImageUrl: profileImageUrlTemp,
       firstName: firstName!,
@@ -244,14 +237,15 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
     // Check if userId's document exists, if no, create one
     bool docExists = await FirebaseHelper.checkDocumentExists(
-        collectionName: 'cv_personal_details', docID: widget.userId);
+        collectionName: 'cv_personal_details',
+        docID: widget.asdUserCredentials.userId);
     if (!docExists) {
-      print('no');
-      PersonalDetails.createPersonalDetailsInFirestore(userId: widget.userId);
+      PersonalDetails.createPersonalDetailsInFirestore(
+          userId: widget.asdUserCredentials.userId);
     }
 
     // Update in firestore
-    personalDetails.updatePersonalDetailsToFirestore();
+    await personalDetails.updatePersonalDetailsToFirestore();
 
     // Update the var userPersonalDetails
     userPersonalDetails = personalDetails;

@@ -1,5 +1,6 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/firebase_helpers.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -12,22 +13,13 @@ import 'package:sizer/sizer.dart';
 class AsdProfessionalSummaryScreen extends StatefulWidget {
   static const id = 'asd_professional_summary_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final ProfessionalSummary? userProfessionalSummary;
 
   const AsdProfessionalSummaryScreen(
       {Key? key,
-      required this.userFirstName,
-      required this.userLastName,
-      required this.userEmail,
-      required this.userId,
+      required this.asdUserCredentials,
       required this.userProfessionalSummary})
       : super(key: key);
 
@@ -94,20 +86,21 @@ class _AsdProfessionalSummaryScreenState
   Future<void> handleDataInFirebase() async {
     // Create the ProfessionalSummary class
     ProfessionalSummary professionalSummary = ProfessionalSummary(
-      userId: widget.userId,
+      userId: widget.asdUserCredentials.userId,
       summaryText: summaryText!,
     );
 
     // Check if userId's document exists, if no, create one
     bool docExists = await FirebaseHelper.checkDocumentExists(
-        collectionName: 'cv_professional_summary', docID: widget.userId);
+        collectionName: 'cv_professional_summary',
+        docID: widget.asdUserCredentials.userId);
     if (!docExists) {
       ProfessionalSummary.createProfessionalSummaryInFirestore(
-          userId: widget.userId);
+          userId: widget.asdUserCredentials.userId);
     }
 
     // Update in firestore
-    professionalSummary.updateProfessionalSummaryToFirestore();
+    await professionalSummary.updateProfessionalSummaryToFirestore();
 
     // Update the var userProfessionalSummary
     userProfessionalSummary = professionalSummary;

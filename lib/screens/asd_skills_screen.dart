@@ -1,4 +1,5 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -8,7 +9,6 @@ import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';
@@ -16,13 +16,7 @@ import 'package:sizer/sizer.dart';
 class AsdSkillsScreen extends StatefulWidget {
   static const id = 'asd_skills_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final bool isAddingNew;
 
@@ -34,10 +28,7 @@ class AsdSkillsScreen extends StatefulWidget {
 
   const AsdSkillsScreen(
       {Key? key,
-      required this.userFirstName,
-      required this.userLastName,
-      required this.userEmail,
-      required this.userId,
+      required this.asdUserCredentials,
       required this.isAddingNew,
       this.subCollectionId,
       this.listIndex,
@@ -64,6 +55,8 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
   String btnText = 'Add';
 
   bool isSaving = false;
+
+  bool isDeleting = false;
 
   final Widget seg = SizedBox(height: 1.h);
 
@@ -95,18 +88,18 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
 
     if (wantDelete) {
       setState(() {
-        isSaving = true;
+        isDeleting = true;
       });
 
-      Skill.deleteSkillFromFirestore(
-        userId: widget.userId,
+      await Skill.deleteSkillFromFirestore(
+        userId: widget.asdUserCredentials.userId,
         mySubCollectionId: widget.subCollectionId!,
       );
 
       userSkillList!.removeAt(widget.listIndex!);
 
       setState(() {
-        isSaving = false;
+        isDeleting = false;
       });
 
       Navigator.pop(context, userSkillList);
@@ -171,7 +164,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
 
       // When creating, we use timestamp as unique id
       skill = Skill(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: DateTime.now().microsecondsSinceEpoch.toString(),
         skillName: skillName!,
         skillLevel: skillLevel!,
@@ -179,7 +172,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
       );
 
       // Add in firestore
-      skill.addSkillToFirestore();
+      await skill.addSkillToFirestore();
 
       // Update the list userEmploymentHistoryList
       userSkillList!.add(skill);
@@ -189,14 +182,14 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
 
       // When updating, we don't update the timestamp
       skill = Skill(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: widget.subCollectionId!,
         skillName: skillName!,
         skillLevel: skillLevel!,
         skillDescription: skillDescription!,
       );
 
-      skill.updateSkillToFirestore();
+      await skill.updateSkillToFirestore();
 
       // Update the list userEmploymentHistoryList
       // Ensure listIndex is not null
@@ -406,7 +399,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                       children: [
                         Expanded(
                           child: ResumeBuilderButton(
-                            child: isSaving
+                            child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
                                     height: 3.18.h,
@@ -423,7 +416,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                                       color: kAutismBridgeBlue,
                                     ),
                                   ),
-                            onPressed: isSaving
+                            onPressed: isDeleting
                                 ? null
                                 : () {
                                     deleteBtnOnPressed(context);

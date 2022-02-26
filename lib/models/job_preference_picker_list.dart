@@ -3,12 +3,12 @@ const employmentTypeList = '''[
   "Part Time",
   "Internship",
   "Volunteer",
-  "Any"
+  "Any Type"
 ]''';
 //TODO: finish this
 const salaryRageList = '''[
     {
-    "0k": [
+    "None": [
     ""
     ],
     "<1k": [

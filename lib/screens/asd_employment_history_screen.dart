@@ -1,4 +1,5 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -25,13 +26,7 @@ enum PickerPosition {
 class AsdEmploymentHistoryScreen extends StatefulWidget {
   static const id = 'asd_employment_history_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final bool isAddingNew;
 
@@ -43,10 +38,7 @@ class AsdEmploymentHistoryScreen extends StatefulWidget {
 
   const AsdEmploymentHistoryScreen(
       {Key? key,
-      required this.userFirstName,
-      required this.userLastName,
-      required this.userEmail,
-      required this.userId,
+      required this.asdUserCredentials,
       required this.isAddingNew,
       this.subCollectionId,
       this.listIndex,
@@ -98,6 +90,8 @@ class _AsdEmploymentHistoryScreenState
 
   bool isSaving = false;
 
+  bool isDeleting = false;
+
   String btnText = 'Add';
 
   final Widget seg = SizedBox(height: 1.h);
@@ -144,18 +138,18 @@ class _AsdEmploymentHistoryScreenState
 
     if (wantDelete) {
       setState(() {
-        isSaving = true;
+        isDeleting = true;
       });
 
-      EmploymentHistory.deleteEmploymentHistoryToFirestore(
-        userId: widget.userId,
+      await EmploymentHistory.deleteEmploymentHistoryToFirestore(
+        userId: widget.asdUserCredentials.userId,
         mySubCollectionId: widget.subCollectionId!,
       );
 
       userEmploymentHistoryList!.removeAt(widget.listIndex!);
 
       setState(() {
-        isSaving = false;
+        isDeleting = false;
       });
 
       Navigator.pop(context, userEmploymentHistoryList);
@@ -264,7 +258,7 @@ class _AsdEmploymentHistoryScreenState
 
       // When creating, we use timestamp as unique id
       employmentHistory = EmploymentHistory(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: DateTime.now().microsecondsSinceEpoch.toString(),
         jobTitle: jobTitle!,
         employer: employer!,
@@ -277,7 +271,7 @@ class _AsdEmploymentHistoryScreenState
       );
 
       // Add in firestore
-      employmentHistory.addEmploymentHistoryToFirestore();
+      await employmentHistory.addEmploymentHistoryToFirestore();
 
       // Update the list userEmploymentHistoryList
       userEmploymentHistoryList!.add(employmentHistory);
@@ -287,7 +281,7 @@ class _AsdEmploymentHistoryScreenState
 
       // When updating, we don't update the timestamp
       employmentHistory = EmploymentHistory(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: widget.subCollectionId!,
         jobTitle: jobTitle!,
         employer: employer!,
@@ -299,7 +293,7 @@ class _AsdEmploymentHistoryScreenState
         description: description!,
       );
 
-      employmentHistory.updateEmploymentHistoryToFirestore();
+      await employmentHistory.updateEmploymentHistoryToFirestore();
 
       // Update the list userEmploymentHistoryList
       // Ensure listIndex is not null
@@ -731,13 +725,13 @@ class _AsdEmploymentHistoryScreenState
                       children: [
                         Expanded(
                           child: ResumeBuilderButton(
-                            child: isSaving
+                            child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
                                     height: 3.18.h,
                                     child: const CircularProgressIndicator(
                                       valueColor: AlwaysStoppedAnimation(
-                                        Colors.white,
+                                        kAutismBridgeBlue,
                                       ),
                                     ),
                                   )
@@ -748,7 +742,7 @@ class _AsdEmploymentHistoryScreenState
                                       color: kAutismBridgeBlue,
                                     ),
                                   ),
-                            onPressed: isSaving
+                            onPressed: isDeleting
                                 ? null
                                 : () {
                                     deleteBtnOnPressed(context);

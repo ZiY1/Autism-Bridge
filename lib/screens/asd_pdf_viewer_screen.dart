@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_pdf_export_screen.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -10,26 +11,17 @@ import 'package:sizer/sizer.dart';
 import '../constants.dart';
 
 class AsdPdfViewerScreen extends StatefulWidget {
+  final AsdUserCredentials asdUserCredentials;
+
   final File file;
 
   final Resume userResume;
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
-
   const AsdPdfViewerScreen({
     Key? key,
+    required this.asdUserCredentials,
     required this.file,
     required this.userResume,
-    required this.userFirstName,
-    required this.userLastName,
-    required this.userEmail,
-    required this.userId,
   }) : super(key: key);
 
   @override
@@ -110,10 +102,7 @@ class _AsdPdfViewerScreenState extends State<AsdPdfViewerScreen> {
                         fileName: widget.userResume.userPersonalDetails == null
                             ? 'my_resume.pdf'
                             : '${widget.userResume.userPersonalDetails!.firstName}_${widget.userResume.userPersonalDetails!.lastName}_resume.pdf',
-                        userId: widget.userId,
-                        userFirstName: widget.userFirstName,
-                        userLastName: widget.userLastName,
-                        userEmail: widget.userEmail,
+                        asdUserCredentials: widget.asdUserCredentials,
                       ),
                     ),
                   );

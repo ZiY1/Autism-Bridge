@@ -1,46 +1,37 @@
-import 'dart:convert';
-
-import 'package:autism_bridge/models/personal_details_data.dart';
-import 'package:autism_bridge/models/resume_builder_picker_list.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
-import 'package:csc_picker/csc_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
-import 'dart:io';
 import '../constants.dart';
-import '../firebase_helpers.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 
 class AsdJobPreferenceScreen extends StatefulWidget {
   static const id = 'asd_job_preference_screen';
 
-  final String userFirstName;
+  final AsdUserCredentials asdUserCredentials;
 
-  final String userLastName;
+  final bool isAddingNew;
 
-  final String userEmail;
+  final String? subCollectionId;
 
-  final String userId;
+  final int? listIndex;
 
-  //final PersonalDetails? userPersonalDetails;
+  final List<JobPreference?> userJobPreferenceList;
 
   const AsdJobPreferenceScreen({
     Key? key,
-    required this.userFirstName,
-    required this.userLastName,
-    required this.userEmail,
-    required this.userId,
-    //required this.userPersonalDetails,
+    required this.asdUserCredentials,
+    required this.isAddingNew,
+    this.subCollectionId,
+    this.listIndex,
+    required this.userJobPreferenceList,
   }) : super(key: key);
 
   @override
@@ -48,17 +39,17 @@ class AsdJobPreferenceScreen extends StatefulWidget {
 }
 
 class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
-  //PersonalDetails? userPersonalDetails;
+  List<JobPreference?>? userJobPreferenceList;
 
   String? preferredEmploymentType;
 
-  String? preferredJobTitle;
-
   String? preferredJobCategory;
 
-  String? preferredState;
+  String? preferredJobTitle;
 
   String? preferredCity;
+
+  String? preferredState;
 
   String? preferredMinSalary;
 
@@ -66,129 +57,208 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
 
   bool isSaving = false;
 
+  bool isDeleting = false;
+
+  String btnText = 'Add';
+
   @override
   void initState() {
     super.initState();
 
-    // PersonalDetails? personalDetailsTemp = widget.userPersonalDetails;
-    // if (personalDetailsTemp != null) {
-    //   userPersonalDetails = personalDetailsTemp;
-    //   wantedJobTitle = personalDetailsTemp.wantedJobTitle;
-    //   profileImage = personalDetailsTemp.profileImage;
-    //   profileImageUrl = personalDetailsTemp.profileImageUrl;
-    //   firstName = personalDetailsTemp.firstName;
-    //   lastName = personalDetailsTemp.lastName;
-    //   dateOfBirth = personalDetailsTemp.dateOfBirth;
-    //   email = personalDetailsTemp.email;
-    //   phone = personalDetailsTemp.phone;
-    //   country = personalDetailsTemp.country;
-    //   city = personalDetailsTemp.city;
-    //   address = personalDetailsTemp.address;
-    //   postalCode = personalDetailsTemp.postalCode;
-    //
-    //   selectedDate = DateFormat('MM/dd/yyyy').parse(dateOfBirth!);
-    // }
+    List<JobPreference?> jobPreferenceListTemp = widget.userJobPreferenceList;
+
+    userJobPreferenceList = jobPreferenceListTemp;
+
+    if (!widget.isAddingNew) {
+      btnText = 'Save';
+
+      if (userJobPreferenceList![widget.listIndex!] != null) {
+        JobPreference? jobPreferenceTemp =
+            jobPreferenceListTemp[widget.listIndex!];
+
+        preferredEmploymentType = jobPreferenceTemp!.getEmploymentType;
+        preferredJobCategory = jobPreferenceTemp.getJobCategory;
+        preferredJobTitle = jobPreferenceTemp.getJobTitle;
+        preferredCity = jobPreferenceTemp.getJobCity;
+        preferredState = jobPreferenceTemp.getJobState;
+        preferredMinSalary = jobPreferenceTemp.getMinSalary;
+        preferredMaxSalary = jobPreferenceTemp.getMaxSalary;
+      }
+    }
   }
 
-  Future<void> saveButtonOnPressed() async {
-    // Ensure all fields are not null
+  Future<void> deleteBtnOnPressed(BuildContext context) async {
+    bool wantDelete = await Utils.showMyDialog(context);
 
-    // if (wantedJobTitle == null || wantedJobTitle!.isEmpty) {
-    //   Utils.showSnackBar(
-    //     'Please enter your wanted job title',
-    //     const Icon(
-    //       Icons.error_sharp,
-    //       color: Colors.red,
-    //       size: 30.0,
-    //     ),
-    //   );
-    //   return;
-    // }
-    // if (profileImage == null) {
-    //   Utils.showSnackBar(
-    //     'Please upload your profile photo',
-    //     const Icon(
-    //       Icons.error_sharp,
-    //       color: Colors.red,
-    //       size: 30.0,
-    //     ),
-    //   );
-    //   return;
-    // }
-    // if (firstName == null || firstName!.isEmpty) {
-    //   Utils.showSnackBar(
-    //     'Please enter your first name',
-    //     const Icon(
-    //       Icons.error_sharp,
-    //       color: Colors.red,
-    //       size: 30.0,
-    //     ),
-    //   );
-    //   return;
-    // }
-    // if (lastName == null || lastName!.isEmpty) {
-    //   Utils.showSnackBar(
-    //     'Please enter your last name',
-    //     const Icon(
-    //       Icons.error_sharp,
-    //       color: Colors.red,
-    //       size: 30.0,
-    //     ),
-    //   );
-    //   return;
-    // }
+    if (wantDelete) {
+      setState(() {
+        isDeleting = true;
+      });
+
+      try {
+        await JobPreference.deleteJobPreferenceToFirestore(
+          userId: widget.asdUserCredentials.userId,
+          // it won't be null because by entering the delete mode, we will pass the subCollectionId
+          mySubCollectionId: widget.subCollectionId!,
+        );
+      } on FirebaseException catch (e) {
+        Utils.showSnackBar(
+          e.message,
+          const Icon(
+            Icons.error_sharp,
+            color: Colors.red,
+            size: 30.0,
+          ),
+        );
+      }
+
+      userJobPreferenceList!.removeAt(widget.listIndex!);
+
+      setState(() {
+        isDeleting = false;
+      });
+
+      Navigator.pop(context, userJobPreferenceList);
+    }
+  }
+
+  Future<void> saveAddBtnOnPressed(BuildContext context) async {
+    //Ensure all fields are not null
+    if (preferredEmploymentType == null || preferredEmploymentType!.isEmpty) {
+      Utils.showSnackBar(
+        'Please enter your desired employment type',
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+      return;
+    }
+    if (preferredJobCategory == null ||
+        preferredJobCategory!.isEmpty ||
+        preferredJobTitle == null ||
+        preferredJobTitle!.isEmpty) {
+      Utils.showSnackBar(
+        'Please select your desired job categories & title',
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+      return;
+    }
+    if (preferredCity == null ||
+        preferredCity!.isEmpty ||
+        preferredState == null ||
+        preferredState!.isEmpty) {
+      Utils.showSnackBar(
+        'Please select your desired city & state to work',
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+      return;
+    }
+    if (preferredMinSalary == null || preferredMaxSalary == null) {
+      Utils.showSnackBar(
+        'Please select your desired salary range',
+        const Icon(
+          Icons.error_sharp,
+          color: Colors.red,
+          size: 30.0,
+        ),
+      );
+      return;
+    }
 
     setState(() {
       isSaving = true;
     });
 
-    //await handleDataInFirebase();
+    await handleDataInFirebase();
 
     setState(() {
       isSaving = false;
     });
 
-    //Navigator.pop(context, userPersonalDetails);
-
-    // save it to firebase
+    Navigator.pop(context, userJobPreferenceList);
   }
 
-  // Future<void> handleDataInFirebase() async {
-  //   // Upload the profile image in storage and return the image url
-  //   String profileImageUrlTemp =
-  //   await PersonalDetails.uploadProfileImageInStorage(
-  //       userId: widget.userId, profileImage: profileImage!);
-  //
-  //   // Create the PersonalDetails class
-  //   PersonalDetails personalDetails = PersonalDetails(
-  //     userId: widget.userId,
-  //     wantedJobTitle: wantedJobTitle!,
-  //     profileImage: profileImage!,
-  //     profileImageUrl: profileImageUrlTemp,
-  //     firstName: firstName!,
-  //     lastName: lastName!,
-  //     dateOfBirth: dateOfBirth!,
-  //     email: email!,
-  //     phone: phone!,
-  //     country: country!,
-  //     city: city!,
-  //     address: address!,
-  //     postalCode: postalCode!,
-  //   );
-  //
-  //   // Check if userId's document exists, if no, create one
-  //   bool docExists = await FirebaseHelper.checkDocumentExists(
-  //       collectionName: 'cv_professional_summary', docID: widget.userId);
-  //   if (!docExists) {
-  //     PersonalDetails.createPersonalDetailsInFirestore(userId: widget.userId);
-  //   }
-  //
-  //   // Update in firestore
-  //   personalDetails.updatePersonalDetailsToFirestore();
-  //
-  //   // Update the var userPersonalDetails
-  //   userPersonalDetails = personalDetails;
-  // }
+  Future<void> handleDataInFirebase() async {
+    // Create the JobPreference class
+    JobPreference jobPreference;
+
+    if (widget.isAddingNew) {
+      // Add the data in firestore
+
+      // When creating, we use timestamp as unique id
+      jobPreference = JobPreference(
+        userId: widget.asdUserCredentials.userId,
+        subCollectionId: DateTime.now().microsecondsSinceEpoch.toString(),
+        employmentType: preferredEmploymentType!,
+        jobCategory: preferredJobCategory!,
+        jobTitle: preferredJobTitle!,
+        jobCity: preferredCity!,
+        jobState: preferredState!,
+        minSalary: preferredMinSalary!,
+        maxSalary: preferredMaxSalary!,
+      );
+
+      // Add in firestore
+      try {
+        await jobPreference.addJobPreferenceToFirestore();
+      } on FirebaseException catch (e) {
+        Utils.showSnackBar(
+          e.message,
+          const Icon(
+            Icons.error_sharp,
+            color: Colors.red,
+            size: 30.0,
+          ),
+        );
+        return;
+      }
+
+      // Update the list userJobPreferenceList
+      userJobPreferenceList!.add(jobPreference);
+    } else {
+      // Update the data (subcolectionId) in firestore
+      // make sure subCollectionId is not null
+
+      // When updating, we don't update the timestamp
+      jobPreference = JobPreference(
+        userId: widget.asdUserCredentials.userId,
+        subCollectionId: widget.subCollectionId!,
+        employmentType: preferredEmploymentType!,
+        jobCategory: preferredJobCategory!,
+        jobTitle: preferredJobTitle!,
+        jobCity: preferredCity!,
+        jobState: preferredState!,
+        minSalary: preferredMinSalary!,
+        maxSalary: preferredMaxSalary!,
+      );
+      try {
+        await jobPreference.updateJobPreferenceToFirestore();
+      } on FirebaseException catch (e) {
+        Utils.showSnackBar(
+          e.message,
+          const Icon(
+            Icons.error_sharp,
+            color: Colors.red,
+            size: 30.0,
+          ),
+        );
+      }
+
+      // Update the list userJobPreferenceList
+      // Ensure listIndex is not null
+      userJobPreferenceList![widget.listIndex!] = jobPreference;
+    }
+  }
 
   void showEmpTypePicker() {
     Utils.showMyCustomizedPicker(
@@ -375,7 +445,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           onPressed: () {
                             showEmpTypePicker();
                           },
-                          title: 'Preferred Employment Type',
+                          title: 'Desired Employment Type',
                           bodyText: preferredEmploymentType == null
                               ? Text(
                                   'Select your employment type',
@@ -398,11 +468,11 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           onPressed: () {
                             showJobTitlePicker();
                           },
-                          title: 'Preferred Job Category & Title',
+                          title: 'Desired Job Category & Title',
                           bodyText: preferredJobCategory == null &&
                                   preferredJobTitle == null
                               ? Text(
-                                  'Select your preferred category & job title',
+                                  'Select your category & job title',
                                   style: TextStyle(
                                     fontSize: 9.5.sp,
                                     color: Colors.grey.shade400,
@@ -422,11 +492,11 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           onPressed: () {
                             showCityStatePicker();
                           },
-                          title: 'Preferred Job City & State',
+                          title: 'Desired City & State',
                           bodyText:
                               preferredState == null && preferredCity == null
                                   ? Text(
-                                      'Select your job city & state',
+                                      'Select your the city & state to work',
                                       style: TextStyle(
                                         fontSize: 9.5.sp,
                                         color: Colors.grey.shade400,
@@ -446,11 +516,11 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           onPressed: () {
                             showSalaryRangePicker();
                           },
-                          title: 'Preferred Salary',
+                          title: 'Desired Monthly Salary',
                           bodyText: preferredMinSalary == null &&
                                   preferredMaxSalary == null
                               ? Text(
-                                  'Select your preferred monthly salary range',
+                                  'Select your monthly salary range',
                                   style: TextStyle(
                                     fontSize: 9.5.sp,
                                     color: Colors.grey.shade400,
@@ -482,27 +552,94 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(
               height: 6.25.h,
-              child: ResumeBuilderButton(
-                onPressed: isSaving ? null : saveButtonOnPressed,
-                isHollow: false,
-                child: isSaving
-                    ? SizedBox(
-                        width: 3.18.h,
-                        height: 3.18.h,
-                        child: const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(
-                            Colors.white,
+              child: widget.isAddingNew
+                  ? ResumeBuilderButton(
+                      child: isSaving
+                          ? SizedBox(
+                              width: 3.18.h,
+                              height: 3.18.h,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              btnText,
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                      onPressed: isSaving
+                          ? null
+                          : () {
+                              saveAddBtnOnPressed(context);
+                            },
+                      isHollow: false,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: isDeleting
+                                ? SizedBox(
+                                    width: 3.18.h,
+                                    height: 3.18.h,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      fontSize: 12.5.sp,
+                                      color: kAutismBridgeBlue,
+                                    ),
+                                  ),
+                            onPressed: isDeleting
+                                ? null
+                                : () {
+                                    deleteBtnOnPressed(context);
+                                  },
+                            isHollow: true,
                           ),
                         ),
-                      )
-                    : Text(
-                        'Save',
-                        style: TextStyle(
-                          fontSize: 12.5.sp,
-                          color: Colors.white,
+                        SizedBox(
+                          width: 4.w,
                         ),
-                      ),
-              ),
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: isSaving
+                                ? SizedBox(
+                                    width: 3.18.h,
+                                    height: 3.18.h,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    btnText,
+                                    style: TextStyle(
+                                      fontSize: 12.5.sp,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                            onPressed: isSaving
+                                ? null
+                                : () {
+                                    saveAddBtnOnPressed(context);
+                                  },
+                            isHollow: false,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
           ),
         ),

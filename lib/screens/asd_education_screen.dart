@@ -1,4 +1,5 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
@@ -10,7 +11,6 @@ import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/resume_date_toggle.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';
@@ -26,13 +26,7 @@ enum PickerPosition {
 class AsdEducationScreen extends StatefulWidget {
   static const id = 'asd_education_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final bool isAddingNew;
 
@@ -44,10 +38,7 @@ class AsdEducationScreen extends StatefulWidget {
 
   const AsdEducationScreen(
       {Key? key,
-      required this.userFirstName,
-      required this.userLastName,
-      required this.userEmail,
-      required this.userId,
+      required this.asdUserCredentials,
       required this.isAddingNew,
       this.subCollectionId,
       this.listIndex,
@@ -99,6 +90,8 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
   bool isSaving = false;
 
+  bool isDeleting = false;
+
   final Widget seg = SizedBox(height: 1.h);
 
   @override
@@ -141,18 +134,18 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
     if (wantDelete) {
       setState(() {
-        isSaving = true;
+        isDeleting = true;
       });
 
-      Education.deleteEducationFromFirestore(
-        userId: widget.userId,
+      await Education.deleteEducationFromFirestore(
+        userId: widget.asdUserCredentials.userId,
         mySubCollectionId: widget.subCollectionId!,
       );
 
       userEducationList!.removeAt(widget.listIndex!);
 
       setState(() {
-        isSaving = false;
+        isDeleting = false;
       });
 
       Navigator.pop(context, userEducationList);
@@ -261,7 +254,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
       // When creating, we use timestamp as unique id
       education = Education(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: DateTime.now().microsecondsSinceEpoch.toString(),
         school: school!,
         major: major!,
@@ -274,7 +267,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
       );
 
       // Add in firestore
-      education.addEducationToFirestore();
+      await education.addEducationToFirestore();
 
       // Update the list userEmploymentHistoryList
       userEducationList!.add(education);
@@ -284,7 +277,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
 
       // When updating, we don't update the timestamp
       education = Education(
-        userId: widget.userId,
+        userId: widget.asdUserCredentials.userId,
         subCollectionId: widget.subCollectionId!,
         school: school!,
         major: major!,
@@ -296,7 +289,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
         description: description!,
       );
 
-      education.updateEducationToFirestore();
+      await education.updateEducationToFirestore();
 
       // Update the list userEmploymentHistoryList
       // Ensure listIndex is not null
@@ -726,7 +719,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                       children: [
                         Expanded(
                           child: ResumeBuilderButton(
-                            child: isSaving
+                            child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
                                     height: 3.18.h,
@@ -743,7 +736,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                                       color: kAutismBridgeBlue,
                                     ),
                                   ),
-                            onPressed: isSaving
+                            onPressed: isDeleting
                                 ? null
                                 : () {
                                     deleteBtnOnPressed(context);

@@ -1,4 +1,5 @@
 import 'package:autism_bridge/apis/resume_pdf_api.dart';
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
@@ -18,7 +19,6 @@ import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../constants.dart';
@@ -26,13 +26,7 @@ import '../constants.dart';
 class AsdResumeBuilderScreen extends StatefulWidget {
   static const id = 'asd_resume_builder_screen';
 
-  final String userFirstName;
-
-  final String userLastName;
-
-  final String userEmail;
-
-  final String userId;
+  final AsdUserCredentials asdUserCredentials;
 
   final PersonalDetails? userPersonalDetails;
 
@@ -48,10 +42,7 @@ class AsdResumeBuilderScreen extends StatefulWidget {
 
   const AsdResumeBuilderScreen({
     Key? key,
-    required this.userFirstName,
-    required this.userLastName,
-    required this.userEmail,
-    required this.userId,
+    required this.asdUserCredentials,
     required this.userPersonalDetails,
     required this.userProfessionalSummary,
     required this.userEmploymentHistoryList,
@@ -142,10 +133,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdAutismChallengesScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
           userAutismChallengeList: userAutismChallengeList!,
         ),
@@ -173,10 +161,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdSkillsScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
@@ -207,10 +192,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdAutismChallengesScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
@@ -237,10 +219,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdSkillsScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
           userSkillList: userSkillList!,
         ),
@@ -268,10 +247,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdEducationScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
@@ -298,10 +274,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdEducationScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
           userEducationList: userEducationList!,
         ),
@@ -330,10 +303,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdEmploymentHistoryScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
@@ -361,10 +331,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdEmploymentHistoryScreen(
-          userId: widget.userId,
-          userEmail: widget.userEmail,
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
+          asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
           userEmploymentHistoryList: userEmploymentHistoryList!,
         ),
@@ -389,10 +356,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdPersonalDetailsScreen(
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
-          userEmail: widget.userEmail,
-          userId: widget.userId,
+          asdUserCredentials: widget.asdUserCredentials,
           userPersonalDetails: userPersonalDetails,
         ),
       ),
@@ -419,10 +383,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AsdProfessionalSummaryScreen(
-          userFirstName: widget.userFirstName,
-          userLastName: widget.userLastName,
-          userEmail: widget.userEmail,
-          userId: widget.userId,
+          asdUserCredentials: widget.asdUserCredentials,
           userProfessionalSummary: userProfessionalSummary,
         ),
       ),
@@ -447,6 +408,21 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
   Widget build(BuildContext context) {
     final Widget seg = SizedBox(height: 1.5.h);
     final Widget littleSeg = SizedBox(height: 0.3.h);
+    final TextStyle titleTextStyle = TextStyle(
+      color: kTitleBlack,
+      fontSize: 14.5.sp,
+    );
+    final TextStyle subTitleTextStyle = TextStyle(
+      color: kTitleBlack,
+      fontSize: 11.5.sp,
+    );
+    final TextStyle bodyTextStyle =
+        TextStyle(color: kRegistrationSubtitleGrey, fontSize: 9.sp);
+    final Text colonText = Text(
+      ':',
+      style: bodyTextStyle,
+    );
+    const double arrowBtnSize = 20.5;
     return Container(
       //TODO: using linear gradient color rather than a fixed appbar color, is it better or not?
       decoration: const BoxDecoration(
@@ -557,10 +533,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     userPersonalDetails == null
                                         ? 'Personal Details'
                                         : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
-                                    style: TextStyle(
-                                      color: kTitleBlack,
-                                      fontSize: 14.sp,
-                                    ),
+                                    style: titleTextStyle,
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -613,104 +586,134 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Date of Birth',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 0.82.h),
+                                          child: const Icon(
+                                            Icons.phone,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 14.7,
+                                          ),
                                         ),
-                                        littleSeg,
-                                        Text(
-                                          'Phone Number',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 0.82.h),
+                                          child: const Icon(
+                                            Icons.email,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 14.7,
+                                          ),
                                         ),
-                                        littleSeg,
-                                        Text(
-                                          'Email Address',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 0.82.h),
+                                          child: const Icon(
+                                            Icons.cake,
+                                            color: kRegistrationSubtitleGrey,
+                                            size: 14.7,
+                                          ),
                                         ),
-                                        littleSeg,
-                                        Text(
-                                          'Current City',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                        const Icon(
+                                          Icons.location_city,
+                                          color: kRegistrationSubtitleGrey,
+                                          size: 14.7,
                                         ),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 0.6.h,
+                                      width: 1.h,
                                     ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          ':',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          'Phone',
+                                          style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          ':',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          'Email',
+                                          style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          ':',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          'Birth',
+                                          style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          ':',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          'Current',
+                                          style: bodyTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Number',
+                                          style: bodyTextStyle,
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'Address',
+                                          style: bodyTextStyle,
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'Date',
+                                          style: bodyTextStyle,
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          'City',
+                                          style: bodyTextStyle,
                                         ),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 0.6.h,
+                                      width: 0.8.h,
                                     ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          userPersonalDetails!.dateOfBirth,
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
-                                        ),
+                                        colonText,
                                         littleSeg,
+                                        colonText,
+                                        littleSeg,
+                                        colonText,
+                                        littleSeg,
+                                        colonText,
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 0.8.h,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
                                         Text(
                                           userPersonalDetails!.phone,
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
                                           userPersonalDetails!.email,
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          style: bodyTextStyle,
+                                        ),
+                                        littleSeg,
+                                        Text(
+                                          userPersonalDetails!.dateOfBirth,
+                                          style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
                                           '${userPersonalDetails!.city}, ${userPersonalDetails!.state}',
-                                          style: TextStyle(
-                                              color: kRegistrationSubtitleGrey,
-                                              fontSize: 9.5.sp),
+                                          style: bodyTextStyle,
                                         ),
                                       ],
                                     ),
@@ -741,10 +744,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                           children: [
                             Text(
                               'Professional Summary',
-                              style: TextStyle(
-                                color: kTitleBlack,
-                                fontSize: 14.sp,
-                              ),
+                              style: titleTextStyle,
                             ),
                             RoundedIconContainer(
                               onPressed: () {
@@ -772,9 +772,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 : userProfessionalSummary!.summaryText,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: kRegistrationSubtitleGrey,
-                                fontSize: 9.5.sp),
+                            style: bodyTextStyle,
                           ),
                         ),
                       ],
@@ -801,10 +799,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                           children: [
                             Text(
                               'Employment History',
-                              style: TextStyle(
-                                color: kTitleBlack,
-                                fontSize: 14.sp,
-                              ),
+                              style: titleTextStyle,
                             ),
                             RoundedIconContainer(
                               onPressed: () {
@@ -846,19 +841,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                                 currentEmploymentHistory!
                                                     .employer,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: kTitleBlack,
-                                                  fontSize: 11.5.sp,
-                                                ),
+                                                style: subTitleTextStyle,
                                               ),
                                               Text(
                                                 '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                style: TextStyle(
-                                                    color:
-                                                        kRegistrationSubtitleGrey,
-                                                    fontSize: 9.5.sp),
+                                                style: bodyTextStyle,
                                               ),
                                             ],
                                           ),
@@ -875,9 +864,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                             );
                                           },
                                           icon: const Icon(
-                                            Icons.arrow_forward_ios,
+                                            Icons.arrow_forward_ios_rounded,
                                             color: kRegistrationSubtitleGrey,
-                                            size: 23.5,
+                                            size: arrowBtnSize,
                                           ),
                                         ),
                                       ],
@@ -892,9 +881,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Create your first employment history . . .',
-                                  style: TextStyle(
-                                      color: kRegistrationSubtitleGrey,
-                                      fontSize: 9.5.sp),
+                                  style: bodyTextStyle,
                                 ),
                               ),
                       ],
@@ -921,10 +908,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                           children: [
                             Text(
                               'Education',
-                              style: TextStyle(
-                                color: kTitleBlack,
-                                fontSize: 14.sp,
-                              ),
+                              style: titleTextStyle,
                             ),
                             RoundedIconContainer(
                               onPressed: () {
@@ -964,19 +948,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                               Text(
                                                 currentEducation!.school,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: kTitleBlack,
-                                                  fontSize: 11.5.sp,
-                                                ),
+                                                style: subTitleTextStyle,
                                               ),
                                               Text(
                                                 '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                style: TextStyle(
-                                                    color:
-                                                        kRegistrationSubtitleGrey,
-                                                    fontSize: 9.5.sp),
+                                                style: bodyTextStyle,
                                               ),
                                             ],
                                           ),
@@ -992,9 +970,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                                 listIndex: index);
                                           },
                                           icon: const Icon(
-                                            Icons.arrow_forward_ios,
+                                            Icons.arrow_forward_ios_rounded,
                                             color: kRegistrationSubtitleGrey,
-                                            size: 23.5,
+                                            size: arrowBtnSize,
                                           ),
                                         ),
                                       ],
@@ -1009,9 +987,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Create your first education . . .',
-                                  style: TextStyle(
-                                      color: kRegistrationSubtitleGrey,
-                                      fontSize: 9.5.sp),
+                                  style: bodyTextStyle,
                                 ),
                               ),
                       ],
@@ -1038,10 +1014,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                           children: [
                             Text(
                               'Skills',
-                              style: TextStyle(
-                                color: kTitleBlack,
-                                fontSize: 14.sp,
-                              ),
+                              style: titleTextStyle,
                             ),
                             RoundedIconContainer(
                               onPressed: () {
@@ -1081,19 +1054,12 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                               Text(
                                                 currentSkill!.skillName,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: kTitleBlack,
-                                                  fontSize: 11.5.sp,
-                                                ),
+                                                style: subTitleTextStyle,
                                               ),
                                               Text(
                                                 currentSkill.skillLevel,
                                                 overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    color:
-                                                        kRegistrationSubtitleGrey,
-                                                    fontSize: 9.5.sp),
+                                                style: bodyTextStyle,
                                               ),
                                             ],
                                           ),
@@ -1108,9 +1074,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                                 listIndex: index);
                                           },
                                           icon: const Icon(
-                                            Icons.arrow_forward_ios,
+                                            Icons.arrow_forward_ios_rounded,
                                             color: kRegistrationSubtitleGrey,
-                                            size: 23.5,
+                                            size: arrowBtnSize,
                                           ),
                                         ),
                                       ],
@@ -1125,9 +1091,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Create your first skill . . .',
-                                  style: TextStyle(
-                                      color: kRegistrationSubtitleGrey,
-                                      fontSize: 9.5.sp),
+                                  style: bodyTextStyle,
                                 ),
                               ),
                       ],
@@ -1154,10 +1118,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                           children: [
                             Text(
                               'Autism Challenges',
-                              style: TextStyle(
-                                color: kTitleBlack,
-                                fontSize: 14.sp,
-                              ),
+                              style: titleTextStyle,
                             ),
                             RoundedIconContainer(
                               onPressed: () {
@@ -1199,20 +1160,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                                 currentAutismChallenge!
                                                     .challengeName,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: kTitleBlack,
-                                                  fontSize: 11.5.sp,
-                                                ),
+                                                style: subTitleTextStyle,
                                               ),
                                               Text(
                                                 currentAutismChallenge
                                                     .challengeLevel,
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 2,
-                                                style: TextStyle(
-                                                    color:
-                                                        kRegistrationSubtitleGrey,
-                                                    fontSize: 9.5.sp),
+                                                style: bodyTextStyle,
                                               ),
                                             ],
                                           ),
@@ -1228,9 +1183,9 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                                 listIndex: index);
                                           },
                                           icon: const Icon(
-                                            Icons.arrow_forward_ios,
+                                            Icons.arrow_forward_ios_rounded,
                                             color: kRegistrationSubtitleGrey,
-                                            size: 23.5,
+                                            size: arrowBtnSize,
                                           ),
                                         ),
                                       ],
@@ -1245,9 +1200,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Create your first autism challenge . . .',
-                                  style: TextStyle(
-                                      color: kRegistrationSubtitleGrey,
-                                      fontSize: 9.5.sp),
+                                  style: bodyTextStyle,
                                 ),
                               ),
                       ],
@@ -1293,10 +1246,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                       builder: (context) => AsdPdfViewerScreen(
                         file: resumePdfFile,
                         userResume: userResume,
-                        userId: widget.userId,
-                        userFirstName: widget.userFirstName,
-                        userLastName: widget.userLastName,
-                        userEmail: widget.userEmail,
+                        asdUserCredentials: widget.asdUserCredentials,
                       ),
                       settings:
                           const RouteSettings(name: AsdResumeBuilderScreen.id),

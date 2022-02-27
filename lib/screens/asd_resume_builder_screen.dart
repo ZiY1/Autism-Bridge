@@ -1116,9 +1116,25 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Autism Challenges',
-                              style: titleTextStyle,
+                            // TODO: figure out a better name, 'Challenge' ? 'Workplace Challenge'
+                            Row(
+                              children: [
+                                Text(
+                                  'Workplace Challenges',
+                                  style: titleTextStyle,
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 0.5.h, top: 0.78.h),
+                                  child: Text(
+                                    '(optional)',
+                                    style: TextStyle(
+                                      color: kRegistrationSubtitleGrey,
+                                      fontSize: 7.5.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             RoundedIconContainer(
                               onPressed: () {

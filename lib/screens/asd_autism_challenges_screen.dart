@@ -133,17 +133,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
       );
       return;
     }
-    if (challengeDescription == null || challengeDescription!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your challenge description',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
+    challengeDescription ??= '';
 
     setState(() {
       isSaving = true;
@@ -340,7 +330,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 2.h),
                           child: ResumeBuilderParagraphField(
                             initialValue: challengeDescription,
-                            title: 'Description',
+                            title: 'Description (optional)',
                             onChanged: (text) {
                               challengeDescription = text;
                               setState(() {

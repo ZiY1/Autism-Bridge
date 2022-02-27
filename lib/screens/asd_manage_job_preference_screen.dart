@@ -5,7 +5,7 @@ import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../constants.dart';
-
+import 'package:dotted_border/dotted_border.dart';
 import 'asd_job_preference_screen.dart';
 
 class AsdManageJobPreferenceScreen extends StatefulWidget {
@@ -87,51 +87,62 @@ class _AsdManageJobPreferenceScreenState
       padding: EdgeInsets.only(top: 1.5.h),
       child: SizedBox(
         height: 7.h,
-        child: TextButton(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 2.5.h,
-                height: 2.5.h,
-                child: const Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                  size: 17,
-                ),
-                margin: EdgeInsets.only(right: 1.h),
-                decoration: const BoxDecoration(
-                  color: kAutismBridgeBlue,
-                  shape: BoxShape.circle,
-                ),
+        child: DottedBorder(
+          color: kAutismBridgeBlue,
+          borderType: BorderType.RRect,
+          strokeWidth: 1.2,
+          dashPattern: const [4.5],
+          radius: const Radius.circular(12),
+          child: Padding(
+            padding: EdgeInsets.only(top: 0.32.h),
+            child: TextButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 2.5.h,
+                    height: 2.5.h,
+                    child: const Icon(
+                      Icons.add_rounded,
+                      color: Colors.white,
+                      size: 17,
+                    ),
+                    margin: EdgeInsets.only(right: 1.h),
+                    decoration: const BoxDecoration(
+                      color: kAutismBridgeBlue,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Text(
+                    'Add Job Preference',
+                    style: TextStyle(
+                      color: kAutismBridgeBlue,
+                      fontSize: 11.sp,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                'Add Job Preference',
-                style: TextStyle(
-                  color: kAutismBridgeBlue,
-                  fontSize: 11.sp,
-                ),
-              ),
-            ],
+              // style: ButtonStyle(
+              //   padding: MaterialStateProperty.all<EdgeInsets>(
+              //     EdgeInsets.all(1.55.h),
+              //   ),
+              //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //     RoundedRectangleBorder(
+              //       borderRadius:
+              //           BorderRadius.circular(kResumeBuilderCardRadius),
+              //     ),
+              //   ),
+              //   side: MaterialStateProperty.all<BorderSide>(
+              //     const BorderSide(
+              //       color: kAutismBridgeBlue,
+              //     ),
+              //   ),
+              // ),
+              onPressed: () {
+                jobPreferenceAddNewBtnOnPressed(context);
+              },
+            ),
           ),
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.all(1.55.h),
-            ),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
-              ),
-            ),
-            side: MaterialStateProperty.all<BorderSide>(
-              const BorderSide(
-                color: kAutismBridgeBlue,
-              ),
-            ),
-          ),
-          onPressed: () {
-            jobPreferenceAddNewBtnOnPressed(context);
-          },
         ),
       ),
     );
@@ -201,26 +212,29 @@ class _AsdManageJobPreferenceScreenState
                               fontSize: 18.5.sp,
                               fontWeight: FontWeight.w600),
                         ),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: userJobPreferenceList!.length.toString(),
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 10.5.sp,
-                                color: kAutismBridgeBlue,
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.7.h),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: userJobPreferenceList!.length.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 10.5.sp,
+                                  color: kAutismBridgeBlue,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: ' /3',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 10.5.sp,
-                                color: const Color(0xFF858597),
+                              TextSpan(
+                                text: ' /3',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 10.5.sp,
+                                  color: const Color(0xFF858597),
+                                ),
                               ),
-                            ),
-                          ]),
+                            ]),
+                          ),
                         ),
                       ],
                     ),

@@ -130,17 +130,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
       );
       return;
     }
-    if (skillDescription == null || skillDescription!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your skill description',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
+    skillDescription ??= '';
 
     setState(() {
       isSaving = true;
@@ -337,7 +327,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 2.h),
                           child: ResumeBuilderParagraphField(
                             initialValue: skillDescription,
-                            title: 'Description',
+                            title: 'Description (optional)',
                             onChanged: (text) {
                               skillDescription = text;
                               setState(() {

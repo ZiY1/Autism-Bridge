@@ -224,17 +224,7 @@ class _AsdEmploymentHistoryScreenState
       );
       return;
     }
-    if (description == null || description!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your description',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
+    description ??= '';
 
     setState(() {
       isSaving = true;
@@ -663,7 +653,7 @@ class _AsdEmploymentHistoryScreenState
                           padding: EdgeInsets.symmetric(horizontal: 2.h),
                           child: ResumeBuilderParagraphField(
                               initialValue: description,
-                              title: 'Description',
+                              title: 'Description (optional)',
                               onChanged: (text) {
                                 description = text;
                                 setState(() {

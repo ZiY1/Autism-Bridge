@@ -66,6 +66,8 @@ dependencies:
 
   flutter_picker: ^2.0.3
 
+  dotted_border: ^2.0.0+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

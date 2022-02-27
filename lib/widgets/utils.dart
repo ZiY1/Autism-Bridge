@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:autism_bridge/apis/resume_pdf_api.dart';
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -98,7 +99,7 @@ class Utils {
                             child: Text(
                               'Yes',
                               style: TextStyle(
-                                color: kWelcomeSubtitleGrey,
+                                color: kPickerCancelGrey,
                                 fontFamily: 'Poppins',
                                 fontSize: 12.sp,
                               ),
@@ -168,7 +169,7 @@ class Utils {
                       child: Text(
                         'Cancel',
                         style: TextStyle(
-                          color: kAutismBridgeBlue,
+                          color: kPickerCancelGrey,
                           fontSize: 11.sp,
                           fontFamily: 'Poppins',
                         ),
@@ -215,7 +216,7 @@ class Utils {
         fontSize: 11.sp,
       ),
       cancelTextStyle: TextStyle(
-        color: kAutismBridgeBlue,
+        color: kPickerCancelGrey,
         fontSize: 11.sp,
       ),
       textStyle:

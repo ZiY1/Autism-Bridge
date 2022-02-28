@@ -222,7 +222,7 @@ class ResumePdfApi {
                   ),
                 ),
                 pw.Text(
-                  '${userResume.userEmploymentHistoryList[i]!.startDate} - ${userResume.userEmploymentHistoryList[0]!.endDate}',
+                  '${userResume.userEmploymentHistoryList[i]!.startDate} - ${userResume.userEmploymentHistoryList[i]!.endDate}',
                   style: pw.TextStyle(
                     font: myFontRegular,
                     fontSize: 12.sp,
@@ -306,7 +306,7 @@ class ResumePdfApi {
                   ),
                 ),
                 pw.Text(
-                  '${userResume.userEducationList[i]!.startDate} - ${userResume.userEducationList[0]!.endDate}',
+                  '${userResume.userEducationList[i]!.startDate} - ${userResume.userEducationList[i]!.endDate}',
                   style: pw.TextStyle(
                     font: myFontRegular,
                     fontSize: 12.sp,

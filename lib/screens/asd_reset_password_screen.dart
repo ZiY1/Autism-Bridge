@@ -88,7 +88,8 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
               children: [
                 RegistrationTitle(
                   title: 'Reset Password',
-                  subtitle: 'Receive an email to reset your password',
+                  subtitle:
+                      'Follow the link on the email to reset your password',
                   backOnPressed: () {
                     Navigator.pop(context);
                   },

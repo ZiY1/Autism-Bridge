@@ -199,7 +199,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 5,
+                      flex: 4,
                       child: TextFormField(
                         autofocus: true,
                         onChanged: (email) {

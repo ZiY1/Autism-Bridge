@@ -11,6 +11,8 @@ import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/widgets/emailFieldWidget.dart';
 import 'package:autism_bridge/widgets/passwordFieldWidget.dart';
 
+import 'asd_email_verify_screen.dart';
+
 class SignInEmployerPage extends StatefulWidget {
   static String nameRoute = '/Sign_In_Page?';
 
@@ -118,22 +120,13 @@ class _SignInEmployerPageState extends State<SignInEmployerPage> {
 
         // All the info that will be pass to the next Navigator Page
         final String userFirstName = userInfo[0]['userFirstName'];
-        final String userLastName = userInfo[0]['userLastName'];
-        final int userNewMessages = userInfo[0]['userNewMessages'];
-        final String userUrlProfilePicture = userInfo[0]['urlProfileImage'];
-
+       
         // Send the Navigator to the Employer Main Page
-        Navigator.of(ctx).popAndPushNamed(
-          SignedEmployerHomeScreen.routeName,
-          arguments: {
-            'userFirstName': userFirstName,
-            'userLastName': userLastName,
-            'userEmail': userEmail,
-            'userNewMessages': userNewMessages,
-            'userUrlProfilePicture': userUrlProfilePicture,
-            'userId': userId,
-          },
-        );
+        //Navigator.of(ctx).popAndPushNamed(SignedEmployerHomeScreen.routeName);
+        Navigator.pushNamedAndRemoveUntil(
+            context, AsdEmailVerifyScreen.id, (route) => false);
+
+       
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           showErrorDialog(

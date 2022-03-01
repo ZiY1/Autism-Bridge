@@ -90,8 +90,7 @@ class AutismBridgeApp extends StatelessWidget {
                   const JoinInEmployerPage(),
               JoinInEmployerSecondPage.nameRoute: (context) =>
                   const JoinInEmployerSecondPage(),
-              SignedEmployerHomeScreen.routeName: (context) =>
-                  const SignedEmployerHomeScreen(),
+              //SignedEmployerHomeScreen.routeName: (context) =>SignedEmployerHomeScreen(),
               EmployerProfilePage.routeName: (context) =>
                   const EmployerProfilePage(),
               EmployerSettingsScreen.routeName: (context) =>

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-//import 'package:app/tempo.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,6 +8,7 @@ import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/screens/SignedEmployerNewMessageScreen.dart';
 
 import 'package:autism_bridge/widgets/MessagTile.dart';
+import 'package:autism_bridge/models/Employer.dart';
 
 class EmployerMessagingScreen extends StatefulWidget {
   static const nameRoute = "MyMessages";
@@ -27,29 +27,8 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
     // TODO: sent back the info of the logged user in arguments
 
     // Extract user info from the Navigator
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-
-    String userId = routeArgs['userId'] as String;
-
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
-
     Navigator.of(ctx).popAndPushNamed(
       SignedEmployerHomeScreen.routeName,
-      arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userId': userId,
-        'userEmail': userEmail,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
-      },
     );
   }
 
@@ -58,26 +37,13 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-
-    String userId = routeArgs['userId'] as String;
-
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
+    Employer signedEmployer = routeArgs['signedEmployer'] as Employer;
 
     // TODO: Fix arguments that you sent
     await Navigator.of(ctx).popAndPushNamed(
       EmployerSendNewMessageScreen.routeName,
       arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userId': userId,
-        'userEmail': userEmail,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
+        'signedEmployer': signedEmployer,
       },
     );
   }
@@ -149,7 +115,8 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
     final routeArgs =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
-    String userEmail = routeArgs['userEmail'] as String;
+    Employer signedEmployer = routeArgs['signedEmployer'] as Employer;
+    String userEmail = signedEmployer.email;
 
     Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
         .collection(

@@ -1,21 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+// Imported Screen
 import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
-
 import 'package:autism_bridge/screens/SignedEmployerHomeMainContent.dart';
 import 'package:autism_bridge/screens/SignedEmployerMessagingScreen.dart';
-
 import 'package:autism_bridge/screens/SignedEmployerProfileScreen.dart';
-
 import 'package:autism_bridge/screens/SignedEmployerSettingsScreen.dart';
-
+// Imported libraries
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+// Imported Customized Widgets
 import 'package:autism_bridge/widgets/NotificationIcon.dart';
+// Imported models
+import 'package:autism_bridge/models/Employer.dart';
+
+// Global variable
+final FirebaseFirestore autismBridgeFireBaseFireStore =
+    FirebaseFirestore.instance;
+final FirebaseAuth authentication = FirebaseAuth.instance;
 
 class SignedEmployerHomeScreen extends StatefulWidget {
   static String routeName = "Recuiter_MainPage";
 
-  const SignedEmployerHomeScreen() : super();
+  final Employer employer;
+
+  const SignedEmployerHomeScreen({required this.employer}) : super();
   @override
   _SignedEmployerHomeScreenState createState() =>
       _SignedEmployerHomeScreenState();
@@ -23,13 +32,74 @@ class SignedEmployerHomeScreen extends StatefulWidget {
 
 class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
   //
+  // Gather the Employer info
+
+  Employer? signedEmployer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get the Current Employer info
+    signedEmployer = widget.employer;
+    //getCurrentUser();
+  }
+
+  /*
+  Future<void> getCurrentUser() async {
+    try {
+      final currentUser = authentication.currentUser;
+      if (currentUser != null) {
+        userEmail = currentUser.email!;
+        userId = currentUser.uid;
+        await getUsername();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }*/
+
+  /*
+  Future<void> getUsername() async {
+    await autismBridgeFireBaseFireStore
+        .collection('EmployerUsers')
+        .doc(userId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        // Map contain user data
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        // Get the data and create an Employer Object
+        userFirstName = data['userFirstName'];
+        userLastName = data['userLastName'];
+        userPassword = data['userPassword'];
+        userUrlProfilePicture = data['urlProfileImage'];
+        userNewMessages = data['userNewMessages'];
+        signedEmployer = Employer(
+          userId: userId,
+          userUrlProfilePicture: userUrlProfilePicture,
+          userFirstName: userFirstName,
+          userLastName: userLastName,
+          userEmail: userEmail,
+          userPassword: userPassword,
+          userNewMessages: userNewMessages,
+        );
+
+        //print(userFirstName);
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+  }*/
+
+  //
   // State Tab index
-  int currentTabindex = 0;
+  int currentTabIndex = 0;
 
   // Function that controls the State tab index
   onTapped(int index) {
     setState(() {
-      currentTabindex = index;
+      currentTabIndex = index;
     });
   }
 
@@ -37,82 +107,29 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Function that tells the Navigator to go to MessagingPage
-  void goToMessagingPage(BuildContext ctx) async {
-    // Get the arguments from the Navigator
-    final routeArgs =
-        ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-    String userId = routeArgs['userId'] as String;
-
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
-
+  void goToMessagingPage(BuildContext ctx, Employer signedEmployer) async {
     await Navigator.of(ctx).pushNamed(
       EmployerMessagingScreen.nameRoute,
       arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userId': userId,
-        'userEmail': userEmail,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
+        'signedEmployer': signedEmployer,
       },
     );
   }
 
-  void goToMyProfilePage(BuildContext ctx) async {
-    // Gather the UserInfo from the previous page
-    final routeArgs =
-        ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-    String userId = routeArgs['userId'] as String;
-
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
-
+  void goToMyProfilePage(BuildContext ctx, Employer signedEmployer) async {
     // Go to Employer user Profile Page
-    await Navigator.of(ctx).popAndPushNamed(
-      EmployerProfilePage.routeName,
-      arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userId': userId,
-        'userEmail': userEmail,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
-      },
-    );
+    await Navigator.of(ctx)
+        .popAndPushNamed(EmployerProfilePage.routeName, arguments: {
+      'signedEmployer': signedEmployer,
+    });
   }
 
-  void goToSettingsPage(BuildContext ctx) async {
-    // Gather the UserInfo from the previous page
-    final routeArgs =
-        ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-    String userId = routeArgs['userId'] as String;
-
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
-
+  void goToSettingsPage(BuildContext ctx, Employer signedEmployer) async {
     // Go to Employer user Profile Page
     await Navigator.of(ctx).popAndPushNamed(
       EmployerSettingsScreen.routeName,
       arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userId': userId,
-        'userEmail': userEmail,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
+        'signedEmployer': signedEmployer,
       },
     );
   }
@@ -141,15 +158,14 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
     final screenDeviceHeight = MediaQuery.of(context).size.height;
     final screenDeviceWidth = MediaQuery.of(context).size.width;
 
-    // Get the arguments from the Navigator
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-
     // AppBar State List
     List<AppBar> appBarStates = [
-      returnAppBar(0, context, goToMessagingPage, _scaffoldKey),
-      returnAppBar(1, context, goToMessagingPage, _scaffoldKey),
-      returnAppBar(2, context, goToMessagingPage, _scaffoldKey),
+      returnAppBar(
+          0, context, goToMessagingPage, signedEmployer!, _scaffoldKey),
+      returnAppBar(
+          1, context, goToMessagingPage, signedEmployer!, _scaffoldKey),
+      returnAppBar(
+          2, context, goToMessagingPage, signedEmployer!, _scaffoldKey),
     ];
 
     // Tabs State List
@@ -164,64 +180,74 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
     ];
 
     return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade200,
-        appBar: appBarStates[currentTabindex],
-        key: _scaffoldKey,
-        drawer: buildMainPageDrawer(
-            context, logOutUser, goToMyProfilePage, goToSettingsPage),
-        drawerEnableOpenDragGesture: true,
-        body: SafeArea(
-          child: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : SingleChildScrollView(child: tabs[currentTabindex]),
-        ),
-        bottomNavigationBar: Container(
-          color: Colors.white,
-          height: 60,
-          child: BottomNavigationBar(
-            onTap: onTapped,
-            currentIndex: currentTabindex,
-            backgroundColor: Colors.white,
-            unselectedLabelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-            selectedItemColor: Colors.blue.shade700,
-            selectedIconTheme: IconThemeData(
-              color: Colors.blue.shade700,
-            ),
-            selectedLabelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.blue.shade700,
-            ),
-            items: [
-              BottomNavigationBarItem(
-                icon: Stack(children: <Widget>[
-                  Icon(Icons.search),
-                ]),
-                label: 'Search',
-              ),
-              BottomNavigationBarItem(
-                  icon: Stack(
-                    children: <Widget>[Icon(Icons.video_label_rounded)],
-                  ),
-                  label: "VR"),
-              BottomNavigationBarItem(
-                icon: Stack(children: <Widget>[
-                  Icon(Icons.post_add),
-                ]),
-                label: 'Post Job',
-              ),
-            ],
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: SafeArea(
+            child: Scaffold(
+                          backgroundColor: Colors.grey.shade200,
+                          appBar: appBarStates[currentTabIndex],
+                          key: _scaffoldKey,
+                          drawer: buildMainPageDrawer(
+                              context,
+                              logOutUser,
+                              goToMyProfilePage,
+                              goToSettingsPage,
+                              signedEmployer!),
+                          drawerEnableOpenDragGesture: true,
+                          body: SafeArea(
+                            child: _isLoading
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : SingleChildScrollView(
+                                    child: tabs[currentTabIndex]),
+                          ),
+                          bottomNavigationBar: Container(
+                            color: Colors.white,
+                            height: 60,
+                            child: BottomNavigationBar(
+                              onTap: onTapped,
+                              currentIndex: currentTabIndex,
+                              backgroundColor: Colors.white,
+                              unselectedLabelStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              selectedItemColor: Colors.blue.shade700,
+                              selectedIconTheme: IconThemeData(
+                                color: Colors.blue.shade700,
+                              ),
+                              selectedLabelStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade700,
+                              ),
+                              items: [
+                                BottomNavigationBarItem(
+                                  icon: Stack(children: <Widget>[
+                                    Icon(Icons.search),
+                                  ]),
+                                  label: 'Search',
+                                ),
+                                BottomNavigationBarItem(
+                                    icon: Stack(
+                                      children: <Widget>[
+                                        Icon(Icons.video_label_rounded)
+                                      ],
+                                    ),
+                                    label: "VR"),
+                                BottomNavigationBarItem(
+                                  icon: Stack(children: <Widget>[
+                                    Icon(Icons.post_add),
+                                  ]),
+                                  label: 'Post Job',
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                ,
           ),
-        ),
-      ),
-    );
+        );
   }
 }
 
@@ -229,6 +255,7 @@ AppBar returnAppBar(
   int idx,
   BuildContext ctx,
   Function goToMessaging,
+  Employer signedEmployer,
   GlobalKey<ScaffoldState> Scaffoldkey,
 ) {
   // Calculate Device's Dimension
@@ -236,16 +263,13 @@ AppBar returnAppBar(
   final screenDeviceHeight = MediaQuery.of(ctx).size.height;
   final screenDeviceWidth = MediaQuery.of(ctx).size.width;
 
-  // Get the arguments from the Navigator
-  final routeArgs =
-      ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-  String userFirstName = routeArgs['userFirstName'] as String;
-  String userLastName = routeArgs['userLastName'] as String;
-  String userEmail = routeArgs['userEmail'] as String;
-  String userId = routeArgs['userId'] as String;
-  int userNewMessages = routeArgs['userNewMessages'] as int;
-  String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
+  // Get the userEmployerInfo
+  String userFirstName = signedEmployer.firstName;
+  String userLastName = signedEmployer.lastName;
+  String userEmail = signedEmployer.email;
+  String userId = signedEmployer.id;
+  int userNewMessages = signedEmployer.newMessages;
+  String userUrlProfilePicture = signedEmployer.urlProfilePicture;
 
   AppBar myAppBar = AppBar();
 
@@ -263,7 +287,7 @@ AppBar returnAppBar(
               ? IconButton(
                   onPressed: () {
                     // Go to Message Page
-                    goToMessaging(ctx);
+                    goToMessaging(ctx, signedEmployer);
                   },
                   icon: Icon(
                     Icons.message_rounded,
@@ -274,7 +298,7 @@ AppBar returnAppBar(
               : NotificationIcon(
                   onTap: () {
                     // Go to Message Page
-                    goToMessaging(ctx);
+                    goToMessaging(ctx, signedEmployer);
                   },
                   text: "",
                   iconData: Icons.message_rounded,
@@ -470,17 +494,16 @@ Drawer buildMainPageDrawer(
   Function logOutUser,
   Function goToMyProfilePage,
   Function goToSettingsPage,
+  Employer signedEmployer,
 ) {
   //
   // Get the arguments from the Navigator
-  final routeArgs =
-      ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
 
-  String userFirstName = routeArgs['userFirstName'] as String;
-  String userLastName = routeArgs['userLastName'] as String;
-  String userEmail = routeArgs['userEmail'] as String;
-  String userId = routeArgs['userId'] as String;
-  String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
+  String userFirstName = signedEmployer.firstName;
+  String userLastName = signedEmployer.lastName;
+  String userEmail = signedEmployer.email;
+  String userId = signedEmployer.id;
+  String userUrlProfilePicture = signedEmployer.urlProfilePicture;
 
   Drawer mainPageDrawer = Drawer(
     backgroundColor: Colors.grey.shade200,
@@ -582,9 +605,6 @@ Drawer buildMainPageDrawer(
 
   return mainPageDrawer;
 }
-
-
-
 
 /*
 BottomNavigationBarItem returnBottomNavigatorPeople(int noInvitation) {

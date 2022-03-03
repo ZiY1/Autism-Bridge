@@ -1,7 +1,6 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
-import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -88,8 +87,6 @@ class _DetermineUserTypeLoadingScreenState
                       'determine_user_type_screen=>checkUserTypeAndGetUserCredentials');
             }
           } else {
-            // TODO: Fetch Employer user credentials
-
             // Fetch employer user credentials
             String userId;
             String userUrlProfilePicture;
@@ -179,7 +176,6 @@ class _DetermineUserTypeLoadingScreenState
                 asdUserCredentials: asdUserCredentials!,
               );
             } else {
-              //TODO: change this when billy finish the SignedInEmployerHomeScreen arch rebuild
               return SignedEmployerHomeScreen(employer: employer!);
             }
           }

@@ -10,6 +10,10 @@ import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/date_time_picker_widget.dart';
+import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
+import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
+import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
+import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,6 +39,38 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
   final _auth = FirebaseAuth.instance;
 
   final _firestore = FirebaseFirestore.instance;
+
+  int bottomNavBarCurrentIndex = 0;
+
+  void jobBtnOnPressed() {
+    setState(() {
+      bottomNavBarCurrentIndex = 0;
+    });
+  }
+
+  void messageBtnOnPressed() {
+    setState(() {
+      bottomNavBarCurrentIndex = 1;
+    });
+  }
+
+  void searchBtnOnPressed() {
+    setState(() {
+      bottomNavBarCurrentIndex = 2;
+    });
+  }
+
+  void homeBtnOnPressed() {
+    setState(() {
+      bottomNavBarCurrentIndex = 3;
+    });
+  }
+
+  void meBtnOnPressed() {
+    setState(() {
+      bottomNavBarCurrentIndex = 4;
+    });
+  }
 
   Future<void> resumeBuilderBtnOnPressed() async {
     PersonalDetails? userPersonalDetails =
@@ -99,7 +135,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double navBarIconSize = 3.5;
+    const double navBarIconSize = 3.425;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -240,74 +276,123 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
           //   },
           // ),
         ),
-        bottomNavigationBar: Container(
-          height: 8.5.h,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF8A959E).withOpacity(0.2),
-                spreadRadius: 0,
-                blurRadius: 30.0,
-                //offset: Offset(0, 3), // changes position of shadow
+        bottomNavigationBar: MyBottomNavBar(
+          middleSearch: GestureDetector(
+            onTap: searchBtnOnPressed,
+            child: Container(
+              width: 6.4.h,
+              height: 6.4.h,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 0.15.h, right: 0.1.h),
+                child: Image.asset(
+                  'images/icon_search.png',
+                  scale: 3.3,
+                  color: bottomNavBarCurrentIndex == 2
+                      ? kAutismBridgeBlue
+                      : const Color(0xFFB8B8D2),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFF3D5CFF).withOpacity(0.05),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          firstRow: Row(
+            children: [
+              MyBottomNavBarIndicator(
+                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+              ),
+              SizedBox(
+                width: 10.92.w,
+              ),
+              MyBottomNavBarIndicator(
+                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+              ),
+              SizedBox(
+                width: 30.07.w,
+              ),
+              MyBottomNavBarIndicator(
+                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+              ),
+              SizedBox(
+                width: 11.1.w,
+              ),
+              MyBottomNavBarIndicator(
+                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
               ),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.white,
-              selectedItemColor: Colors.greenAccent,
-              unselectedItemColor: Colors.grey,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 1.h),
-                    child: Image.asset(
-                      'images/icon_job.png',
-                      scale: navBarIconSize,
-                      //color: kAutismBridgeBlue,
-                    ),
-                  ),
-                  label: 'Jobs',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    'images/icon_message.png',
-                    scale: navBarIconSize,
-                    color: kAutismBridgeBlue,
-                  ),
-                  label: 'Message',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    'images/icon_search.png',
-                    scale: navBarIconSize,
-                    color: kAutismBridgeBlue,
-                  ),
-                  label: 'Search',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    'images/icon_home.png',
-                    scale: navBarIconSize,
-                    color: kAutismBridgeBlue,
-                  ),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    'images/icon_me.png',
-                    scale: navBarIconSize,
-                    color: kAutismBridgeBlue,
-                  ),
-                  label: 'Me',
-                ),
-              ],
-            ),
+          secondRow: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MyBottomNavBarIcon(
+                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                onPressed: jobBtnOnPressed,
+                iconPath: 'images/icon_job.png',
+              ),
+              MyBottomNavBarIcon(
+                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                onPressed: messageBtnOnPressed,
+                iconPath: 'images/icon_message.png',
+              ),
+              Image.asset(
+                'images/icon_search.png',
+                scale: navBarIconSize,
+                color: Colors.transparent,
+              ),
+              MyBottomNavBarIcon(
+                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                onPressed: homeBtnOnPressed,
+                iconPath: 'images/icon_home.png',
+              ),
+              MyBottomNavBarIcon(
+                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                onPressed: meBtnOnPressed,
+                iconPath: 'images/icon_me.png',
+              ),
+            ],
+          ),
+          thirdRow: Row(
+            children: [
+              MyBottomNavBarLabel(
+                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                onPressed: jobBtnOnPressed,
+                labelName: 'Jobs',
+              ),
+              SizedBox(
+                width: 9.w,
+              ),
+              MyBottomNavBarLabel(
+                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                onPressed: messageBtnOnPressed,
+                labelName: 'Message',
+              ),
+              SizedBox(
+                width: 7.35.w,
+              ),
+              MyBottomNavBarLabel(
+                isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
+                onPressed: searchBtnOnPressed,
+                labelName: 'Search',
+              ),
+              SizedBox(
+                width: 8.9.w,
+              ),
+              MyBottomNavBarLabel(
+                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                onPressed: homeBtnOnPressed,
+                labelName: 'Home',
+              ),
+              SizedBox(
+                width: 12.2.w,
+              ),
+              MyBottomNavBarLabel(
+                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                onPressed: jobBtnOnPressed,
+                labelName: 'Me',
+              ),
+            ],
           ),
         ),
       ),

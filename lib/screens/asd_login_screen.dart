@@ -10,9 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:autism_bridge/widgets/registration_button.dart';
 import 'package:autism_bridge/widgets/registration_title.dart';
 import 'package:sizer/sizer.dart';
-import '../main.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-
 import 'asd_email_verify_screen.dart';
 
 class AsdLoginScreen extends StatefulWidget {

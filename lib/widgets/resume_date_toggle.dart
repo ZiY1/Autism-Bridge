@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import '../constants.dart';
 
 class ResumeDateToggle extends StatelessWidget {

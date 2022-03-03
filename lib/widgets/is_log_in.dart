@@ -24,37 +24,7 @@ class IsLogIn extends StatelessWidget {
             );
           } else if (snapshot.hasData) {
             // snapshot.hasData means there is a user logged in
-
             return const AsdEmailVerifyScreen();
-
-            // await FirebaseFirestore.instance
-            //     .collection('all_users')
-            //     .doc(snapshot.data!.uid)
-            //     .get()
-            //     .then((DocumentSnapshot documentSnapshot) {
-            //   if (documentSnapshot.exists) {
-            //     Map<String, dynamic> data =
-            //         documentSnapshot.data() as Map<String, dynamic>;
-            //     final String userType = data['wantedJobTitle'];
-            //
-            //     if (userType == 'JobSeeker') {
-            //       return const AsdEmailVerifyScreen();
-            //     } else if (userType == 'Employer') {
-            //       // TODO: return to Employer's side, below is for testing
-            //       return const JoinInEmployerPage();
-            //     }
-            //   }
-            // });
-            //
-            // return Utils.showSnackBar(
-            //   'Something went wrong',
-            //   const Icon(
-            //     Icons.error_sharp,
-            //     color: Colors.red,
-            //     size: 30.0,
-            //   ),
-            // );
-            // //return const JoinInEmployerPage();
           } else {
             return const WelcomeScreen();
           }

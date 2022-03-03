@@ -302,7 +302,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     // }
   }
 
-  // TODO: configure for iOS
   Future pickImage(ImageSource imageSource) async {
     try {
       final image = await ImagePicker().pickImage(source: imageSource);

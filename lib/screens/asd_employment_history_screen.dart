@@ -10,7 +10,6 @@ import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/resume_date_toggle.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:sizer/sizer.dart';

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:autism_bridge/apis/resume_pdf_api.dart';
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';

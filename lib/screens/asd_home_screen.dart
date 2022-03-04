@@ -1,27 +1,13 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
-import 'package:autism_bridge/models/autism_challenge_data.dart';
-import 'package:autism_bridge/models/education_data.dart';
-import 'package:autism_bridge/models/employment_history_data.dart';
-import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/personal_details_data.dart';
-import 'package:autism_bridge/models/professional_summary_data.dart';
-import 'package:autism_bridge/models/skill_data.dart';
-import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
-import 'package:autism_bridge/screens/welcome_screen.dart';
-import 'package:autism_bridge/widgets/date_time_picker_widget.dart';
+import 'package:autism_bridge/screens/asd_me_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
-import 'package:autism_bridge/widgets/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
-
-import 'asd_manage_job_preference_screen.dart';
 
 class AsdHomeScreen extends StatefulWidget {
   static const id = 'asd_home_screen';
@@ -38,9 +24,13 @@ class AsdHomeScreen extends StatefulWidget {
 class _AsdHomeScreenState extends State<AsdHomeScreen> {
   final _auth = FirebaseAuth.instance;
 
-  final _firestore = FirebaseFirestore.instance;
-
   int bottomNavBarCurrentIndex = 0;
+
+  AsdUserCredentials? asdUserCredentials;
+
+  List<Widget> screens = [];
+
+  List<PreferredSizeWidget?> appBars = [];
 
   void jobBtnOnPressed() {
     setState(() {
@@ -72,65 +62,71 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     });
   }
 
-  Future<void> resumeBuilderBtnOnPressed() async {
-    PersonalDetails? userPersonalDetails =
-        await PersonalDetails.readPersonalDetailsDataFromFirestore(
-            widget.asdUserCredentials.userId);
+  @override
+  void initState() {
+    super.initState();
 
-    ProfessionalSummary? userProfessionalSummary =
-        await ProfessionalSummary.readProfessionalSummaryDataFromFirestore(
-            widget.asdUserCredentials.userId);
-
-    // try to read cv_employment_history of current users' subcollection employment_histories in firestore
-    // Store it/them in List<EmploymentHistory?> userEmploymentHistory
-    // Two Cases:
-    // 1. has no data, so userEmploymentHistory has a list of null
-    // 2. has data, so userEmploymentHistory has a list of EmploymentHistory obj
-
-    List<EmploymentHistory?> userEmploymentHistoryList =
-        await EmploymentHistory.readAllEmploymentHistoryDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    List<Education?> userEducationList =
-        await Education.readAllEducationDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    List<Skill?> userSkillList = await Skill.readAllSkillDataFromFirestore(
-        userId: widget.asdUserCredentials.userId);
-
-    List<AutismChallenge?> userAutismChallengeList =
-        await AutismChallenge.readAllAutismChallengeDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdResumeBuilderScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userPersonalDetails: userPersonalDetails,
-          userProfessionalSummary: userProfessionalSummary,
-          userEmploymentHistoryList: userEmploymentHistoryList,
-          userEducationList: userEducationList,
-          userSkillList: userSkillList,
-          userAutismChallengeList: userAutismChallengeList,
-        ),
+    screens.add(
+      const Center(
+        child: Text('Job Screen'),
       ),
     );
-  }
-
-  Future<void> jobPreferenceBtnOnPressed() async {
-    List<JobPreference?> userJobPreferenceList =
-        await JobPreference.readAllJobPreferenceDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdManageJobPreferenceScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userJobPreferenceList: userJobPreferenceList,
-        ),
+    screens.add(
+      const Center(
+        child: Text('Message Screen'),
       ),
     );
+    screens.add(
+      const Center(
+        child: Text('Search Screen'),
+      ),
+    );
+    screens.add(
+      const Center(
+        child: Text('Calendar Screen'),
+      ),
+    );
+    screens.add(
+      AsdMeScreen(asdUserCredentials: widget.asdUserCredentials),
+    );
+    appBars.add(AppBar(
+      elevation: 0,
+      flexibleSpace: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TabBar(
+            isScrollable: true, // Required
+            unselectedLabelColor: Colors.white.withOpacity(0.8),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 11.7.sp,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Poppins',
+              letterSpacing: 0.3,
+            ),
+            labelPadding:
+                EdgeInsets.symmetric(horizontal: 1.5.h), // Space between tabs
+            indicatorColor: Colors.transparent,
+            labelColor: Colors.white,
+            labelStyle: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Poppins',
+              letterSpacing: 0.3,
+            ),
+            tabs: const [
+              Tab(text: 'Software Engineer'),
+              Tab(text: 'UI Designer'),
+              Tab(text: 'Product Manager'),
+            ],
+          ),
+        ],
+      ),
+      backgroundColor: kAutismBridgeBlue,
+    ));
+    appBars.add(AppBar());
+    appBars.add(AppBar());
+    appBars.add(AppBar());
+    appBars.add(null);
   }
 
   @override
@@ -140,259 +136,127 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       length: 3,
       child: Scaffold(
         backgroundColor: kBackgroundRiceWhite,
-        appBar: AppBar(
-          elevation: 0,
-          flexibleSpace: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TabBar(
-                isScrollable: true, // Required
-                unselectedLabelColor: Colors.white.withOpacity(0.8),
-                unselectedLabelStyle: TextStyle(
-                  fontSize: 11.7.sp,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                  letterSpacing: 0.3,
+        appBar: appBars[bottomNavBarCurrentIndex],
+        body: screens[bottomNavBarCurrentIndex],
+        bottomNavigationBar: SafeArea(
+          child: MyBottomNavBar(
+            middleSearch: GestureDetector(
+              onTap: searchBtnOnPressed,
+              child: Container(
+                width: 6.4.h,
+                height: 6.4.h,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 0.15.h, right: 0.1.h),
+                  child: Image.asset(
+                    'images/icon_search.png',
+                    scale: 3.3,
+                    color: bottomNavBarCurrentIndex == 2
+                        ? kAutismBridgeBlue
+                        : const Color(0xFFB8B8D2),
+                  ),
                 ),
-                labelPadding: EdgeInsets.symmetric(
-                    horizontal: 1.5.h), // Space between tabs
-                indicatorColor: Colors.transparent,
-                labelColor: Colors.white,
-                labelStyle: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                  letterSpacing: 0.3,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3D5CFF).withOpacity(0.05),
+                  shape: BoxShape.circle,
                 ),
-                tabs: const [
-                  Tab(text: 'Software Engineer'),
-                  Tab(text: 'UI Designer'),
-                  Tab(text: 'Product Manager'),
-                ],
-              ),
-            ],
-          ),
-          backgroundColor: kAutismBridgeBlue,
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Text(widget.asdUserCredentials.userEmail),
-              Text(widget.asdUserCredentials.userId),
-              Text(
-                  '${widget.asdUserCredentials.userFirstName} ${widget.asdUserCredentials.userLastName}'),
-              ElevatedButton(
-                onPressed: () {
-                  _auth.signOut();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, WelcomeScreen.id, (route) => false);
-                },
-                child: const Text('Sign Out'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  resumeBuilderBtnOnPressed();
-                },
-                child: const Text('Resume Builder'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  jobPreferenceBtnOnPressed();
-                },
-                child: const Text('Job Preference'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Utils.showProgressIndicator(context);
-                },
-                child: const Text('Progress Indicator Test'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DateTimePicker(),
-                    ),
-                  );
-                },
-                child: const Text('Date Time Test'),
-              ),
-            ],
-          ),
-          // child: FutureBuilder(
-          //   future: getUsername(),
-          //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.done) {
-          //       return Column(
-          //         children: [
-          //           Text(userEmail!),
-          //           Text(userId!),
-          //           Text('$userFirstName $userLastName'),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               _auth.signOut();
-          //               Navigator.pushNamedAndRemoveUntil(
-          //                   context, WelcomeScreen.id, (route) => false);
-          //             },
-          //             child: const Text('Sign Out'),
-          //           ),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               resumeBuilderBtnOnPressed();
-          //             },
-          //             child: const Text('Resume Builder'),
-          //           ),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               jobPreferenceBtnOnPressed();
-          //             },
-          //             child: const Text('Job Preference'),
-          //           ),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               Utils.showProgressIndicator(context);
-          //             },
-          //             child: const Text('Progress Indicator Test'),
-          //           ),
-          //           ElevatedButton(
-          //             onPressed: () {
-          //               Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                   builder: (context) => DateTimePicker(),
-          //                 ),
-          //               );
-          //             },
-          //             child: const Text('Date Time Test'),
-          //           ),
-          //         ],
-          //       );
-          //     } else {
-          //       return const Center(
-          //         child: CircularProgressIndicator(),
-          //       );
-          //     }
-          //   },
-          // ),
-        ),
-        bottomNavigationBar: MyBottomNavBar(
-          middleSearch: GestureDetector(
-            onTap: searchBtnOnPressed,
-            child: Container(
-              width: 6.4.h,
-              height: 6.4.h,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.15.h, right: 0.1.h),
-                child: Image.asset(
-                  'images/icon_search.png',
-                  scale: 3.3,
-                  color: bottomNavBarCurrentIndex == 2
-                      ? kAutismBridgeBlue
-                      : const Color(0xFFB8B8D2),
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF3D5CFF).withOpacity(0.05),
-                shape: BoxShape.circle,
               ),
             ),
-          ),
-          firstRow: Row(
-            children: [
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
-              ),
-              SizedBox(
-                width: 10.92.w,
-              ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-              ),
-              SizedBox(
-                width: 30.07.w,
-              ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-              ),
-              SizedBox(
-                width: 11.1.w,
-              ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
-              ),
-            ],
-          ),
-          secondRow: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MyBottomNavBarIcon(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
-                onPressed: jobBtnOnPressed,
-                iconPath: 'images/icon_job.png',
-              ),
-              MyBottomNavBarIcon(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-                onPressed: messageBtnOnPressed,
-                iconPath: 'images/icon_message.png',
-              ),
-              Image.asset(
-                'images/icon_search.png',
-                scale: navBarIconSize,
-                color: Colors.transparent,
-              ),
-              MyBottomNavBarIcon(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                onPressed: homeBtnOnPressed,
-                iconPath: 'images/icon_home.png',
-              ),
-              MyBottomNavBarIcon(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
-                onPressed: meBtnOnPressed,
-                iconPath: 'images/icon_me.png',
-              ),
-            ],
-          ),
-          thirdRow: Row(
-            children: [
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
-                onPressed: jobBtnOnPressed,
-                labelName: 'Jobs',
-              ),
-              SizedBox(
-                width: 9.w,
-              ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-                onPressed: messageBtnOnPressed,
-                labelName: 'Message',
-              ),
-              SizedBox(
-                width: 7.35.w,
-              ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
-                onPressed: searchBtnOnPressed,
-                labelName: 'Search',
-              ),
-              SizedBox(
-                width: 8.9.w,
-              ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                onPressed: homeBtnOnPressed,
-                labelName: 'Home',
-              ),
-              SizedBox(
-                width: 12.2.w,
-              ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
-                onPressed: jobBtnOnPressed,
-                labelName: 'Me',
-              ),
-            ],
+            firstRow: Row(
+              children: [
+                MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                ),
+                SizedBox(
+                  width: 10.92.w,
+                ),
+                MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                ),
+                SizedBox(
+                  width: 30.07.w,
+                ),
+                MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                ),
+                SizedBox(
+                  width: 11.1.w,
+                ),
+                MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                ),
+              ],
+            ),
+            secondRow: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MyBottomNavBarIcon(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                  onPressed: jobBtnOnPressed,
+                  iconPath: 'images/icon_job.png',
+                ),
+                MyBottomNavBarIcon(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                  onPressed: messageBtnOnPressed,
+                  iconPath: 'images/icon_message.png',
+                ),
+                Image.asset(
+                  'images/icon_search.png',
+                  scale: navBarIconSize,
+                  color: Colors.transparent,
+                ),
+                MyBottomNavBarIcon(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                  onPressed: homeBtnOnPressed,
+                  iconPath: 'images/icon_home.png',
+                ),
+                MyBottomNavBarIcon(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                  onPressed: meBtnOnPressed,
+                  iconPath: 'images/icon_me.png',
+                ),
+              ],
+            ),
+            thirdRow: Row(
+              children: [
+                MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                  onPressed: jobBtnOnPressed,
+                  labelName: 'Jobs',
+                ),
+                SizedBox(
+                  width: 9.w,
+                ),
+                MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                  onPressed: messageBtnOnPressed,
+                  labelName: 'Message',
+                ),
+                SizedBox(
+                  width: 7.35.w,
+                ),
+                MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
+                  onPressed: searchBtnOnPressed,
+                  labelName: 'Search',
+                ),
+                SizedBox(
+                  width: 8.9.w,
+                ),
+                MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                  onPressed: homeBtnOnPressed,
+                  labelName: 'Home',
+                ),
+                SizedBox(
+                  width: 12.2.w,
+                ),
+                MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                  onPressed: meBtnOnPressed,
+                  labelName: 'Me',
+                ),
+              ],
+            ),
           ),
         ),
       ),

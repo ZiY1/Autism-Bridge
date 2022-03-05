@@ -1,6 +1,7 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
+import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -146,22 +147,7 @@ class _AsdManageJobPreferenceScreenState
         ),
       ),
     );
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [
-            0.01,
-            0.25,
-          ],
-          colors: [
-            Color(0xFFE7F0F9),
-            //kAutismBridgeBlue,
-            kBackgroundRiceWhite,
-          ],
-        ),
-      ),
+    return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

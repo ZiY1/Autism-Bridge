@@ -15,6 +15,7 @@ import 'package:autism_bridge/screens/asd_personal_details_screen.dart';
 import 'package:autism_bridge/screens/asd_professional_summary_screen.dart';
 import 'package:autism_bridge/screens/asd_skills_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
+import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -423,23 +424,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       style: bodyTextStyle,
     );
     const double arrowBtnSize = 20.5;
-    return Container(
-      //TODO: using linear gradient color rather than a fixed appbar color, is it better or not?
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [
-            0.01,
-            0.25,
-          ],
-          colors: [
-            Color(0xFFE7F0F9),
-            //kAutismBridgeBlue,
-            kBackgroundRiceWhite,
-          ],
-        ),
-      ),
+    return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

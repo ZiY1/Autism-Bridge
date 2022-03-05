@@ -2,6 +2,7 @@ import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
+import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_picker.dart';
@@ -380,22 +381,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [
-            0.01,
-            0.25,
-          ],
-          colors: [
-            Color(0xFFE7F0F9),
-            //kAutismBridgeBlue,
-            kBackgroundRiceWhite,
-          ],
-        ),
-      ),
+    return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

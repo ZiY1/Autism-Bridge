@@ -1,4 +1,5 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:email_validator/email_validator.dart';
@@ -144,22 +145,7 @@ class _AsdPdfExportScreenState extends State<AsdPdfExportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [
-            0.01,
-            0.25,
-          ],
-          colors: [
-            Color(0xFFE7F0F9),
-            //kAutismBridgeBlue,
-            kBackgroundRiceWhite,
-          ],
-        ),
-      ),
+    return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

@@ -67,6 +67,9 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     super.initState();
 
     screens.add(
+      AsdMeScreen(asdUserCredentials: widget.asdUserCredentials),
+    );
+    screens.add(
       const Center(
         child: Text('Job Screen'),
       ),
@@ -86,9 +89,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         child: Text('Calendar Screen'),
       ),
     );
-    screens.add(
-      AsdMeScreen(asdUserCredentials: widget.asdUserCredentials),
-    );
+    appBars.add(null);
     appBars.add(AppBar(
       elevation: 0,
       flexibleSpace: Column(
@@ -126,7 +127,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     appBars.add(AppBar());
     appBars.add(AppBar());
     appBars.add(AppBar());
-    appBars.add(null);
   }
 
   @override

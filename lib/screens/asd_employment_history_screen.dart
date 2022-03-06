@@ -2,6 +2,7 @@ import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -34,16 +35,16 @@ class AsdEmploymentHistoryScreen extends StatefulWidget {
 
   final int? listIndex;
 
-  final List<EmploymentHistory?> userEmploymentHistoryList;
+  final Resume userResume;
 
-  const AsdEmploymentHistoryScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.isAddingNew,
-      this.subCollectionId,
-      this.listIndex,
-      required this.userEmploymentHistoryList})
-      : super(key: key);
+  const AsdEmploymentHistoryScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.isAddingNew,
+    this.subCollectionId,
+    this.listIndex,
+    required this.userResume,
+  }) : super(key: key);
 
   @override
   _AsdEmploymentHistoryScreenState createState() =>
@@ -101,7 +102,7 @@ class _AsdEmploymentHistoryScreenState
     super.initState();
 
     List<EmploymentHistory?> employmentHistoryListTemp =
-        widget.userEmploymentHistoryList;
+        widget.userResume.userEmploymentHistoryList;
 
     userEmploymentHistoryList = employmentHistoryListTemp;
 

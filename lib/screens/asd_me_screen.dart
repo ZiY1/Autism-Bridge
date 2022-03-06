@@ -1,4 +1,3 @@
-import 'package:autism_bridge/apis/resume_pdf_api.dart';
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
@@ -7,16 +6,16 @@ import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
-import 'package:autism_bridge/widgets/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import 'asd_manage_job_preference_screen.dart';
 import 'asd_resume_builder_screen.dart';
 
@@ -25,9 +24,12 @@ class AsdMeScreen extends StatefulWidget {
 
   final AsdUserCredentials asdUserCredentials;
 
+  final Resume userResume;
+
   const AsdMeScreen({
     Key? key,
     required this.asdUserCredentials,
+    required this.userResume,
   }) : super(key: key);
 
   @override
@@ -67,20 +69,34 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
         await AutismChallenge.readAllAutismChallengeDataFromFirestore(
             userId: widget.asdUserCredentials.userId);
 
-    Navigator.push(
+    widget.userResume.setPersonalDetails = userPersonalDetails;
+    widget.userResume.setProfessionalSummary = userProfessionalSummary;
+    widget.userResume.setEmploymentHistoryList = userEmploymentHistoryList;
+    widget.userResume.setEducationList = userEducationList;
+    widget.userResume.setSkillList = userSkillList;
+    widget.userResume.setAutismChallengeList = userAutismChallengeList;
+
+    Resume resumeTemp = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AsdResumeBuilderScreen(
           asdUserCredentials: widget.asdUserCredentials,
-          userPersonalDetails: userPersonalDetails,
-          userProfessionalSummary: userProfessionalSummary,
-          userEmploymentHistoryList: userEmploymentHistoryList,
-          userEducationList: userEducationList,
-          userSkillList: userSkillList,
-          userAutismChallengeList: userAutismChallengeList,
+          userResume: widget.userResume,
         ),
       ),
     );
+
+    setState(() {
+      widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
+      widget.userResume.setProfessionalSummary =
+          resumeTemp.userProfessionalSummary;
+      widget.userResume.setEmploymentHistoryList =
+          resumeTemp.userEmploymentHistoryList;
+      widget.userResume.setEducationList = resumeTemp.userEducationList;
+      widget.userResume.setSkillList = resumeTemp.userSkillList;
+      widget.userResume.setAutismChallengeList =
+          resumeTemp.userAutismChallengeList;
+    });
   }
 
   Future<void> jobPreferenceBtnOnPressed() async {
@@ -275,7 +291,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                 Column(
                   children: [
                     Text(
-                      '${widget.asdUserCredentials.userFirstName} ${widget.asdUserCredentials.userLastName}',
+                      '${widget.userResume.userPersonalDetails!.firstName} ${widget.userResume.userPersonalDetails!.lastName}',
                       style: TextStyle(
                         fontSize: 18.sp,
                         color: kTitleBlack,

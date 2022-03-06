@@ -2,6 +2,7 @@ import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/firebase_helpers.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -16,13 +17,13 @@ class AsdProfessionalSummaryScreen extends StatefulWidget {
 
   final AsdUserCredentials asdUserCredentials;
 
-  final ProfessionalSummary? userProfessionalSummary;
+  final Resume userResume;
 
-  const AsdProfessionalSummaryScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.userProfessionalSummary})
-      : super(key: key);
+  const AsdProfessionalSummaryScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.userResume,
+  }) : super(key: key);
 
   @override
   _AsdProfessionalSummaryScreenState createState() =>
@@ -46,7 +47,7 @@ class _AsdProfessionalSummaryScreenState
     super.initState();
 
     ProfessionalSummary? professionalSummaryTemp =
-        widget.userProfessionalSummary;
+        widget.userResume.userProfessionalSummary;
 
     if (professionalSummaryTemp != null) {
       userProfessionalSummary = professionalSummaryTemp;

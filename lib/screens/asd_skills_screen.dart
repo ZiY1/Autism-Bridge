@@ -1,6 +1,7 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
@@ -25,16 +26,16 @@ class AsdSkillsScreen extends StatefulWidget {
 
   final int? listIndex;
 
-  final List<Skill?> userSkillList;
+  final Resume userResume;
 
-  const AsdSkillsScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.isAddingNew,
-      this.subCollectionId,
-      this.listIndex,
-      required this.userSkillList})
-      : super(key: key);
+  const AsdSkillsScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.isAddingNew,
+    this.subCollectionId,
+    this.listIndex,
+    required this.userResume,
+  }) : super(key: key);
 
   @override
   _AsdSkillsScreenState createState() => _AsdSkillsScreenState();
@@ -65,7 +66,7 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
   void initState() {
     super.initState();
 
-    List<Skill?> skillListTemp = widget.userSkillList;
+    List<Skill?> skillListTemp = widget.userResume.userSkillList;
 
     userSkillList = skillListTemp;
 

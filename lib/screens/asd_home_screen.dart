@@ -1,5 +1,7 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/job_preference_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_me_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
@@ -14,8 +16,16 @@ class AsdHomeScreen extends StatefulWidget {
 
   final AsdUserCredentials asdUserCredentials;
 
-  const AsdHomeScreen({Key? key, required this.asdUserCredentials})
-      : super(key: key);
+  final Resume userResume;
+
+  final List<JobPreference?> userJobPreferenceList;
+
+  const AsdHomeScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.userResume,
+    required this.userJobPreferenceList,
+  }) : super(key: key);
 
   @override
   State<AsdHomeScreen> createState() => _AsdHomeScreenState();
@@ -67,11 +77,15 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     super.initState();
 
     screens.add(
-      AsdMeScreen(asdUserCredentials: widget.asdUserCredentials),
+      AsdMeScreen(
+        asdUserCredentials: widget.asdUserCredentials,
+        userResume: widget.userResume,
+      ),
     );
     screens.add(
-      const Center(
-        child: Text('Job Screen'),
+      Center(
+        child: Text(
+            'Job Screen ${widget.userResume.userPersonalDetails!.firstName}'),
       ),
     );
     screens.add(

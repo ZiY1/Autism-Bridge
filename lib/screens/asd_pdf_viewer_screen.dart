@@ -89,6 +89,7 @@ class _AsdPdfViewerScreenState extends State<AsdPdfViewerScreen> {
                             ? 'my_resume.pdf'
                             : '${widget.userResume.userPersonalDetails!.firstName}_${widget.userResume.userPersonalDetails!.lastName}_resume.pdf',
                         asdUserCredentials: widget.asdUserCredentials,
+                        userResume: widget.userResume,
                       ),
                     ),
                   );

@@ -51,6 +51,7 @@ class _AsdManageJobPreferenceScreenState
           subCollectionId: subCollectionId,
           listIndex: listIndex,
           userJobPreferenceList: userJobPreferenceList!,
+          isFirstTimeIn: false,
         ),
       ),
     );
@@ -70,6 +71,7 @@ class _AsdManageJobPreferenceScreenState
           asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
           userJobPreferenceList: userJobPreferenceList!,
+          isFirstTimeIn: false,
         ),
       ),
     );

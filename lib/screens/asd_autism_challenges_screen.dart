@@ -1,6 +1,7 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -25,16 +26,16 @@ class AsdAutismChallengesScreen extends StatefulWidget {
 
   final int? listIndex;
 
-  final List<AutismChallenge?> userAutismChallengeList;
+  final Resume userResume;
 
-  const AsdAutismChallengesScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.isAddingNew,
-      this.subCollectionId,
-      this.listIndex,
-      required this.userAutismChallengeList})
-      : super(key: key);
+  const AsdAutismChallengesScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.isAddingNew,
+    this.subCollectionId,
+    this.listIndex,
+    required this.userResume,
+  }) : super(key: key);
 
   @override
   _AsdAutismChallengesScreenState createState() =>
@@ -67,7 +68,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
     super.initState();
 
     List<AutismChallenge?> autismChallengeListTemp =
-        widget.userAutismChallengeList;
+        widget.userResume.userAutismChallengeList;
 
     userAutismChallengeList = autismChallengeListTemp;
 

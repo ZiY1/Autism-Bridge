@@ -1,4 +1,12 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/autism_challenge_data.dart';
+import 'package:autism_bridge/models/education_data.dart';
+import 'package:autism_bridge/models/employment_history_data.dart';
+import 'package:autism_bridge/models/job_preference_data.dart';
+import 'package:autism_bridge/models/personal_details_data.dart';
+import 'package:autism_bridge/models/professional_summary_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +14,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import 'package:autism_bridge/models/Employer.dart';
+
+import 'asd_personal_details_screen.dart';
 
 class DetermineUserTypeLoadingScreen extends StatefulWidget {
   static const id = 'determine_user_type_screen';
@@ -28,6 +38,10 @@ class _DetermineUserTypeLoadingScreenState
 
   Employer? employer;
 
+  Resume? userResume;
+
+  List<JobPreference?>? userJobPreferenceList;
+
   Future<void> checkUserType() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     try {
@@ -46,8 +60,9 @@ class _DetermineUserTypeLoadingScreenState
             // Fetch Asd user credentials
             String userId;
             String userEmail;
-            String userFirstName;
-            String userLastName;
+            bool isFirstTimeIn;
+            // String userFirstName;
+            // String userLastName;
 
             // Fetch user id and email from firebaseAuth
             try {
@@ -61,19 +76,71 @@ class _DetermineUserTypeLoadingScreenState
                     .collection('all_users')
                     .doc(userId)
                     .get()
-                    .then((DocumentSnapshot documentSnapshot) {
+                    .then((DocumentSnapshot documentSnapshot) async {
                   if (documentSnapshot.exists) {
                     Map<String, dynamic> data =
                         documentSnapshot.data() as Map<String, dynamic>;
-                    userFirstName = data['firstName'];
-                    userLastName = data['lastName'];
+                    // userFirstName = data['firstName'];
+                    // userLastName = data['lastName'];
+                    isFirstTimeIn = data['isFirstTimeIn'];
 
                     // store credential into the AsdUserCredentials class
                     asdUserCredentials = AsdUserCredentials(
-                        userId: userId,
-                        userEmail: userEmail,
-                        userFirstName: userFirstName,
-                        userLastName: userLastName);
+                      userId: userId,
+                      userEmail: userEmail,
+                      isFirstTimeIn: isFirstTimeIn,
+                    );
+
+                    List<EmploymentHistory?> employmentHistoryTemp = [];
+                    List<Education?> educationTemp = [];
+                    List<Skill?> skillTemp = [];
+                    List<AutismChallenge?> autismChallengeTemp = [];
+
+                    Resume resumeTemp = Resume(
+                        userPersonalDetails: null,
+                        userProfessionalSummary: null,
+                        userEmploymentHistoryList: employmentHistoryTemp,
+                        userEducationList: educationTemp,
+                        userSkillList: skillTemp,
+                        userAutismChallengeList: autismChallengeTemp);
+
+                    // If user is not first time in, fetch the personal details and job preference list
+                    if (!isFirstTimeIn) {
+                      // Read the resume data
+                      resumeTemp.setPersonalDetails = await PersonalDetails
+                          .readPersonalDetailsDataFromFirestore(
+                              asdUserCredentials!.userId);
+
+                      resumeTemp.setProfessionalSummary =
+                          await ProfessionalSummary
+                              .readProfessionalSummaryDataFromFirestore(
+                                  asdUserCredentials!.userId);
+
+                      resumeTemp.setEmploymentHistoryList =
+                          await EmploymentHistory
+                              .readAllEmploymentHistoryDataFromFirestore(
+                                  userId: asdUserCredentials!.userId);
+
+                      resumeTemp.setEducationList =
+                          await Education.readAllEducationDataFromFirestore(
+                              userId: asdUserCredentials!.userId);
+
+                      resumeTemp.setSkillList =
+                          await Skill.readAllSkillDataFromFirestore(
+                              userId: asdUserCredentials!.userId);
+
+                      resumeTemp.setAutismChallengeList = await AutismChallenge
+                          .readAllAutismChallengeDataFromFirestore(
+                              userId: asdUserCredentials!.userId);
+
+                      // Read the job preference data
+                      userJobPreferenceList = await JobPreference
+                          .readAllJobPreferenceDataFromFirestore(
+                        userId: asdUserCredentials!.userId,
+                      );
+                    }
+
+                    userResume = resumeTemp;
                   } else {
                     developer.log('Document does not exist on the database',
                         name:
@@ -172,9 +239,19 @@ class _DetermineUserTypeLoadingScreenState
           }
           if (snapshot.connectionState == ConnectionState.done) {
             if (userType == 'JobSeeker') {
-              return AsdHomeScreen(
-                asdUserCredentials: asdUserCredentials!,
-              );
+              if (asdUserCredentials!.isFirstTimeIn) {
+                return AsdPersonalDetailsScreen(
+                  asdUserCredentials: asdUserCredentials!,
+                  userResume: userResume!,
+                  isFirstTimeIn: asdUserCredentials!.isFirstTimeIn,
+                );
+              } else {
+                return AsdHomeScreen(
+                  asdUserCredentials: asdUserCredentials!,
+                  userJobPreferenceList: userJobPreferenceList!,
+                  userResume: userResume!,
+                );
+              }
             } else {
               return SignedEmployerHomeScreen(employer: employer!);
             }

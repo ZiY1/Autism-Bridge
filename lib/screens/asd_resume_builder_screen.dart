@@ -29,27 +29,12 @@ class AsdResumeBuilderScreen extends StatefulWidget {
 
   final AsdUserCredentials asdUserCredentials;
 
-  final PersonalDetails? userPersonalDetails;
-
-  final ProfessionalSummary? userProfessionalSummary;
-
-  final List<EmploymentHistory?> userEmploymentHistoryList;
-
-  final List<Education?> userEducationList;
-
-  final List<Skill?> userSkillList;
-
-  final List<AutismChallenge?> userAutismChallengeList;
+  final Resume userResume;
 
   const AsdResumeBuilderScreen({
     Key? key,
     required this.asdUserCredentials,
-    required this.userPersonalDetails,
-    required this.userProfessionalSummary,
-    required this.userEmploymentHistoryList,
-    required this.userEducationList,
-    required this.userSkillList,
-    required this.userAutismChallengeList,
+    required this.userResume,
   }) : super(key: key);
 
   @override
@@ -89,38 +74,38 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
   void initState() {
     super.initState();
 
-    userPersonalDetails = widget.userPersonalDetails;
+    userPersonalDetails = widget.userResume.userPersonalDetails;
     if (userPersonalDetails != null) {
       profileCompleteness += 1 / 6;
       isPersonalDetailsComplete = true;
     }
 
-    userProfessionalSummary = widget.userProfessionalSummary;
+    userProfessionalSummary = widget.userResume.userProfessionalSummary;
     if (userProfessionalSummary != null) {
       profileCompleteness += 1 / 6;
       isProfessionalSummaryComplete = true;
     }
 
-    userEmploymentHistoryList = widget.userEmploymentHistoryList;
+    userEmploymentHistoryList = widget.userResume.userEmploymentHistoryList;
     if (userEmploymentHistoryList != null &&
         userEmploymentHistoryList!.isNotEmpty) {
       profileCompleteness += 1 / 6;
       isEmploymentHistoryComplete = true;
     }
 
-    userEducationList = widget.userEducationList;
+    userEducationList = widget.userResume.userEducationList;
     if (userEducationList != null && userEducationList!.isNotEmpty) {
       profileCompleteness += 1 / 6;
       isEducationComplete = true;
     }
 
-    userSkillList = widget.userSkillList;
+    userSkillList = widget.userResume.userSkillList;
     if (userSkillList != null && userSkillList!.isNotEmpty) {
       profileCompleteness += 1 / 6;
       isSkillComplete = true;
     }
 
-    userAutismChallengeList = widget.userAutismChallengeList;
+    userAutismChallengeList = widget.userResume.userAutismChallengeList;
     if (userAutismChallengeList != null &&
         userAutismChallengeList!.isNotEmpty) {
       profileCompleteness += 1 / 6;
@@ -136,12 +121,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
         builder: (context) => AsdAutismChallengesScreen(
           asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
-          userAutismChallengeList: userAutismChallengeList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedAutismChallengeList != null) {
+      widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       setState(() {
         userAutismChallengeList = updatedAutismChallengeList;
       });
@@ -166,12 +152,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
-          userSkillList: userSkillList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedSkillList != null) {
+      widget.userResume.setSkillList = updatedSkillList;
       setState(() {
         userSkillList = updatedSkillList;
       });
@@ -197,12 +184,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
-          userAutismChallengeList: userAutismChallengeList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedAutismChallengeList != null) {
+      widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       setState(() {
         userAutismChallengeList = updatedAutismChallengeList;
       });
@@ -222,12 +210,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
         builder: (context) => AsdSkillsScreen(
           asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
-          userSkillList: userSkillList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedSkillList != null) {
+      widget.userResume.setSkillList = updatedSkillList;
       setState(() {
         userSkillList = updatedSkillList;
       });
@@ -252,12 +241,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
-          userEducationList: userEducationList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedEducationList != null) {
+      widget.userResume.setEducationList = updatedEducationList;
       setState(() {
         userEducationList = updatedEducationList;
       });
@@ -277,12 +267,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
         builder: (context) => AsdEducationScreen(
           asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
-          userEducationList: userEducationList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedEducationList != null) {
+      widget.userResume.setEducationList = updatedEducationList;
       setState(() {
         userEducationList = updatedEducationList;
       });
@@ -308,12 +299,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
           isAddingNew: false,
           subCollectionId: subCollectionId,
           listIndex: listIndex,
-          userEmploymentHistoryList: userEmploymentHistoryList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedEmploymentHistoryList != null) {
+      widget.userResume.setEmploymentHistoryList = updatedEmploymentHistoryList;
       setState(() {
         userEmploymentHistoryList = updatedEmploymentHistoryList;
       });
@@ -334,12 +326,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
         builder: (context) => AsdEmploymentHistoryScreen(
           asdUserCredentials: widget.asdUserCredentials,
           isAddingNew: true,
-          userEmploymentHistoryList: userEmploymentHistoryList!,
+          userResume: widget.userResume,
         ),
       ),
     );
 
     if (updatedEmploymentHistoryList != null) {
+      widget.userResume.setEmploymentHistoryList = updatedEmploymentHistoryList;
       setState(() {
         userEmploymentHistoryList = updatedEmploymentHistoryList;
       });
@@ -358,7 +351,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       MaterialPageRoute(
         builder: (context) => AsdPersonalDetailsScreen(
           asdUserCredentials: widget.asdUserCredentials,
-          userPersonalDetails: userPersonalDetails,
+          userResume: widget.userResume,
+          isFirstTimeIn: false,
         ),
       ),
     );
@@ -366,6 +360,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     // Return non-null means changes have made in AsdPersonalDetailsScreen
     // so update the userPersonalDetails to updatedPersonalDetails
     if (updatedPersonalDetails != null) {
+      widget.userResume.setPersonalDetails = updatedPersonalDetails;
       setState(() {
         userPersonalDetails = updatedPersonalDetails;
       });
@@ -385,7 +380,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
       MaterialPageRoute(
         builder: (context) => AsdProfessionalSummaryScreen(
           asdUserCredentials: widget.asdUserCredentials,
-          userProfessionalSummary: userProfessionalSummary,
+          userResume: widget.userResume,
         ),
       ),
     );
@@ -393,6 +388,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     // Return non-null means changes have made in AsdPersonalDetailsScreen
     // so update the userPersonalDetails to updatedPersonalDetails
     if (updatedProfessionalSummary != null) {
+      widget.userResume.setProfessionalSummary = updatedProfessionalSummary;
       setState(() {
         userProfessionalSummary = updatedProfessionalSummary;
       });
@@ -448,7 +444,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             ),
             color: Colors.white,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, widget.userResume);
             },
             margin: EdgeInsets.all(1.35.h),
           ),
@@ -1225,16 +1221,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                     isLoading = true;
                   });
 
-                  final Resume userResume = Resume(
-                    userPersonalDetails: userPersonalDetails,
-                    userProfessionalSummary: userProfessionalSummary,
-                    userEmploymentHistoryList: userEmploymentHistoryList!,
-                    userEducationList: userEducationList!,
-                    userSkillList: userSkillList!,
-                    userAutismChallengeList: userAutismChallengeList!,
-                  );
-
-                  final resumePdfFile = await ResumePdfApi.generate(userResume);
+                  final resumePdfFile =
+                      await ResumePdfApi.generate(widget.userResume);
 
                   setState(() {
                     isLoading = false;
@@ -1246,7 +1234,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                     MaterialPageRoute(
                       builder: (context) => AsdPdfViewerScreen(
                         file: resumePdfFile,
-                        userResume: userResume,
+                        userResume: widget.userResume,
                         asdUserCredentials: widget.asdUserCredentials,
                       ),
                       settings:

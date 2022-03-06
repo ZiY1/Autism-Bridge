@@ -1,6 +1,9 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/screens/asd_job_preference_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -24,13 +27,16 @@ class AsdPersonalDetailsScreen extends StatefulWidget {
 
   final AsdUserCredentials asdUserCredentials;
 
-  final PersonalDetails? userPersonalDetails;
+  final Resume userResume;
 
-  const AsdPersonalDetailsScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.userPersonalDetails})
-      : super(key: key);
+  final bool isFirstTimeIn;
+
+  const AsdPersonalDetailsScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.userResume,
+    required this.isFirstTimeIn,
+  }) : super(key: key);
 
   @override
   State<AsdPersonalDetailsScreen> createState() =>
@@ -76,7 +82,8 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
   void initState() {
     super.initState();
 
-    PersonalDetails? personalDetailsTemp = widget.userPersonalDetails;
+    PersonalDetails? personalDetailsTemp =
+        widget.userResume.userPersonalDetails;
     if (personalDetailsTemp != null) {
       userPersonalDetails = personalDetailsTemp;
       profileImage = personalDetailsTemp.profileImage;
@@ -208,9 +215,29 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       isSaving = false;
     });
 
-    Navigator.pop(context, userPersonalDetails);
+    if (widget.isFirstTimeIn) {
+      List<JobPreference?> userJobPreferenceList = [];
+      widget.userResume.setPersonalDetails = userPersonalDetails;
+      Resume resumeTemp = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AsdJobPreferenceScreen(
+            asdUserCredentials: widget.asdUserCredentials,
+            userResume: widget.userResume,
+            isAddingNew: true,
+            userJobPreferenceList: userJobPreferenceList,
+            isFirstTimeIn: true,
+          ),
+        ),
+      );
 
-    // save it to firebase
+      setState(() {
+        widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
+        userPersonalDetails = widget.userResume.userPersonalDetails;
+      });
+    } else {
+      Navigator.pop(context, userPersonalDetails);
+    }
   }
 
   Future<void> handleDataInFirebase() async {
@@ -384,32 +411,34 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
     return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          title: const Text(
-            'Personal Details',
-            style: TextStyle(
-              color: kTitleBlack,
-            ),
-          ),
-          iconTheme: const IconThemeData(
-            color: kTitleBlack,
-          ),
-          leading: RoundedIconContainer(
-            childIcon: const Icon(
-              Icons.close_rounded,
-              color: kTitleBlack,
-              size: 20,
-            ),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            margin: EdgeInsets.all(1.35.h),
-          ),
-          leadingWidth: 14.8.w,
-        ),
+        appBar: widget.isFirstTimeIn
+            ? null
+            : AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                title: const Text(
+                  'Personal Details',
+                  style: TextStyle(
+                    color: kTitleBlack,
+                  ),
+                ),
+                iconTheme: const IconThemeData(
+                  color: kTitleBlack,
+                ),
+                leading: RoundedIconContainer(
+                  childIcon: const Icon(
+                    Icons.close_rounded,
+                    color: kTitleBlack,
+                    size: 20,
+                  ),
+                  color: Colors.white,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  margin: EdgeInsets.all(1.35.h),
+                ),
+                leadingWidth: 14.8.w,
+              ),
         body: SafeArea(
           child: ListView(
             padding: EdgeInsets.symmetric(
@@ -417,6 +446,69 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
               vertical: 1.2.h,
             ),
             children: [
+              widget.isFirstTimeIn
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 1.h, vertical: 1.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'My Profile',
+                                style: TextStyle(
+                                    color: kTitleBlack,
+                                    fontSize: 23.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 0.7.h),
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: '1',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18.5.sp,
+                                        color: kAutismBridgeBlue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' /2',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18.5.sp,
+                                        color: const Color(0xFF858597),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 1.h,
+                            right: 1.h,
+                            bottom: 2.h,
+                          ),
+                          child: Text(
+                            'Start creating connection with recruiters by adding your profile',
+                            style: TextStyle(
+                              color: kRegistrationSubtitleGrey,
+                              fontSize: 9.5.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
@@ -688,7 +780,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                         ),
                       )
                     : Text(
-                        'Save',
+                        widget.isFirstTimeIn ? 'Save & Next' : 'Save',
                         style: TextStyle(
                           fontSize: 12.5.sp,
                           color: Colors.white,

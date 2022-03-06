@@ -3,6 +3,7 @@ import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
+import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -35,16 +36,16 @@ class AsdEducationScreen extends StatefulWidget {
 
   final int? listIndex;
 
-  final List<Education?> userEducationList;
+  final Resume userResume;
 
-  const AsdEducationScreen(
-      {Key? key,
-      required this.asdUserCredentials,
-      required this.isAddingNew,
-      this.subCollectionId,
-      this.listIndex,
-      required this.userEducationList})
-      : super(key: key);
+  const AsdEducationScreen({
+    Key? key,
+    required this.asdUserCredentials,
+    required this.isAddingNew,
+    this.subCollectionId,
+    this.listIndex,
+    required this.userResume,
+  }) : super(key: key);
 
   @override
   _AsdEducationScreenState createState() => _AsdEducationScreenState();
@@ -99,7 +100,7 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
   void initState() {
     super.initState();
 
-    List<Education?> educationListTemp = widget.userEducationList;
+    List<Education?> educationListTemp = widget.userResume.userEducationList;
 
     userEducationList = educationListTemp;
 

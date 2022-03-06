@@ -1,6 +1,9 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/personal_details_data.dart';
+import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -26,6 +29,10 @@ class AsdJobPreferenceScreen extends StatefulWidget {
 
   final List<JobPreference?> userJobPreferenceList;
 
+  final bool isFirstTimeIn;
+
+  final Resume? userResume;
+
   const AsdJobPreferenceScreen({
     Key? key,
     required this.asdUserCredentials,
@@ -33,6 +40,8 @@ class AsdJobPreferenceScreen extends StatefulWidget {
     this.subCollectionId,
     this.listIndex,
     required this.userJobPreferenceList,
+    required this.isFirstTimeIn,
+    this.userResume,
   }) : super(key: key);
 
   @override
@@ -186,7 +195,40 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
       isSaving = false;
     });
 
-    Navigator.pop(context, userJobPreferenceList);
+    if (widget.isFirstTimeIn) {
+      // Update isFirstTimeIn to false in all_users collection
+      await FirebaseFirestore.instance
+          .collection('all_users')
+          .doc(widget.asdUserCredentials.userId)
+          .update({
+        'isFirstTimeIn': false,
+      });
+
+      // Update isFirstTimeIn to false in job_seeker_users collection
+      await FirebaseFirestore.instance
+          .collection('job_seeker_users')
+          .doc(widget.asdUserCredentials.userId)
+          .update({
+        'isFirstTimeIn': false,
+      });
+
+      // Update the userCredential class
+      widget.asdUserCredentials.setIsFirstTimeIn = false;
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AsdHomeScreen(
+            asdUserCredentials: widget.asdUserCredentials,
+            userResume: widget.userResume!,
+            userJobPreferenceList: userJobPreferenceList!,
+          ),
+        ),
+        (route) => false,
+      );
+    } else {
+      Navigator.pop(context, userJobPreferenceList);
+    }
   }
 
   Future<void> handleDataInFirebase() async {
@@ -348,32 +390,28 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
     return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          // title: const Text(
-          //   'Job Preference',
-          //   style: TextStyle(
-          //     color: kTitleBlack,
-          //   ),
-          // ),
-          iconTheme: const IconThemeData(
-            color: kTitleBlack,
-          ),
-          leading: RoundedIconContainer(
-            childIcon: const Icon(
-              Icons.close_rounded,
-              color: kTitleBlack,
-              size: 20,
-            ),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            margin: EdgeInsets.all(1.35.h),
-          ),
-          leadingWidth: 14.8.w,
-        ),
+        appBar: widget.isFirstTimeIn
+            ? null
+            : AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                iconTheme: const IconThemeData(
+                  color: kTitleBlack,
+                ),
+                leading: RoundedIconContainer(
+                  childIcon: const Icon(
+                    Icons.close_rounded,
+                    color: kTitleBlack,
+                    size: 20,
+                  ),
+                  color: Colors.white,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  margin: EdgeInsets.all(1.35.h),
+                ),
+                leadingWidth: 14.8.w,
+              ),
         body: SafeArea(
           child: ListView(
             padding: EdgeInsets.symmetric(
@@ -381,37 +419,101 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
               vertical: 1.2.h,
             ),
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 1.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              widget.isFirstTimeIn
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Edit Job Preference',
-                          style: TextStyle(
-                              color: kTitleBlack,
-                              fontSize: 19.sp,
-                              fontWeight: FontWeight.w600),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 1.h,
+                            vertical: 1.h,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'My Job Preference',
+                                style: TextStyle(
+                                    color: kTitleBlack,
+                                    fontSize: 23.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 0.7.h),
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: '2',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18.5.sp,
+                                        color: kAutismBridgeBlue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' /2',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18.5.sp,
+                                        color: const Color(0xFF858597),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 1.h,
+                            right: 1.h,
+                            bottom: 2.h,
+                          ),
+                          child: Text(
+                            'Start getting desired jobs by adding your job preference',
+                            style: TextStyle(
+                              color: kRegistrationSubtitleGrey,
+                              fontSize: 9.5.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 1.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Edit Job Preference',
+                                style: TextStyle(
+                                    color: kTitleBlack,
+                                    fontSize: 19.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 1.h, right: 1.h, bottom: 1.h),
+                          child: Text(
+                            'We will recommend various job positions \nbased on your job preference',
+                            style: TextStyle(
+                              color: kRegistrationSubtitleGrey,
+                              fontSize: 9.5.sp,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 1.h, right: 1.h, bottom: 1.h),
-                    child: Text(
-                      'We will recommend various job positions \nbased on your job preference',
-                      style: TextStyle(
-                        color: kRegistrationSubtitleGrey,
-                        fontSize: 9.5.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0.8.h,
@@ -539,93 +641,170 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
             child: SizedBox(
               height: 6.25.h,
               child: widget.isAddingNew
-                  ? ResumeBuilderButton(
-                      child: isSaving
-                          ? SizedBox(
-                              width: 3.18.h,
-                              height: 3.18.h,
-                              child: const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(
-                                  Colors.white,
+                  ? widget.isFirstTimeIn
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: ResumeBuilderButton(
+                                child: Text(
+                                  'Back',
+                                  style: TextStyle(
+                                    fontSize: 12.5.sp,
+                                    color: kAutismBridgeBlue,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Text(
-                              btnText,
-                              style: TextStyle(
-                                fontSize: 12.5.sp,
-                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.pop(context, widget.userResume);
+                                },
+                                isHollow: true,
                               ),
                             ),
-                      onPressed: isSaving
-                          ? null
-                          : () {
-                              saveAddBtnOnPressed(context);
-                            },
-                      isHollow: false,
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: ResumeBuilderButton(
-                            child: isDeleting
-                                ? SizedBox(
-                                    width: 3.18.h,
-                                    height: 3.18.h,
-                                    child: const CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation(
-                                        Colors.white,
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Expanded(
+                              child: ResumeBuilderButton(
+                                child: isSaving
+                                    ? SizedBox(
+                                        width: 3.18.h,
+                                        height: 3.18.h,
+                                        child: const CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        'Save',
+                                        style: TextStyle(
+                                          fontSize: 12.5.sp,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      fontSize: 12.5.sp,
-                                      color: kAutismBridgeBlue,
+                                onPressed: isSaving
+                                    ? null
+                                    : () {
+                                        saveAddBtnOnPressed(context);
+                                      },
+                                isHollow: false,
+                              ),
+                            ),
+                          ],
+                        )
+                      : ResumeBuilderButton(
+                          child: isSaving
+                              ? SizedBox(
+                                  width: 3.18.h,
+                                  height: 3.18.h,
+                                  child: const CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                      Colors.white,
                                     ),
                                   ),
-                            onPressed: isDeleting
-                                ? null
-                                : () {
-                                    deleteBtnOnPressed(context);
-                                  },
-                            isHollow: true,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 4.w,
-                        ),
-                        Expanded(
-                          child: ResumeBuilderButton(
-                            child: isSaving
-                                ? SizedBox(
-                                    width: 3.18.h,
-                                    height: 3.18.h,
-                                    child: const CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : Text(
-                                    btnText,
-                                    style: TextStyle(
-                                      fontSize: 12.5.sp,
-                                      color: Colors.white,
+                                )
+                              : Text(
+                                  btnText,
+                                  style: TextStyle(
+                                    fontSize: 12.5.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                          onPressed: isSaving
+                              ? null
+                              : () {
+                                  saveAddBtnOnPressed(context);
+                                },
+                          isHollow: false,
+                        )
+                  : userJobPreferenceList!.length == 1
+                      ? ResumeBuilderButton(
+                          child: isSaving
+                              ? SizedBox(
+                                  width: 3.18.h,
+                                  height: 3.18.h,
+                                  child: const CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                      Colors.white,
                                     ),
                                   ),
-                            onPressed: isSaving
-                                ? null
-                                : () {
-                                    saveAddBtnOnPressed(context);
-                                  },
-                            isHollow: false,
-                          ),
+                                )
+                              : Text(
+                                  btnText,
+                                  style: TextStyle(
+                                    fontSize: 12.5.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                          onPressed: isSaving
+                              ? null
+                              : () {
+                                  saveAddBtnOnPressed(context);
+                                },
+                          isHollow: false,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: ResumeBuilderButton(
+                                child: isDeleting
+                                    ? SizedBox(
+                                        width: 3.18.h,
+                                        height: 3.18.h,
+                                        child: const CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        'Delete',
+                                        style: TextStyle(
+                                          fontSize: 12.5.sp,
+                                          color: kAutismBridgeBlue,
+                                        ),
+                                      ),
+                                onPressed: isDeleting
+                                    ? null
+                                    : () {
+                                        deleteBtnOnPressed(context);
+                                      },
+                                isHollow: true,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Expanded(
+                              child: ResumeBuilderButton(
+                                child: isSaving
+                                    ? SizedBox(
+                                        width: 3.18.h,
+                                        height: 3.18.h,
+                                        child: const CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        btnText,
+                                        style: TextStyle(
+                                          fontSize: 12.5.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                onPressed: isSaving
+                                    ? null
+                                    : () {
+                                        saveAddBtnOnPressed(context);
+                                      },
+                                isHollow: false,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
             ),
           ),
         ),

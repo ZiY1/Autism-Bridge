@@ -26,10 +26,13 @@ class AsdMeScreen extends StatefulWidget {
 
   final Resume userResume;
 
+  final Function(Resume) onValueChanged;
+
   const AsdMeScreen({
     Key? key,
     required this.asdUserCredentials,
     required this.userResume,
+    required this.onValueChanged,
   }) : super(key: key);
 
   @override
@@ -97,6 +100,8 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       widget.userResume.setAutismChallengeList =
           resumeTemp.userAutismChallengeList;
     });
+
+    widget.onValueChanged(widget.userResume);
   }
 
   Future<void> jobPreferenceBtnOnPressed() async {

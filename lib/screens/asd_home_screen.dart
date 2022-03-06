@@ -42,6 +42,23 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
 
   List<PreferredSizeWidget?> appBars = [];
 
+  void onResumeChanged(Resume resumeTemp) {
+    widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
+    widget.userResume.setProfessionalSummary =
+        resumeTemp.userProfessionalSummary;
+    widget.userResume.setEmploymentHistoryList =
+        resumeTemp.userEmploymentHistoryList;
+    widget.userResume.setEducationList = resumeTemp.userEducationList;
+    widget.userResume.setSkillList = resumeTemp.userSkillList;
+    widget.userResume.setAutismChallengeList =
+        resumeTemp.userAutismChallengeList;
+
+    screens[1] = Center(
+      child: Text(
+          'Job Screen ${widget.userResume.userPersonalDetails!.firstName}'),
+    );
+  }
+
   void jobBtnOnPressed() {
     setState(() {
       bottomNavBarCurrentIndex = 0;
@@ -80,6 +97,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       AsdMeScreen(
         asdUserCredentials: widget.asdUserCredentials,
         userResume: widget.userResume,
+        onValueChanged: onResumeChanged,
       ),
     );
     screens.add(

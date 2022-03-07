@@ -25,10 +25,18 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
   // Function that takes the Navigator back
   void goBackToHomePage(BuildContext ctx) {
     // TODO: sent back the info of the logged user in arguments
+    final routeArgs =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+
+    Employer signedEmployer = routeArgs['signedEmployer'] as Employer;
+
 
     // Extract user info from the Navigator
     Navigator.of(ctx).popAndPushNamed(
       SignedEmployerHomeScreen.routeName,
+      arguments: {
+        'signedEmployer': signedEmployer,
+      },
     );
   }
 
@@ -78,7 +86,6 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
     if (eliminate) {
       // TODO: eliminate From the dataBase
       //
-
       setState(() {
         listOfDeleteId.add(id);
       });

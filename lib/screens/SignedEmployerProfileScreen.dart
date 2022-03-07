@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:autism_bridge/models/Employer.dart';
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 
 import 'package:autism_bridge/widgets/ImageWidget.dart';
@@ -16,7 +17,9 @@ import 'package:autism_bridge/widgets/ConnectionsNumberWidget.dart';
 class EmployerProfilePage extends StatefulWidget {
   static String routeName = "EmployerProfilePage";
 
-  const EmployerProfilePage({Key? key}) : super(key: key);
+  final Employer employer;
+
+  const EmployerProfilePage({Key? key, required this.employer,}) : super(key: key);
 
   @override
   _EmployerProfilePageState createState() => _EmployerProfilePageState();
@@ -25,18 +28,11 @@ class EmployerProfilePage extends StatefulWidget {
 class _EmployerProfilePageState extends State<EmployerProfilePage> {
   //
   // Function that takes Navigator back to the Main Page
-  void goBackToMainPage(BuildContext ctx) async {
+  void goBackToMainPage(BuildContext ctx, Employer signedEmployer) async {
     // TODO: Send the update it info in case there was an update
-    // Gather the UserInfo and send it back to the previous navigator page
-    final routeArgs =
-        ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
 
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-    String userId = routeArgs['userId'] as String;
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-    String userUrlProfilePicture = "";
+    // Gather the UserInfo and send it back to the previous navigator page
+    String userId = signedEmployer.id;
 
     // Check if there was a change in the userUrlProfilePicture
     await FirebaseFirestore.instance
@@ -46,22 +42,18 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
         .then((value) {
       Map<String, dynamic> data = value.data() as Map<String, dynamic>;
       setState(() {
-        userUrlProfilePicture = data['urlProfileImage'] as String;
+        signedEmployer.urlProfilePicture = data['urlProfileImage'] as String;
       });
     });
 
     // Go back to Main Page for Signed Employer User
-    await Navigator.of(ctx).popAndPushNamed(
-      SignedEmployerHomeScreen.routeName,
-      arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userEmail': userEmail,
-        'userId': userId,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
-      },
-    );
+    // Navigator.of(ctx).popAndPushNamed(
+    //   SignedEmployerHomeScreen.routeName,
+    //   arguments: {
+    //     'signedEmployer': signedEmployer,
+    //   },
+    // );
+    Navigator.pop(context, signedEmployer);
   }
 
   File? imageSelected;
@@ -80,32 +72,9 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
       // Cast it as a File object
       File pickedImageFile = File(pickedImage!.path);
 
-      // Gather the user arguments
-      final routeArgs =
-          ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-      // Get the userId
-      String userId = routeArgs['userId'] as String;
-
-      // Get access to the FirebaseStorage's folder 'user_images' and
-      // map it to that user_Id
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child("user_images/")
-          .child("${userId}.jpg");
-
-      // Put that image file with the respective user Id
-      await ref.putFile(pickedImageFile);
-
-      // Get the url of the profile image of the user
-      final userImageUrl = await ref.getDownloadURL();
-
-      // update the info in the database
-      FirebaseFirestore.instance.collection("EmployerUsers").doc(userId).update(
-        {
-          'urlProfileImage': userImageUrl.toString(),
-        },
-      );
+      
+      // Change the urlProfilePicture in the data base
+      widget.employer.changeUrlProfilePicture(pickedImageFile);
 
       // Show the change of images to the user
       setState(() => imageSelected = pickedImageFile);
@@ -117,27 +86,40 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Gather the user arguments
+    /*final routeArgs =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    */
+
+    //Employer signedEmployer = routeArgs['signedEmployer'];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: getProfilePageAppBar(
         context,
         goBackToMainPage,
+        widget.employer,
       ),
       body: getProfilePageBody(
         context,
         pickImage,
         imageSelected,
+        widget.employer,
       ),
     );
   }
 }
 
-AppBar getProfilePageAppBar(BuildContext ctx, Function goBackToMainPage) {
+AppBar getProfilePageAppBar(
+  BuildContext ctx,
+  Function goBackToMainPage,
+  Employer signedEmployer,
+) {
   return AppBar(
     backgroundColor: Colors.blue.shade900,
     leading: IconButton(
       onPressed: () {
-        goBackToMainPage(ctx);
+        goBackToMainPage(ctx, signedEmployer);
       },
       icon: Icon(
         Icons.arrow_back,
@@ -158,20 +140,17 @@ Widget getProfilePageBody(
   BuildContext ctx,
   Function pickImage,
   File? image,
+  Employer signedEmployer,
 ) {
   // Calculate Device's Dimension
   final textScaleFactor = MediaQuery.of(ctx).textScaleFactor;
   final screenDeviceHeight = MediaQuery.of(ctx).size.height;
-  //final screenDeviceWidth = MediaQuery.of(ctx).size.width;
 
   // Get the user Info
-  final routeArgs =
-      ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-  String userFirstName = routeArgs['userFirstName'] as String;
-  String userLastName = routeArgs['userLastName'] as String;
-  String userEmail = routeArgs['userEmail'] as String;
-  String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
+  String userFirstName = signedEmployer.firstName;
+  String userLastName = signedEmployer.lastName;
+  String userEmail = signedEmployer.email;
+  String userUrlProfilePicture = signedEmployer.urlProfilePicture;
 
   Widget userFullNameText = Text(
     "$userFirstName $userLastName",

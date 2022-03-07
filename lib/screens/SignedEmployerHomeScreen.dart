@@ -41,56 +41,7 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
     super.initState();
     // Get the Current Employer info
     signedEmployer = widget.employer;
-    //getCurrentUser();
   }
-
-  /*
-  Future<void> getCurrentUser() async {
-    try {
-      final currentUser = authentication.currentUser;
-      if (currentUser != null) {
-        userEmail = currentUser.email!;
-        userId = currentUser.uid;
-        await getUsername();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }*/
-
-  /*
-  Future<void> getUsername() async {
-    await autismBridgeFireBaseFireStore
-        .collection('EmployerUsers')
-        .doc(userId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        // Map contain user data
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        // Get the data and create an Employer Object
-        userFirstName = data['userFirstName'];
-        userLastName = data['userLastName'];
-        userPassword = data['userPassword'];
-        userUrlProfilePicture = data['urlProfileImage'];
-        userNewMessages = data['userNewMessages'];
-        signedEmployer = Employer(
-          userId: userId,
-          userUrlProfilePicture: userUrlProfilePicture,
-          userFirstName: userFirstName,
-          userLastName: userLastName,
-          userEmail: userEmail,
-          userPassword: userPassword,
-          userNewMessages: userNewMessages,
-        );
-
-        //print(userFirstName);
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
-  }*/
 
   //
   // State Tab index
@@ -118,10 +69,24 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
 
   void goToMyProfilePage(BuildContext ctx, Employer signedEmployer) async {
     // Go to Employer user Profile Page
-    await Navigator.of(ctx)
-        .popAndPushNamed(EmployerProfilePage.routeName, arguments: {
-      'signedEmployer': signedEmployer,
+    // signedEmployer = await Navigator.of(ctx)
+    //     .popAndPushNamed(EmployerProfilePage.routeName, arguments: {
+    //   'signedEmployer': signedEmployer,
+    // });
+    Employer employerTemp = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmployerProfilePage(
+          employer: signedEmployer,
+        ),
+      ),
+    );
+
+    setState(() {
+      signedEmployer = employerTemp;
     });
+
+    widget.employer.urlProfilePicture = employerTemp.urlProfilePicture;
   }
 
   void goToSettingsPage(BuildContext ctx, Employer signedEmployer) async {
@@ -180,74 +145,66 @@ class _SignedEmployerHomeScreenState extends State<SignedEmployerHomeScreen> {
     ];
 
     return GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: SafeArea(
-            child: Scaffold(
-                          backgroundColor: Colors.grey.shade200,
-                          appBar: appBarStates[currentTabIndex],
-                          key: _scaffoldKey,
-                          drawer: buildMainPageDrawer(
-                              context,
-                              logOutUser,
-                              goToMyProfilePage,
-                              goToSettingsPage,
-                              signedEmployer!),
-                          drawerEnableOpenDragGesture: true,
-                          body: SafeArea(
-                            child: _isLoading
-                                ? Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : SingleChildScrollView(
-                                    child: tabs[currentTabIndex]),
-                          ),
-                          bottomNavigationBar: Container(
-                            color: Colors.white,
-                            height: 60,
-                            child: BottomNavigationBar(
-                              onTap: onTapped,
-                              currentIndex: currentTabIndex,
-                              backgroundColor: Colors.white,
-                              unselectedLabelStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              selectedItemColor: Colors.blue.shade700,
-                              selectedIconTheme: IconThemeData(
-                                color: Colors.blue.shade700,
-                              ),
-                              selectedLabelStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue.shade700,
-                              ),
-                              items: [
-                                BottomNavigationBarItem(
-                                  icon: Stack(children: <Widget>[
-                                    Icon(Icons.search),
-                                  ]),
-                                  label: 'Search',
-                                ),
-                                BottomNavigationBarItem(
-                                    icon: Stack(
-                                      children: <Widget>[
-                                        Icon(Icons.video_label_rounded)
-                                      ],
-                                    ),
-                                    label: "VR"),
-                                BottomNavigationBarItem(
-                                  icon: Stack(children: <Widget>[
-                                    Icon(Icons.post_add),
-                                  ]),
-                                  label: 'Post Job',
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                ,
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.grey.shade200,
+          appBar: appBarStates[currentTabIndex],
+          key: _scaffoldKey,
+          drawer: buildMainPageDrawer(context, logOutUser, goToMyProfilePage,
+              goToSettingsPage, signedEmployer!),
+          drawerEnableOpenDragGesture: true,
+          body: SafeArea(
+            child: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(child: tabs[currentTabIndex]),
           ),
-        );
+          bottomNavigationBar: Container(
+            color: Colors.white,
+            height: 60,
+            child: BottomNavigationBar(
+              onTap: onTapped,
+              currentIndex: currentTabIndex,
+              backgroundColor: Colors.white,
+              unselectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              selectedItemColor: Colors.blue.shade700,
+              selectedIconTheme: IconThemeData(
+                color: Colors.blue.shade700,
+              ),
+              selectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade700,
+              ),
+              items: [
+                BottomNavigationBarItem(
+                  icon: Stack(children: <Widget>[
+                    Icon(Icons.search),
+                  ]),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                    icon: Stack(
+                      children: <Widget>[Icon(Icons.video_label_rounded)],
+                    ),
+                    label: "VR"),
+                BottomNavigationBarItem(
+                  icon: Stack(children: <Widget>[
+                    Icon(Icons.post_add),
+                  ]),
+                  label: 'Post Job',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -517,7 +474,7 @@ Drawer buildMainPageDrawer(
             leading: InkWell(
               onTap: () {
                 // Go to my Profile Page
-                goToMyProfilePage(ctx);
+                goToMyProfilePage(ctx, signedEmployer);
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage(userUrlProfilePicture),
@@ -542,7 +499,7 @@ Drawer buildMainPageDrawer(
                       child: InkWell(
                         onTap: () {
                           // Go to my Profile Page
-                          goToMyProfilePage(ctx);
+                          goToMyProfilePage(ctx, signedEmployer);
                         },
                         child: Text(
                           "View Profile",
@@ -559,7 +516,7 @@ Drawer buildMainPageDrawer(
                       child: InkWell(
                         onTap: () {
                           // TODO: Go to Settings Page
-                          goToSettingsPage(ctx);
+                          goToSettingsPage(ctx, signedEmployer);
                         },
                         child: Text(
                           "Settings",

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
+import 'package:autism_bridge/models/Employer.dart';
 
 import 'package:autism_bridge/widgets/ImageWidget.dart';
 
@@ -28,24 +29,13 @@ class _EmployerSettingsScreenState extends State<EmployerSettingsScreen> {
     // Gather the UserInfo and send it back to the previous navigator page
     final routeArgs =
         ModalRoute.of(ctx)?.settings.arguments as Map<String, dynamic>;
-
-    String userFirstName = routeArgs['userFirstName'] as String;
-    String userLastName = routeArgs['userLastName'] as String;
-    String userEmail = routeArgs['userEmail'] as String;
-    String userId = routeArgs['userId'] as String;
-    int userNewMessages = routeArgs['userNewMessages'] as int;
-    String userUrlProfilePicture = routeArgs['userUrlProfilePicture'] as String;
+    Employer signedEmployer = routeArgs['signedEmployer'] as Employer;
 
     // Go back to Main Page for Signed Employer User
     await Navigator.of(ctx).popAndPushNamed(
       SignedEmployerHomeScreen.routeName,
       arguments: {
-        'userFirstName': userFirstName,
-        'userLastName': userLastName,
-        'userEmail': userEmail,
-        'userId': userId,
-        'userNewMessages': userNewMessages,
-        'userUrlProfilePicture': userUrlProfilePicture,
+        'signedEmployer': signedEmployer,
       },
     );
   }

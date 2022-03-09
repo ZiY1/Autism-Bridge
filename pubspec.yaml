@@ -60,12 +60,6 @@ dependencies:
 
   mailer: ^5.1.0
 
-  country_state_city_picker: ^1.2.8
-
-  csc_picker: ^0.2.6
-
-  flutter_picker: ^2.0.3
-
   dotted_border: ^2.0.0+2
 
 dev_dependencies:

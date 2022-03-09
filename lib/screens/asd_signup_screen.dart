@@ -32,17 +32,9 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
 
   bool isAgreementChecked = false;
 
-  // bool isFirstNameFieldValid = false;
-  //
-  // bool isLastNameFieldValid = false;
-
   bool isEmailFieldValid = false;
 
   bool isPasswordFieldValid = false;
-
-  // final firstNameController = TextEditingController();
-  //
-  // final lastNameController = TextEditingController();
 
   final emailController = TextEditingController();
 
@@ -52,8 +44,6 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
 
   @override
   void dispose() {
-    // firstNameController.dispose();
-    // lastNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -86,7 +76,6 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
     final isInputValid = formKey.currentState!.validate();
     if (!isInputValid) return;
 
-    //Utils.showProgressIndicator(context);
     setState(() {
       isLoading = true;
     });
@@ -106,8 +95,6 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
           .doc(user.uid)
           .set({
         'userType': 'JobSeeker',
-        // 'firstName': firstNameController.text.trim(),
-        // 'lastName': lastNameController.text.trim(),
         'email': user.email,
         'isFirstTimeIn': true,
       });
@@ -117,8 +104,6 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
           .collection('job_seeker_users')
           .doc(user.uid)
           .set({
-        // 'firstName': firstNameController.text.trim(),
-        // 'lastName': lastNameController.text.trim(),
         'email': user.email,
         'isFirstTimeIn': true,
       });
@@ -129,12 +114,7 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
         AsdEmailVerifyScreen.id,
         (route) => false,
       );
-
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, AsdHomeScreen.id, (route) => false);
     } on FirebaseAuthException catch (e) {
-      // navigatorKey.currentState!
-      //     .popUntil(ModalRoute.withName(AsdSignupScreen.id));
       setState(() {
         isLoading = false;
       });
@@ -178,69 +158,6 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                   SizedBox(
                     height: 5.h,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Expanded(
-                  //       child: RegistrationInputField(
-                  //           onChanged: (firstName) {
-                  //             if (firstName != null && firstName.isEmpty) {
-                  //               setState(() {
-                  //                 isFirstNameFieldValid = false;
-                  //               });
-                  //             } else {
-                  //               setState(() {
-                  //                 isFirstNameFieldValid = true;
-                  //               });
-                  //             }
-                  //           },
-                  //           autofocus: false,
-                  //           myController: firstNameController,
-                  //           title: 'First Name',
-                  //           hintText: 'Enter your first name',
-                  //           keyboardType: TextInputType.name,
-                  //           validator: (firstName) =>
-                  //               (firstName != null && firstName.isEmpty)
-                  //                   ? 'Enter your first name'
-                  //                   : null,
-                  //           suffixIcon: null,
-                  //           textInputAction: TextInputAction.next,
-                  //           isObscureText: false),
-                  //     ),
-                  //     // SizedBox(
-                  //     //   width: 10.0,
-                  //     // ),
-                  //     Expanded(
-                  //       child: RegistrationInputField(
-                  //           onChanged: (lastName) {
-                  //             if (lastName != null && lastName.isEmpty) {
-                  //               setState(() {
-                  //                 isLastNameFieldValid = false;
-                  //               });
-                  //             } else {
-                  //               setState(() {
-                  //                 isLastNameFieldValid = true;
-                  //               });
-                  //             }
-                  //           },
-                  //           autofocus: false,
-                  //           myController: lastNameController,
-                  //           title: 'Last Name',
-                  //           hintText: 'Enter your last name',
-                  //           keyboardType: TextInputType.name,
-                  //           validator: (lastName) =>
-                  //               (lastName != null && lastName.isEmpty)
-                  //                   ? 'Enter your last name'
-                  //                   : null,
-                  //           suffixIcon: null,
-                  //           textInputAction: TextInputAction.next,
-                  //           isObscureText: false),
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(
-                  //   height: 1.h,
-                  // ),
                   RegistrationInputField(
                       onChanged: (email) {
                         if (email != null && !EmailValidator.validate(email)) {

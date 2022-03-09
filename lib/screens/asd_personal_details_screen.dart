@@ -14,7 +14,7 @@ import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_picker/Picker.dart';
+import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -543,23 +543,26 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(5.0), //or 15.0
-                                child: Container(
-                                  height: 7.h,
-                                  width: 7.h,
-                                  color: kBackgroundRiceWhite,
-                                  child: profileImage != null
-                                      ? FittedBox(
-                                          child: Image.file(profileImage!),
-                                          fit: BoxFit.fill,
-                                        )
-                                      : const Icon(
-                                          CupertinoIcons.person_alt,
-                                          color: Color(0xFFBEC4D5),
-                                          size: 32.0,
-                                        ),
+                              CircleAvatar(
+                                radius: 31,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(100.0), //or 15.0
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    color: kBackgroundRiceWhite,
+                                    child: profileImage != null
+                                        ? FittedBox(
+                                            child: Image.file(profileImage!),
+                                            fit: BoxFit.fill,
+                                          )
+                                        : const Icon(
+                                            CupertinoIcons.person_alt,
+                                            color: Color(0xFFBEC4D5),
+                                            size: 32.0,
+                                          ),
+                                  ),
                                 ),
                               ),
                               SizedBox(

@@ -5,7 +5,7 @@ import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter_picker/flutter_picker.dart';
+import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 
 class Utils {
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();

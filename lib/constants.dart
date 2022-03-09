@@ -22,4 +22,6 @@ const kClickableIconBlue = Color(0xFF4267B2);
 
 const kPickerCancelGrey = Color(0xFF878787);
 
+const kDarkTextGrey = Color(0xFF878787);
+
 const kResumeBuilderCardRadius = 8.0;

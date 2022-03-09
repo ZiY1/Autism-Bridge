@@ -13,7 +13,7 @@ import 'package:autism_bridge/widgets/resume_date_toggle.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_picker/Picker.dart';
+import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:autism_bridge/widgets/cupertino_picker_extended.dart'

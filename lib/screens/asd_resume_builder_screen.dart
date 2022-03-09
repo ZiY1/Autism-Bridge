@@ -42,31 +42,21 @@ class AsdResumeBuilderScreen extends StatefulWidget {
 }
 
 class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
+  final sectionRatio = 1 / 5;
+
   double profileCompleteness = 0.0;
 
   bool isPersonalDetailsComplete = false;
 
-  PersonalDetails? userPersonalDetails;
-
   bool isProfessionalSummaryComplete = false;
-
-  ProfessionalSummary? userProfessionalSummary;
 
   bool isEmploymentHistoryComplete = false;
 
-  List<EmploymentHistory?>? userEmploymentHistoryList;
-
   bool isEducationComplete = false;
-
-  List<Education?>? userEducationList;
 
   bool isSkillComplete = false;
 
-  List<Skill?>? userSkillList;
-
   bool isAutismChallengeComplete = false;
-
-  List<AutismChallenge?>? userAutismChallengeList;
 
   bool isLoading = false;
 
@@ -74,41 +64,33 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
   void initState() {
     super.initState();
 
-    userPersonalDetails = widget.userResume.userPersonalDetails;
-    if (userPersonalDetails != null) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userPersonalDetails != null) {
+      profileCompleteness += sectionRatio;
       isPersonalDetailsComplete = true;
     }
 
-    userProfessionalSummary = widget.userResume.userProfessionalSummary;
-    if (userProfessionalSummary != null) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userProfessionalSummary != null) {
+      profileCompleteness += sectionRatio;
       isProfessionalSummaryComplete = true;
     }
 
-    userEmploymentHistoryList = widget.userResume.userEmploymentHistoryList;
-    if (userEmploymentHistoryList != null &&
-        userEmploymentHistoryList!.isNotEmpty) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userEmploymentHistoryList.isNotEmpty) {
+      profileCompleteness += sectionRatio;
       isEmploymentHistoryComplete = true;
     }
 
-    userEducationList = widget.userResume.userEducationList;
-    if (userEducationList != null && userEducationList!.isNotEmpty) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userEducationList.isNotEmpty) {
+      profileCompleteness += sectionRatio;
       isEducationComplete = true;
     }
 
-    userSkillList = widget.userResume.userSkillList;
-    if (userSkillList != null && userSkillList!.isNotEmpty) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userSkillList.isNotEmpty) {
+      profileCompleteness += sectionRatio;
       isSkillComplete = true;
     }
 
-    userAutismChallengeList = widget.userResume.userAutismChallengeList;
-    if (userAutismChallengeList != null &&
-        userAutismChallengeList!.isNotEmpty) {
-      profileCompleteness += 1 / 6;
+    if (widget.userResume.userAutismChallengeList.isNotEmpty) {
+      //profileCompleteness += sectionRatio;
       isAutismChallengeComplete = true;
     }
   }
@@ -127,15 +109,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedAutismChallengeList != null) {
-      widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       setState(() {
-        userAutismChallengeList = updatedAutismChallengeList;
+        widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       });
       if (!isAutismChallengeComplete) {
         isAutismChallengeComplete = true;
-        setState(() {
-          profileCompleteness += 1 / 6;
-        });
+        // setState(() {
+        //   profileCompleteness += sectionRatio;
+        // });
       }
     }
   }
@@ -158,14 +139,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedSkillList != null) {
-      widget.userResume.setSkillList = updatedSkillList;
       setState(() {
-        userSkillList = updatedSkillList;
+        widget.userResume.setSkillList = updatedSkillList;
       });
       if (updatedSkillList.isEmpty) {
         setState(() {
           isSkillComplete = false;
-          profileCompleteness -= 1 / 6;
+          profileCompleteness -= sectionRatio;
         });
       }
     }
@@ -190,14 +170,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedAutismChallengeList != null) {
-      widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       setState(() {
-        userAutismChallengeList = updatedAutismChallengeList;
+        widget.userResume.setAutismChallengeList = updatedAutismChallengeList;
       });
       if (updatedAutismChallengeList.isEmpty) {
         setState(() {
           isAutismChallengeComplete = false;
-          profileCompleteness -= 1 / 6;
+          //profileCompleteness -= sectionRatio;
         });
       }
     }
@@ -216,14 +195,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedSkillList != null) {
-      widget.userResume.setSkillList = updatedSkillList;
       setState(() {
-        userSkillList = updatedSkillList;
+        widget.userResume.setSkillList = updatedSkillList;
       });
       if (!isSkillComplete) {
         isSkillComplete = true;
         setState(() {
-          profileCompleteness += 1 / 6;
+          profileCompleteness += sectionRatio;
         });
       }
     }
@@ -247,14 +225,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedEducationList != null) {
-      widget.userResume.setEducationList = updatedEducationList;
       setState(() {
-        userEducationList = updatedEducationList;
+        widget.userResume.setEducationList = updatedEducationList;
       });
       if (updatedEducationList.isEmpty) {
         setState(() {
           isEducationComplete = false;
-          profileCompleteness -= 1 / 6;
+          profileCompleteness -= sectionRatio;
         });
       }
     }
@@ -273,14 +250,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedEducationList != null) {
-      widget.userResume.setEducationList = updatedEducationList;
       setState(() {
-        userEducationList = updatedEducationList;
+        widget.userResume.setEducationList = updatedEducationList;
       });
       if (!isEducationComplete) {
         isEducationComplete = true;
         setState(() {
-          profileCompleteness += 1 / 6;
+          profileCompleteness += sectionRatio;
         });
       }
     }
@@ -305,14 +281,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedEmploymentHistoryList != null) {
-      widget.userResume.setEmploymentHistoryList = updatedEmploymentHistoryList;
       setState(() {
-        userEmploymentHistoryList = updatedEmploymentHistoryList;
+        widget.userResume.setEmploymentHistoryList =
+            updatedEmploymentHistoryList;
       });
       if (updatedEmploymentHistoryList.isEmpty) {
         setState(() {
           isEmploymentHistoryComplete = false;
-          profileCompleteness -= 1 / 6;
+          profileCompleteness -= sectionRatio;
         });
       }
     }
@@ -332,14 +308,14 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     );
 
     if (updatedEmploymentHistoryList != null) {
-      widget.userResume.setEmploymentHistoryList = updatedEmploymentHistoryList;
       setState(() {
-        userEmploymentHistoryList = updatedEmploymentHistoryList;
+        widget.userResume.setEmploymentHistoryList =
+            updatedEmploymentHistoryList;
       });
       if (!isEmploymentHistoryComplete) {
         isEmploymentHistoryComplete = true;
         setState(() {
-          profileCompleteness += 1 / 6;
+          profileCompleteness += sectionRatio;
         });
       }
     }
@@ -360,14 +336,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     // Return non-null means changes have made in AsdPersonalDetailsScreen
     // so update the userPersonalDetails to updatedPersonalDetails
     if (updatedPersonalDetails != null) {
-      widget.userResume.setPersonalDetails = updatedPersonalDetails;
       setState(() {
-        userPersonalDetails = updatedPersonalDetails;
+        widget.userResume.setPersonalDetails = updatedPersonalDetails;
       });
       if (!isPersonalDetailsComplete) {
         isPersonalDetailsComplete = true;
         setState(() {
-          profileCompleteness += 1 / 6;
+          profileCompleteness += sectionRatio;
         });
       }
     }
@@ -388,14 +363,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
     // Return non-null means changes have made in AsdPersonalDetailsScreen
     // so update the userPersonalDetails to updatedPersonalDetails
     if (updatedProfessionalSummary != null) {
-      widget.userResume.setProfessionalSummary = updatedProfessionalSummary;
       setState(() {
-        userProfessionalSummary = updatedProfessionalSummary;
+        widget.userResume.setProfessionalSummary = updatedProfessionalSummary;
       });
       if (!isProfessionalSummaryComplete) {
         isProfessionalSummaryComplete = true;
         setState(() {
-          profileCompleteness += 1 / 6;
+          profileCompleteness += sectionRatio;
         });
       }
     }
@@ -470,7 +444,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                         ),
                       ),
                       Text(
-                        ' Profile Completeness',
+                        ' Resume   Completeness',
                         style: TextStyle(
                           fontSize: 9.5.sp,
                           color: const Color(0xFF808080),
@@ -511,9 +485,10 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    userPersonalDetails == null
+                                    widget.userResume.userPersonalDetails ==
+                                            null
                                         ? 'Personal Details'
-                                        : '${userPersonalDetails!.firstName} ${userPersonalDetails!.lastName}',
+                                        : '${widget.userResume.userPersonalDetails!.firstName} ${widget.userResume.userPersonalDetails!.lastName}',
                                     style: titleTextStyle,
                                   ),
                                   SizedBox(
@@ -537,29 +512,36 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                   ),
                                 ],
                               ),
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(5.0), //or 15.0
-                                child: Container(
-                                  height: 9.h,
-                                  width: 9.h,
-                                  color: kBackgroundRiceWhite,
-                                  child: userPersonalDetails == null
-                                      ? const Icon(
-                                          CupertinoIcons.person_alt,
-                                          color: Color(0xFFBEC4D5),
-                                          size: 40.0,
-                                        )
-                                      : FittedBox(
-                                          child: Image.file(userPersonalDetails!
-                                              .profileImage),
-                                          fit: BoxFit.fill,
-                                        ),
+                              CircleAvatar(
+                                radius: 38,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(100.0), //or 15.0
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    color: kBackgroundRiceWhite,
+                                    child:
+                                        widget.userResume.userPersonalDetails ==
+                                                null
+                                            ? const Icon(
+                                                CupertinoIcons.person_alt,
+                                                color: Color(0xFFBEC4D5),
+                                                size: 40.0,
+                                              )
+                                            : FittedBox(
+                                                child: Image.file(widget
+                                                    .userResume
+                                                    .userPersonalDetails!
+                                                    .profileImage),
+                                                fit: BoxFit.fill,
+                                              ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          userPersonalDetails == null
+                          widget.userResume.userPersonalDetails == null
                               ? const SizedBox.shrink()
                               : Row(
                                   children: [
@@ -678,22 +660,25 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          userPersonalDetails!.phone,
+                                          widget.userResume.userPersonalDetails!
+                                              .phone,
                                           style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          userPersonalDetails!.email,
+                                          widget.userResume.userPersonalDetails!
+                                              .email,
                                           style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          userPersonalDetails!.dateOfBirth,
+                                          widget.userResume.userPersonalDetails!
+                                              .dateOfBirth,
                                           style: bodyTextStyle,
                                         ),
                                         littleSeg,
                                         Text(
-                                          '${userPersonalDetails!.city}, ${userPersonalDetails!.state}',
+                                          '${widget.userResume.userPersonalDetails!.city}, ${widget.userResume.userPersonalDetails!.state}',
                                           style: bodyTextStyle,
                                         ),
                                       ],
@@ -748,9 +733,10 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            userProfessionalSummary == null
+                            widget.userResume.userProfessionalSummary == null
                                 ? 'Add your professional summary...'
-                                : userProfessionalSummary!.summaryText,
+                                : widget.userResume.userProfessionalSummary!
+                                    .summaryText,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: bodyTextStyle,
@@ -797,12 +783,13 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             ),
                           ],
                         ),
-                        userEmploymentHistoryList!.isNotEmpty
+                        widget.userResume.userEmploymentHistoryList.isNotEmpty
                             ? ListView.builder(
                                 itemBuilder: (context, index) {
                                   final EmploymentHistory?
-                                      currentEmploymentHistory =
-                                      userEmploymentHistoryList![index];
+                                      currentEmploymentHistory = widget
+                                          .userResume
+                                          .userEmploymentHistoryList[index];
                                   return Padding(
                                     padding: index == 0
                                         ? EdgeInsets.zero
@@ -854,7 +841,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     ),
                                   );
                                 },
-                                itemCount: userEmploymentHistoryList!.length,
+                                itemCount: widget.userResume
+                                    .userEmploymentHistoryList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                               )
@@ -906,11 +894,11 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             ),
                           ],
                         ),
-                        userEducationList!.isNotEmpty
+                        widget.userResume.userEducationList.isNotEmpty
                             ? ListView.builder(
                                 itemBuilder: (context, index) {
-                                  final Education? currentEducation =
-                                      userEducationList![index];
+                                  final Education? currentEducation = widget
+                                      .userResume.userEducationList[index];
                                   return Padding(
                                     padding: index == 0
                                         ? EdgeInsets.zero
@@ -960,7 +948,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     ),
                                   );
                                 },
-                                itemCount: userEducationList!.length,
+                                itemCount:
+                                    widget.userResume.userEducationList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                               )
@@ -1012,11 +1001,11 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             ),
                           ],
                         ),
-                        userSkillList!.isNotEmpty
+                        widget.userResume.userSkillList.isNotEmpty
                             ? ListView.builder(
                                 itemBuilder: (context, index) {
                                   final Skill? currentSkill =
-                                      userSkillList![index];
+                                      widget.userResume.userSkillList[index];
                                   return Padding(
                                     padding: index == 0
                                         ? EdgeInsets.zero
@@ -1064,7 +1053,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     ),
                                   );
                                 },
-                                itemCount: userSkillList!.length,
+                                itemCount:
+                                    widget.userResume.userSkillList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                               )
@@ -1132,12 +1122,12 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                             ),
                           ],
                         ),
-                        userAutismChallengeList!.isNotEmpty
+                        widget.userResume.userAutismChallengeList.isNotEmpty
                             ? ListView.builder(
                                 itemBuilder: (context, index) {
                                   final AutismChallenge?
-                                      currentAutismChallenge =
-                                      userAutismChallengeList![index];
+                                      currentAutismChallenge = widget.userResume
+                                          .userAutismChallengeList[index];
                                   return Padding(
                                     padding: index == 0
                                         ? EdgeInsets.zero
@@ -1189,7 +1179,8 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                     ),
                                   );
                                 },
-                                itemCount: userAutismChallengeList!.length,
+                                itemCount: widget
+                                    .userResume.userAutismChallengeList.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                               )

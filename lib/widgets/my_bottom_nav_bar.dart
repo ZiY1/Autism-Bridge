@@ -21,7 +21,7 @@ class MyBottomNavBar extends StatelessWidget {
       children: [
         Positioned(
           child: Container(
-            height: 9.h,
+            height: 12.h,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -41,7 +41,7 @@ class MyBottomNavBar extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3.95.h),
+                      padding: EdgeInsets.only(left: 3.8.h, right: 4.12.h),
                       child: firstRow,
                     ),
                     SizedBox(
@@ -57,7 +57,7 @@ class MyBottomNavBar extends StatelessWidget {
                       height: 0.75.h,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 4.h, right: 4.h),
+                      padding: EdgeInsets.only(left: 3.65.h, right: 3.65.h),
                       child: thirdRow,
                     ),
                   ],
@@ -68,7 +68,7 @@ class MyBottomNavBar extends StatelessWidget {
         ),
         Positioned(
           left: 42.7.w,
-          bottom: 3.2.h,
+          bottom: 6.h,
           child: Container(
             width: 7.8.h,
             height: 7.8.h,
@@ -80,7 +80,7 @@ class MyBottomNavBar extends StatelessWidget {
         ),
         Positioned(
           left: 44.14.w,
-          bottom: 3.9.h,
+          bottom: 6.65.h,
           child: middleSearch,
         ),
       ],

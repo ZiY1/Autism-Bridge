@@ -302,16 +302,6 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
   }
 }
 
-// FutureBuilder(
-// future: logIn(),
-// builder: (context, snapshot) {
-// if (!snapshot.hasData) {
-// return const CupertinoActivityIndicator();
-// } else {
-// return const AsdHomeScreen();
-// }
-// });
-
 // Reference:
 
 // TextFormField(

@@ -1,7 +1,6 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/job_preference_picker_list.dart';
-import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -14,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../constants.dart';
-import 'package:flutter_picker/flutter_picker.dart';
+import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 
 class AsdJobPreferenceScreen extends StatefulWidget {
   static const id = 'asd_job_preference_screen';

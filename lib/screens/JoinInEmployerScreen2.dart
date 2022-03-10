@@ -16,7 +16,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
 
-import 'asd_email_verify_screen.dart';
+import 'email_verify_screen.dart';
 
 class JoinInEmployerSecondPage extends StatefulWidget {
   // Keep track of the name of the Page
@@ -201,10 +201,9 @@ class _JoinInEmployerSecondPageState extends State<JoinInEmployerSecondPage> {
         // Navigate to asd email verify screen
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AsdEmailVerifyScreen.id,
+          EmailVerifyScreen.id,
           (route) => false,
         );
-
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           // Error of multiple accounts with similar emails

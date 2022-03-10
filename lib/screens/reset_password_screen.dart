@@ -7,17 +7,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'asd_login_screen.dart';
+import 'login_screen.dart';
 import 'package:sizer/sizer.dart';
 
-class AsdResetPasswordScreen extends StatefulWidget {
-  const AsdResetPasswordScreen({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  _AsdResetPasswordScreenState createState() => _AsdResetPasswordScreenState();
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
 
-class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final formKey = GlobalKey<FormState>();
 
   bool isEmailFieldValid = false;
@@ -55,8 +55,7 @@ class _AsdResetPasswordScreenState extends State<AsdResetPasswordScreen> {
       );
 
       // On success, return to login page
-      navigatorKey.currentState!
-          .popUntil(ModalRoute.withName(AsdLoginScreen.id));
+      navigatorKey.currentState!.popUntil(ModalRoute.withName(LoginScreen.id));
     } on FirebaseAuthException catch (e) {
       //Navigator.of(context).pop();
       setState(() {

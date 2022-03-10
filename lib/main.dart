@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:autism_bridge/screens/asd_autism_challenges_screen.dart';
 import 'package:autism_bridge/screens/asd_education_screen.dart';
-import 'package:autism_bridge/screens/asd_email_verify_screen.dart';
+import 'package:autism_bridge/screens/email_verify_screen.dart';
 import 'package:autism_bridge/screens/asd_employment_history_screen.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
-import 'package:autism_bridge/screens/asd_login_screen.dart';
+import 'package:autism_bridge/screens/login_screen.dart';
 import 'package:autism_bridge/screens/asd_personal_details_screen.dart';
 import 'package:autism_bridge/screens/asd_professional_summary_screen.dart';
 import 'package:autism_bridge/screens/asd_resume_builder_screen.dart';
-import 'package:autism_bridge/screens/asd_signup_screen.dart';
+import 'package:autism_bridge/screens/signup_screen.dart';
 import 'package:autism_bridge/screens/asd_skills_screen.dart';
 import 'package:autism_bridge/screens/determine_user_type_loading_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
@@ -79,10 +79,9 @@ class AutismBridgeApp extends StatelessWidget {
               IsLogIn.id: (context) => const IsLogIn(),
               '/': (context) => const WelcomeScreen(),
               WelcomeScreen.id: (context) => const WelcomeScreen(),
-              AsdLoginScreen.id: (context) => const AsdLoginScreen(),
-              AsdSignupScreen.id: (context) => const AsdSignupScreen(),
-              AsdEmailVerifyScreen.id: (context) =>
-                  const AsdEmailVerifyScreen(),
+              // LoginScreen.id: (context) => const LoginScreen(),
+              // AsdSignupScreen.id: (context) => const AsdSignupScreen(),
+              EmailVerifyScreen.id: (context) => const EmailVerifyScreen(),
               //AsdHomeScreen.id: (context) => const AsdHomeScreen(),
               SignInEmployerPage.nameRoute: (context) =>
                   const SignInEmployerPage(),

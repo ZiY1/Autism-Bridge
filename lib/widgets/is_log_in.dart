@@ -1,4 +1,4 @@
-import 'package:autism_bridge/screens/asd_email_verify_screen.dart';
+import 'package:autism_bridge/screens/email_verify_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class IsLogIn extends StatelessWidget {
             );
           } else if (snapshot.hasData) {
             // snapshot.hasData means there is a user logged in
-            return const AsdEmailVerifyScreen();
+            return const EmailVerifyScreen();
           } else {
             return const WelcomeScreen();
           }

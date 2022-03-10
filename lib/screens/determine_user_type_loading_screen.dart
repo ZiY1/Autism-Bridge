@@ -5,10 +5,14 @@ import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
+import 'package:autism_bridge/models/recruiter_profile.dart';
+import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
+import 'package:autism_bridge/screens/recruiter_home_screen.dart';
+import 'package:autism_bridge/screens/recruiter_profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +40,15 @@ class _DetermineUserTypeLoadingScreenState
 
   AsdUserCredentials? asdUserCredentials;
 
-  Employer? employer;
+  RecruiterUserCredentials? recruiterUserCredentials;
+
+  //Employer? employer;
 
   Resume? userResume;
 
   List<JobPreference?>? userJobPreferenceList;
+
+  RecruiterProfile? recruiterProfile;
 
   Future<void> checkUserType() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -61,8 +69,6 @@ class _DetermineUserTypeLoadingScreenState
             String userId;
             String userEmail;
             bool isFirstTimeIn;
-            // String userFirstName;
-            // String userLastName;
 
             // Fetch user id and email from firebaseAuth
             try {
@@ -73,15 +79,13 @@ class _DetermineUserTypeLoadingScreenState
 
                 // Once fetch id success, Fetch user name from firebaseAuth
                 await _firestore
-                    .collection('all_users')
+                    .collection('job_seeker_users')
                     .doc(userId)
                     .get()
                     .then((DocumentSnapshot documentSnapshot) async {
                   if (documentSnapshot.exists) {
                     Map<String, dynamic> data =
                         documentSnapshot.data() as Map<String, dynamic>;
-                    // userFirstName = data['firstName'];
-                    // userLastName = data['lastName'];
                     isFirstTimeIn = data['isFirstTimeIn'];
 
                     // store credential into the AsdUserCredentials class
@@ -156,12 +160,8 @@ class _DetermineUserTypeLoadingScreenState
           } else {
             // Fetch employer user credentials
             String userId;
-            String userUrlProfilePicture;
-            String userFirstName;
-            String userLastName;
             String userEmail;
-            String userPassword;
-            int userNewMessages;
+            bool isFirstTimeIn;
 
             // Fetch user id and email from firebaseAuth
             try {
@@ -172,28 +172,48 @@ class _DetermineUserTypeLoadingScreenState
 
                 // Once fetch id success, Fetch user name from firebaseAuth
                 await _firestore
-                    .collection('EmployerUsers')
+                    .collection('recruiter_users')
                     .doc(userId)
                     .get()
-                    .then((DocumentSnapshot documentSnapshot) {
+                    .then((DocumentSnapshot documentSnapshot) async {
                   if (documentSnapshot.exists) {
                     Map<String, dynamic> data =
                         documentSnapshot.data() as Map<String, dynamic>;
-                    userFirstName = data['userFirstName'];
-                    userLastName = data['userLastName'];
-                    userUrlProfilePicture = data['urlProfileImage'];
-                    userPassword = data['userPassword'];
-                    userNewMessages = data['userNewMessages'];
+                    isFirstTimeIn = data['isFirstTimeIn'];
 
                     // store credential into the Employer class
-                    employer = Employer(
-                        userId: userId,
-                        userUrlProfilePicture: userUrlProfilePicture,
-                        userFirstName: userFirstName,
-                        userLastName: userLastName,
-                        userEmail: userEmail,
-                        userPassword: userPassword,
-                        userNewMessages: userNewMessages);
+                    // employer = Employer(
+                    //     userId: userId,
+                    //     userUrlProfilePicture: userUrlProfilePicture,
+                    //     userFirstName: userFirstName,
+                    //     userLastName: userLastName,
+                    //     userEmail: userEmail,
+                    //     userPassword: userPassword,
+                    //     userNewMessages: userNewMessages);
+
+                    // store credential into the RecruiterUserCredentials class
+                    recruiterUserCredentials = RecruiterUserCredentials(
+                      userId: userId,
+                      userEmail: userEmail,
+                      isFirstTimeIn: isFirstTimeIn,
+                    );
+
+                    RecruiterProfile? recruiterProfileTemp = RecruiterProfile(
+                      userId: userId,
+                      profileImage: null,
+                      profileImageUrl: null,
+                      firstName: null,
+                      lastName: null,
+                      companyName: null,
+                      jobTitle: null,
+                    );
+
+                    if (!isFirstTimeIn) {
+                      recruiterProfileTemp = await RecruiterProfile
+                          .readRecruiterProfileDataFromFirestore(userId);
+                    }
+
+                    recruiterProfile = recruiterProfileTemp;
                   } else {
                     developer.log('Document does not exist on the database',
                         name:
@@ -253,7 +273,14 @@ class _DetermineUserTypeLoadingScreenState
                 );
               }
             } else {
-              return SignedEmployerHomeScreen(employer: employer!);
+              if (recruiterUserCredentials!.isFirstTimeIn) {
+                return RecruiterProfileScreen(
+                    recruiterUserCredentials: recruiterUserCredentials!,
+                    recruiterProfile: recruiterProfile!);
+              } else {
+                return RecruiterHomeScreen(
+                    recruiterUserCredentials: recruiterUserCredentials!);
+              }
             }
           }
           return const Scaffold(

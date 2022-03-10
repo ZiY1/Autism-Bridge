@@ -240,28 +240,66 @@ class Utils {
 
   // Unused Utils
   static showProgressIndicator(BuildContext context) {
-    if (Platform.isIOS) {
-      showDialog(
-        barrierColor: Colors.transparent,
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CupertinoActivityIndicator(),
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(
-              kAutismBridgeBlue,
-            ),
+    showDialog(
+      barrierColor: null,
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: Container(
+          width: 13.h,
+          height: 13.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(
+                Radius.circular(kResumeBuilderCardRadius)),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF8A959E).withOpacity(0.2),
+                spreadRadius: 0,
+                blurRadius: 30.0,
+                //offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox.shrink(),
+              SizedBox(
+                width: 4.h,
+                height: 4.h,
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(
+                    kAutismBridgeBlue,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 0.5.h),
+                child: const Text(
+                  'Loading . . .',
+                  style: TextStyle(color: kDarkTextGrey),
+                ),
+              ),
+            ],
           ),
         ),
-      );
-    }
+      ),
+    );
+    // As a reference:
+    // if (Platform.isIOS) {
+    //   showDialog(
+    //     barrierColor: Colors.transparent,
+    //     context: context,
+    //     barrierDismissible: false,
+    //     builder: (context) => const Center(
+    //       child: CupertinoActivityIndicator(),
+    //     ),
+    //   );
+    // } else {
+    //
+    // }
   }
 
   static Future<bool> showCupertinoDialog(BuildContext context) async {

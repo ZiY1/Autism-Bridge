@@ -1,7 +1,8 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/emums/user_type_enum.dart';
 import 'package:autism_bridge/firebase_helpers.dart';
-import 'package:autism_bridge/screens/asd_reset_password_screen.dart';
-import 'package:autism_bridge/screens/asd_signup_screen.dart';
+import 'package:autism_bridge/screens/reset_password_screen.dart';
+import 'package:autism_bridge/screens/signup_screen.dart';
 import 'package:autism_bridge/widgets/registration_input_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,18 +12,23 @@ import 'package:autism_bridge/widgets/registration_button.dart';
 import 'package:autism_bridge/widgets/registration_title.dart';
 import 'package:sizer/sizer.dart';
 import 'package:autism_bridge/widgets/utils.dart';
-import 'asd_email_verify_screen.dart';
+import 'email_verify_screen.dart';
 
-class AsdLoginScreen extends StatefulWidget {
-  static const id = 'asd_login_screen';
+class LoginScreen extends StatefulWidget {
+  static const id = 'login_screen';
 
-  const AsdLoginScreen({Key? key}) : super(key: key);
+  final UserType userType;
+
+  const LoginScreen({
+    Key? key,
+    required this.userType,
+  }) : super(key: key);
 
   @override
-  State<AsdLoginScreen> createState() => _AsdLoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _AsdLoginScreenState extends State<AsdLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
 
   bool isPasswordHidden = true;
@@ -72,15 +78,22 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
         password: passwordController.text.trim(),
       );
 
-      // Check if the user is in job_seeker_users collection
-      // ? I believe  userCredential.user will always be non-null here because if it was null, and exception will be caught
-      bool isJobSeekerUser = await FirebaseHelper.checkDocumentExists(
-          collectionName: 'job_seeker_users', docID: userCredential.user!.uid);
+      bool isCorrectUser;
+      if (widget.userType == UserType.jobSeeker) {
+        // Check if the user is in job_seeker_users collection
+        // ? I believe  userCredential.user will always be non-null here because if it was null, and exception will be caught
+        isCorrectUser = await FirebaseHelper.checkDocumentExists(
+            collectionName: 'job_seeker_users',
+            docID: userCredential.user!.uid);
+      } else {
+        isCorrectUser = await FirebaseHelper.checkDocumentExists(
+            collectionName: 'recruiter_users', docID: userCredential.user!.uid);
+      }
 
-      if (isJobSeekerUser) {
+      if (isCorrectUser) {
         // Navigate to asd email verify screen
         Navigator.pushNamedAndRemoveUntil(
-            context, AsdEmailVerifyScreen.id, (route) => false);
+            context, EmailVerifyScreen.id, (route) => false);
       } else {
         // navigatorKey.currentState!
         //     .popUntil(ModalRoute.withName(AsdLoginScreen.id));
@@ -89,7 +102,9 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
         });
 
         Utils.showSnackBar(
-          'There is account is not registered as our job seeker account',
+          widget.userType == UserType.jobSeeker
+              ? 'There is account is not registered as our job seeker account'
+              : 'There is account is not registered as our recruiter account',
           const Icon(
             Icons.error_sharp,
             color: Colors.red,
@@ -116,6 +131,21 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
     }
   }
 
+  void signUpTextBtnOnPressed() {
+    // Remove all screen from stack except the first screen
+    // Navigator.pushNamedAndRemoveUntil(context,
+    //     AsdSignupScreen.id, (route) => route.isFirst);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SignupScreen(
+          userType: widget.userType,
+        ),
+      ),
+      (route) => route.isFirst,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -135,7 +165,9 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
                 //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   RegistrationTitle(
-                    title: 'Log In',
+                    title: widget.userType == UserType.jobSeeker
+                        ? 'Log In'
+                        : 'Recruiter Log In',
                     subtitle: '',
                     backOnPressed: () {
                       Navigator.pop(context);
@@ -223,7 +255,7 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
                             // padding: EdgeInsets.only(
                             //     bottom:
                             //         MediaQuery.of(context).viewInsets.bottom),
-                            child: const AsdResetPasswordScreen(),
+                            child: const ResetPasswordScreen(),
                           ),
                         ),
                         child: Text(
@@ -278,18 +310,17 @@ class _AsdLoginScreenState extends State<AsdLoginScreen> {
                         ),
                       ),
                       TextSpan(
-                          text: 'Sign up',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 8.6.sp,
-                            color: kAutismBridgeBlue,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Remove all screen from stack except the first screen
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  AsdSignupScreen.id, (route) => route.isFirst);
-                            }),
+                        text: 'Sign up',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 8.6.sp,
+                          color: kAutismBridgeBlue,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            signUpTextBtnOnPressed();
+                          },
+                      ),
                     ]),
                   ),
                 ],

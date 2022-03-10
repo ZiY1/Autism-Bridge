@@ -1,9 +1,6 @@
 import 'package:autism_bridge/constants.dart';
-import 'package:autism_bridge/models/asd_user_credentials.dart';
-import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/resume_data.dart';
-import 'package:autism_bridge/screens/asd_job_screen.dart';
-import 'package:autism_bridge/screens/asd_me_screen.dart';
+import 'package:autism_bridge/models/recruiter_user_credentials.dart';
+import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
@@ -12,51 +9,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class AsdHomeScreen extends StatefulWidget {
-  static const id = 'asd_home_screen';
+class RecruiterHomeScreen extends StatefulWidget {
+  static const id = 'recruiter_home_screen';
 
-  final AsdUserCredentials asdUserCredentials;
+  final RecruiterUserCredentials recruiterUserCredentials;
 
-  final Resume userResume;
-
-  final List<JobPreference?> userJobPreferenceList;
-
-  const AsdHomeScreen({
+  const RecruiterHomeScreen({
     Key? key,
-    required this.asdUserCredentials,
-    required this.userResume,
-    required this.userJobPreferenceList,
+    required this.recruiterUserCredentials,
   }) : super(key: key);
 
   @override
-  State<AsdHomeScreen> createState() => _AsdHomeScreenState();
+  State<RecruiterHomeScreen> createState() => _RecruiterHomeScreenState();
 }
 
-class _AsdHomeScreenState extends State<AsdHomeScreen> {
-  int bottomNavBarCurrentIndex = 0;
+class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
+  final _auth = FirebaseAuth.instance;
 
-  AsdUserCredentials? asdUserCredentials;
+  int bottomNavBarCurrentIndex = 0;
 
   List<Widget> screens = [];
 
   List<PreferredSizeWidget?> appBars = [];
-
-  void onResumeChanged(Resume resumeTemp) {
-    widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
-    widget.userResume.setProfessionalSummary =
-        resumeTemp.userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList =
-        resumeTemp.userEmploymentHistoryList;
-    widget.userResume.setEducationList = resumeTemp.userEducationList;
-    widget.userResume.setSkillList = resumeTemp.userSkillList;
-    widget.userResume.setAutismChallengeList =
-        resumeTemp.userAutismChallengeList;
-
-    screens[1] = Center(
-      child: Text(
-          'Job Screen ${widget.userResume.userPersonalDetails!.firstName}'),
-    );
-  }
 
   void jobBtnOnPressed() {
     setState(() {
@@ -93,7 +67,24 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     super.initState();
 
     screens.add(
-      const AsdJobScreen(),
+      Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(
+                  'Message Screen \n${widget.recruiterUserCredentials.userId} \n${widget.recruiterUserCredentials.userEmail}'),
+              GestureDetector(
+                onTap: () {
+                  _auth.signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, WelcomeScreen.id, (route) => false);
+                },
+                child: const Text('Sign Out'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
     screens.add(
       const Center(
@@ -111,10 +102,8 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       ),
     );
     screens.add(
-      AsdMeScreen(
-        asdUserCredentials: widget.asdUserCredentials,
-        userResume: widget.userResume,
-        onValueChanged: onResumeChanged,
+      const Center(
+        child: Text('Me Screen'),
       ),
     );
 
@@ -295,68 +284,3 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     );
   }
 }
-
-// class GetUserName extends StatelessWidget {
-//   final String documentId;
-//
-//   const GetUserName(this.documentId);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     CollectionReference users =
-//         FirebaseFirestore.instance.collection('asd_users');
-//
-//     return FutureBuilder<DocumentSnapshot>(
-//       future: users.doc(documentId).get(),
-//       builder:
-//           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-//         if (snapshot.hasError) {
-//           return const Text("Something went wrong");
-//         }
-//
-//         if (snapshot.hasData && !snapshot.data!.exists) {
-//           return const Text("Document does not exist");
-//         }
-//
-//         if (snapshot.connectionState == ConnectionState.done) {
-//           Map<String, dynamic> data =
-//               snapshot.data!.data() as Map<String, dynamic>;
-//           return Text("Full Name: ${data['name']}");
-//         }
-//
-//         return const Text("loading");
-//       },
-//     );
-//   }
-// }
-
-// PreferredSize(
-// preferredSize: const Size.fromHeight(kToolbarHeight),
-// child: Container(
-// color: kAutismBridgeBlue,
-// child: SafeArea(
-// child: Column(
-// children: [
-// Expanded(child: Container()),
-// TabBar(
-// isScrollable: true, // Required
-// unselectedLabelColor: Colors.white30, // Other tabs color
-// labelPadding: EdgeInsets.symmetric(
-// horizontal: 30), // Space between tabs
-// indicator: UnderlineTabIndicator(
-// borderSide: BorderSide(
-// color: Colors.white, width: 2), // Indicator height
-// insets: EdgeInsets.symmetric(
-// horizontal: 48), // Indicator width
-// ),
-// tabs: [
-// Tab(text: 'Total Investment'),
-// Tab(text: 'Your Earnings'),
-// Tab(text: 'Current Balance'),
-// ],
-// ),
-// ],
-// ),
-// ),
-// ),
-// ),

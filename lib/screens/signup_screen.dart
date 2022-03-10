@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:autism_bridge/constants.dart';
-import 'package:autism_bridge/screens/asd_email_verify_screen.dart';
-import 'package:autism_bridge/screens/asd_login_screen.dart';
+import 'package:autism_bridge/emums/user_type_enum.dart';
+import 'package:autism_bridge/screens/email_verify_screen.dart';
+import 'package:autism_bridge/screens/login_screen.dart';
 import 'package:autism_bridge/widgets/registration_input_field.dart';
 import 'package:autism_bridge/widgets/shake_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,16 +15,21 @@ import 'package:autism_bridge/widgets/registration_title.dart';
 import 'package:sizer/sizer.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 
-class AsdSignupScreen extends StatefulWidget {
-  static const id = 'asd_signup_screen';
+class SignupScreen extends StatefulWidget {
+  static const id = 'signup_screen';
 
-  const AsdSignupScreen({Key? key}) : super(key: key);
+  final UserType userType;
+
+  const SignupScreen({
+    Key? key,
+    required this.userType,
+  }) : super(key: key);
 
   @override
-  State<AsdSignupScreen> createState() => _AsdSignupScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _AsdSignupScreenState extends State<AsdSignupScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final formKey = GlobalKey<FormState>();
 
   final shakeKey = GlobalKey<ShakeWidgetState>();
@@ -57,7 +63,7 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
   }
 
   // Sign Up method
-  Future signUp() async {
+  Future jobSeekerSignUp() async {
     // Check if user checks the agreement box
     if (!isAgreementChecked) {
       shakeKey.currentState?.shake();
@@ -88,30 +94,17 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
         password: passwordController.text.trim(),
       );
 
-      // Store user info in firestore all_users collection
-      User user = userCredential.user!;
-      await FirebaseFirestore.instance
-          .collection('all_users')
-          .doc(user.uid)
-          .set({
-        'userType': 'JobSeeker',
-        'email': user.email,
-        'isFirstTimeIn': true,
-      });
-
-      // Store user info in firestore job_seeker_users collection
-      await FirebaseFirestore.instance
-          .collection('job_seeker_users')
-          .doc(user.uid)
-          .set({
-        'email': user.email,
-        'isFirstTimeIn': true,
-      });
+      //
+      if (widget.userType == UserType.jobSeeker) {
+        handleJobSeekerCredentialsInFirestore(userCredential);
+      } else {
+        handleRecruiterCredentialsInFirestore(userCredential);
+      }
 
       // Navigate to asd email verify screen
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AsdEmailVerifyScreen.id,
+        EmailVerifyScreen.id,
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {
@@ -128,6 +121,62 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
         ),
       );
     }
+  }
+
+  Future<void> handleJobSeekerCredentialsInFirestore(
+      UserCredential userCredential) async {
+    // Store user info in firestore all_users collection
+    User user = userCredential.user!;
+    await FirebaseFirestore.instance.collection('all_users').doc(user.uid).set({
+      'userType': 'JobSeeker',
+      'email': user.email,
+      'isFirstTimeIn': true,
+    });
+
+    // Store user info in firestore job_seeker_users collection
+    await FirebaseFirestore.instance
+        .collection('job_seeker_users')
+        .doc(user.uid)
+        .set({
+      'email': user.email,
+      'isFirstTimeIn': true,
+    });
+  }
+
+  Future<void> handleRecruiterCredentialsInFirestore(
+      UserCredential userCredential) async {
+    // Store user info in firestore all_users collection
+    User user = userCredential.user!;
+    await FirebaseFirestore.instance.collection('all_users').doc(user.uid).set({
+      'userType': 'Employer',
+      'email': user.email,
+      'isFirstTimeIn': true,
+    });
+
+    // Store user info in firestore job_seeker_users collection
+    await FirebaseFirestore.instance
+        .collection('recruiter_users')
+        .doc(user.uid)
+        .set({
+      'email': user.email,
+      'isFirstTimeIn': true,
+    });
+  }
+
+  void logInTextBtnOnPressed() {
+    // Remove all screen from stack except the first screen
+    // Navigator.pushNamedAndRemoveUntil(context,
+    //     LoginScreen.id, (route) => route.isFirst);
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(
+          userType: widget.userType,
+        ),
+      ),
+      (route) => route.isFirst,
+    );
   }
 
   @override
@@ -149,8 +198,12 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                 //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   RegistrationTitle(
-                    title: 'Sign Up',
-                    subtitle: 'Enter your details & free sign up',
+                    title: widget.userType == UserType.jobSeeker
+                        ? 'Sign Up'
+                        : 'Recruiter Sign Up',
+                    subtitle: widget.userType == UserType.jobSeeker
+                        ? 'Enter your details & free sign up'
+                        : 'Enter your details & start recruiting',
                     backOnPressed: () {
                       Navigator.pop(context);
                     },
@@ -228,7 +281,7 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                       onPressed: isEmailFieldValid &&
                               isPasswordFieldValid &&
                               !isLoading
-                          ? signUp
+                          ? jobSeekerSignUp
                           : null,
                       child: isLoading
                           ? SizedBox(
@@ -311,18 +364,17 @@ class _AsdSignupScreenState extends State<AsdSignupScreen> {
                         ),
                       ),
                       TextSpan(
-                          text: 'Log In',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 8.6.sp,
-                            color: const Color(0xFF2A6BAC),
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Remove all screen from stack except the first screen
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  AsdLoginScreen.id, (route) => route.isFirst);
-                            }),
+                        text: 'Log In',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 8.6.sp,
+                          color: const Color(0xFF2A6BAC),
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            logInTextBtnOnPressed();
+                          },
+                      ),
                     ]),
                   ),
                 ],

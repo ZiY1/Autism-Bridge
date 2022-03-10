@@ -11,10 +11,12 @@ import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
+import 'package:autism_bridge/widgets/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../main.dart';
 import 'asd_manage_job_preference_screen.dart';
 import 'asd_personal_details_screen.dart';
 import 'asd_resume_builder_screen.dart';
@@ -67,6 +69,8 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
   }
 
   Future<void> resumeBuilderBtnOnPressed() async {
+    Utils.showProgressIndicator(context);
+
     PersonalDetails? userPersonalDetails =
         await PersonalDetails.readPersonalDetailsDataFromFirestore(
             widget.asdUserCredentials.userId);
@@ -103,6 +107,8 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
     widget.userResume.setSkillList = userSkillList;
     widget.userResume.setAutismChallengeList = userAutismChallengeList;
 
+    navigatorKey.currentState!.pop();
+
     Resume resumeTemp = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -129,9 +135,14 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
   }
 
   Future<void> jobPreferenceBtnOnPressed() async {
+    Utils.showProgressIndicator(context);
+
     List<JobPreference?> userJobPreferenceList =
         await JobPreference.readAllJobPreferenceDataFromFirestore(
             userId: widget.asdUserCredentials.userId);
+
+    navigatorKey.currentState!.pop();
+
     Navigator.push(
       context,
       MaterialPageRoute(

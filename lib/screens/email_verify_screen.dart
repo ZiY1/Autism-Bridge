@@ -8,16 +8,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class AsdEmailVerifyScreen extends StatefulWidget {
-  static const id = 'asd_email_verify_screen';
+class EmailVerifyScreen extends StatefulWidget {
+  static const id = 'email_verify_screen';
 
-  const AsdEmailVerifyScreen({Key? key}) : super(key: key);
+  const EmailVerifyScreen({Key? key}) : super(key: key);
 
   @override
-  State<AsdEmailVerifyScreen> createState() => _AsdEmailVerifyScreenState();
+  State<EmailVerifyScreen> createState() => _EmailVerifyScreenState();
 }
 
-class _AsdEmailVerifyScreenState extends State<AsdEmailVerifyScreen> {
+class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   final _auth = FirebaseAuth.instance;
 
   late final User currentUser;

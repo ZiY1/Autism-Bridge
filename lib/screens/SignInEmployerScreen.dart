@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:autism_bridge/screens/asd_login_screen.dart';
+import 'package:autism_bridge/screens/login_screen.dart';
 
 import 'package:autism_bridge/screens/JoinInEmployerScreen.dart';
 import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
@@ -11,7 +11,7 @@ import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/widgets/emailFieldWidget.dart';
 import 'package:autism_bridge/widgets/passwordFieldWidget.dart';
 
-import 'asd_email_verify_screen.dart';
+import 'email_verify_screen.dart';
 
 class SignInEmployerPage extends StatefulWidget {
   static String nameRoute = '/Sign_In_Page?';
@@ -120,13 +120,11 @@ class _SignInEmployerPageState extends State<SignInEmployerPage> {
 
         // All the info that will be pass to the next Navigator Page
         final String userFirstName = userInfo[0]['userFirstName'];
-       
+
         // Send the Navigator to the Employer Main Page
         //Navigator.of(ctx).popAndPushNamed(SignedEmployerHomeScreen.routeName);
         Navigator.pushNamedAndRemoveUntil(
-            context, AsdEmailVerifyScreen.id, (route) => false);
-
-       
+            context, EmailVerifyScreen.id, (route) => false);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           showErrorDialog(

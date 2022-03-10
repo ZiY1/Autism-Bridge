@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:autism_bridge/emums/user_type_enum.dart';
 import 'package:autism_bridge/models/welcome_item.dart';
-import 'package:autism_bridge/screens/asd_login_screen.dart';
+import 'package:autism_bridge/screens/login_screen.dart';
 
 import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
 
@@ -119,7 +120,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () {
                         // TODO: Billy: Button Function
                         // Send the navigator to the SignInPage of Employer
-                        goToSignInEmployerPage(context);
+                        //goToSignInEmployerPage(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(
+                              userType: UserType.recruiter,
+                            ),
+                          ),
+                        );
                       },
                       isHollow: true,
                     ),
@@ -129,8 +138,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     WelcomeButton(
                       btnName: 'Find jobs',
                       onPressed: () {
-                        // TODO: Button Function
-                        Navigator.pushNamed(context, AsdLoginScreen.id);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(
+                              userType: UserType.jobSeeker,
+                            ),
+                          ),
+                        );
                       },
                       isHollow: false,
                     ),

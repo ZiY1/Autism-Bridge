@@ -1,16 +1,19 @@
 import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
+import 'package:autism_bridge/models/recruiter_company_info_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
-import 'package:autism_bridge/screens/recruiter_company_info_screen.dart';
+import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
+import 'package:autism_bridge/screens/recruiter_home_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
+import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
+import 'package:autism_bridge/widgets/resume_builder_picker.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,8 +22,8 @@ import 'dart:io';
 import '../constants.dart';
 import '../firebase_helpers.dart';
 
-class RecruiterProfileScreen extends StatefulWidget {
-  static const id = 'recruiter_profile_screen';
+class RecruiterCompanyInfoScreen extends StatefulWidget {
+  static const id = 'recruiter_company_info_screen';
 
   final RecruiterUserCredentials recruiterUserCredentials;
 
@@ -28,7 +31,7 @@ class RecruiterProfileScreen extends StatefulWidget {
 
   final RecruiterCompanyInfo recruiterCompanyInfo;
 
-  const RecruiterProfileScreen({
+  const RecruiterCompanyInfoScreen({
     Key? key,
     required this.recruiterUserCredentials,
     required this.recruiterProfile,
@@ -36,43 +39,31 @@ class RecruiterProfileScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<RecruiterProfileScreen> createState() => _RecruiterProfileScreenState();
+  State<RecruiterCompanyInfoScreen> createState() =>
+      _RecruiterCompanyInfoScreenState();
 }
 
-class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
+class _RecruiterCompanyInfoScreenState
+    extends State<RecruiterCompanyInfoScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  int textLen = 0;
+
   bool isSaving = false;
 
   final Widget seg = SizedBox(height: 1.h);
 
   Future<void> saveButtonOnPressed() async {
     // Ensure all fields are not null
-    if (widget.recruiterProfile.profileImage == null) {
+    if (widget.recruiterCompanyInfo.companyLogoImage == null) {
       Utils.showSnackBar(
-        'Please upload your profile photo',
+        'Please upload your company logo',
         kErrorIcon,
       );
       return;
     }
-    if (widget.recruiterProfile.firstName == null ||
-        widget.recruiterProfile.firstName!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your first name',
-        kErrorIcon,
-      );
-      return;
-    }
-
-    if (widget.recruiterProfile.lastName == null ||
-        widget.recruiterProfile.lastName!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your last name',
-        kErrorIcon,
-      );
-      return;
-    }
-
-    if (widget.recruiterProfile.companyName == null ||
-        widget.recruiterProfile.companyName!.isEmpty) {
+    if (widget.recruiterCompanyInfo.companyName == null ||
+        widget.recruiterCompanyInfo.companyName!.isEmpty) {
       Utils.showSnackBar(
         'Please enter your company name',
         kErrorIcon,
@@ -80,14 +71,32 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
       return;
     }
 
-    if (widget.recruiterProfile.jobTitle == null ||
-        widget.recruiterProfile.jobTitle!.isEmpty) {
+    if (widget.recruiterCompanyInfo.companyMinSize == null ||
+        widget.recruiterCompanyInfo.companyMaxSize == null) {
       Utils.showSnackBar(
-        'Please enter your job title',
+        'Please select your company size range',
         kErrorIcon,
       );
       return;
     }
+
+    if (widget.recruiterCompanyInfo.companyAddress == null ||
+        widget.recruiterCompanyInfo.companyAddress!.isEmpty) {
+      Utils.showSnackBar(
+        'Please enter your company address',
+        kErrorIcon,
+      );
+      return;
+    }
+
+    // if (widget.recruiterCompanyInfo.companyDescription == null ||
+    //     widget.recruiterCompanyInfo.companyDescription!.isEmpty) {
+    //   Utils.showSnackBar(
+    //     'Please enter your company description',
+    //     kErrorIcon,
+    //   );
+    //   return;
+    // }
 
     setState(() {
       isSaving = true;
@@ -100,41 +109,65 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
     });
 
     if (widget.recruiterUserCredentials.isFirstTimeIn) {
-      Navigator.push(
+      try {
+        // Update isFirstTimeIn to false in all_users collection
+        await FirebaseFirestore.instance
+            .collection('all_users')
+            .doc(widget.recruiterProfile.userId)
+            .update({
+          'isFirstTimeIn': false,
+        });
+
+        // Update isFirstTimeIn to false in job_seeker_users collection
+        await FirebaseFirestore.instance
+            .collection('recruiter_users')
+            .doc(widget.recruiterProfile.userId)
+            .update({
+          'isFirstTimeIn': false,
+        });
+      } on FirebaseException catch (e) {
+        Utils.showSnackBar(
+          e.message,
+          kErrorIcon,
+        );
+        return;
+      }
+
+      // Update the userCredential class
+      widget.recruiterUserCredentials.setIsFirstTimeIn = false;
+
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => RecruiterCompanyInfoScreen(
+          builder: (context) => RecruiterHomeScreen(
             recruiterUserCredentials: widget.recruiterUserCredentials,
             recruiterProfile: widget.recruiterProfile,
             recruiterCompanyInfo: widget.recruiterCompanyInfo,
           ),
         ),
+        (route) => false,
       );
-      // setState(() {
-      //   widget.recruiterProfile = recruiterProfileTemp;
-      // });
-
     } else {
-      Navigator.pop(context, widget.recruiterProfile);
+      Navigator.pop(context);
     }
   }
 
   Future<void> handleDataInFirebase() async {
-    // Upload the profile image in storage and return the image url
-    String profileImageUrlTemp =
-        await RecruiterProfile.uploadProfileImageInStorage(
+    // Upload the company logo image in storage and return the image url
+    String companyLogoImageUrl =
+        await RecruiterCompanyInfo.uploadCompanyLogoImageInStorage(
             userId: widget.recruiterUserCredentials.userId,
-            profileImage: widget.recruiterProfile.profileImage!);
+            companyLogoImage: widget.recruiterCompanyInfo.companyLogoImage!);
 
-    widget.recruiterProfile.setProfileImageUrl = profileImageUrlTemp;
+    widget.recruiterCompanyInfo.setCompanyLogoImageUrl = companyLogoImageUrl;
 
     // Check if userId's document exists, if no, create one
     bool docExists = await FirebaseHelper.checkDocumentExists(
-        collectionName: 'recruiter_profile',
+        collectionName: 'recruiter_company_info',
         docID: widget.recruiterUserCredentials.userId);
     if (!docExists) {
       try {
-        await RecruiterProfile.createRecruiterProfileInFirestore(
+        await RecruiterCompanyInfo.createRecruiterCompanyInfoInFirestore(
           userId: widget.recruiterUserCredentials.userId,
         );
       } on FirebaseException catch (e) {
@@ -148,7 +181,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
 
     // Update in firestore
     try {
-      await widget.recruiterProfile.updateRecruiterProfileToFirestore();
+      await widget.recruiterCompanyInfo.updateRecruiterCompanyInfoToFirestore();
     } on FirebaseException catch (e) {
       Utils.showSnackBar(
         e.message,
@@ -199,18 +232,36 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
       final imageTemp = File(image.path);
 
       setState(() {
-        widget.recruiterProfile.setProfileImage = imageTemp;
+        widget.recruiterCompanyInfo.setCompanyLogoImage = imageTemp;
       });
     } on PlatformException catch (e) {
       Utils.showSnackBar(
         e.message,
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
+        kErrorIcon,
       );
     }
+  }
+
+  void showCompanySizeRangePicker() {
+    Utils.showMyCustomizedPicker(
+      context: context,
+      pickerData: companySizeRageList,
+      onConfirm: (Picker picker, List value) {
+        String strTemp = picker.adapter.text;
+        String strTempRemovedBracket = strTemp.substring(1, strTemp.length - 1);
+
+        List tempList = strTempRemovedBracket.split(',');
+        String leftValueTemp = tempList[0];
+        String rightValueTempWithWhiteSpace = tempList[1];
+        String rightValueTemp = rightValueTempWithWhiteSpace.substring(
+            1, rightValueTempWithWhiteSpace.length);
+        setState(() {
+          widget.recruiterCompanyInfo.setCompanyMinSize = leftValueTemp;
+          widget.recruiterCompanyInfo.setCompanyMaxSize = rightValueTemp;
+        });
+      },
+      smallerText: false,
+    );
   }
 
   @override
@@ -224,7 +275,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
                 title: const Text(
-                  'My Profile',
+                  'My Company Information',
                   style: TextStyle(
                     color: kTitleBlack,
                   ),
@@ -264,7 +315,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'My Business Card',
+                                'My Company Info',
                                 style: TextStyle(
                                     color: kTitleBlack,
                                     fontSize: 23.sp,
@@ -276,7 +327,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                                   textAlign: TextAlign.center,
                                   text: TextSpan(children: [
                                     TextSpan(
-                                      text: '1',
+                                      text: '2',
                                       style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 18.5.sp,
@@ -306,7 +357,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                             bottom: 2.h,
                           ),
                           child: Text(
-                            'Start recruiting by adding your business card',
+                            'Start recruiting by adding your company information',
                             style: TextStyle(
                               color: kRegistrationSubtitleGrey,
                               fontSize: 9.5.sp,
@@ -334,7 +385,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                         Padding(
                           padding: EdgeInsets.only(left: 1.85.h, bottom: 0.3.h),
                           child: Text(
-                            'Profile Picture',
+                            'Company Logo',
                             style: TextStyle(
                               color: const Color(0xFF858597),
                               fontSize: 10.sp,
@@ -350,30 +401,27 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                radius: 31,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(100.0), //or 15.0
-                                  child: Container(
-                                    height: double.infinity,
-                                    width: double.infinity,
-                                    color: kBackgroundRiceWhite,
-                                    child:
-                                        widget.recruiterProfile.profileImage !=
-                                                null
-                                            ? FittedBox(
-                                                child: Image.file(widget
-                                                    .recruiterProfile
-                                                    .profileImage!),
-                                                fit: BoxFit.fill,
-                                              )
-                                            : const Icon(
-                                                CupertinoIcons.person_alt,
-                                                color: Color(0xFFBEC4D5),
-                                                size: 32.0,
-                                              ),
-                                  ),
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(8.0), //or 15.0
+                                child: Container(
+                                  height: 8.h,
+                                  width: 8.h,
+                                  color: kBackgroundRiceWhite,
+                                  child: widget.recruiterCompanyInfo
+                                              .companyLogoImage !=
+                                          null
+                                      ? FittedBox(
+                                          child: Image.file(widget
+                                              .recruiterCompanyInfo
+                                              .companyLogoImage!),
+                                          fit: BoxFit.fill,
+                                        )
+                                      : const Icon(
+                                          Icons.business,
+                                          color: Color(0xFFBEC4D5),
+                                          size: 32.0,
+                                        ),
                                 ),
                               ),
                               SizedBox(
@@ -417,22 +465,55 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                       children: [
                         seg,
                         ResumeBuilderInputField(
-                            onChanged: (text) {
-                              widget.recruiterProfile.setFirstName = text;
-                            },
-                            initialValue: widget.recruiterProfile.firstName,
-                            title: 'First Name',
-                            hintText: 'Enter your first name',
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next),
+                          onChanged: (text) {
+                            widget.recruiterCompanyInfo.setCompanyName = text;
+                          },
+                          initialValue: widget.recruiterCompanyInfo.companyName,
+                          title: 'Company Name',
+                          hintText: 'Enter your company name',
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                        ),
                         seg,
+                        ResumeBuilderPicker(
+                          onPressed: showCompanySizeRangePicker,
+                          title: 'Company Size',
+                          bodyText: widget.recruiterCompanyInfo
+                                          .companyMinSize ==
+                                      null &&
+                                  widget.recruiterCompanyInfo.companyMaxSize ==
+                                      null
+                              ? Text(
+                                  'Select your company size range',
+                                  style: TextStyle(
+                                    fontSize: 9.5.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                )
+                              : Text(
+                                  widget.recruiterCompanyInfo.companyMaxSize!
+                                          .isEmpty
+                                      ? widget
+                                          .recruiterCompanyInfo.companyMinSize!
+                                      : "${widget.recruiterCompanyInfo.companyMinSize!} - ${widget.recruiterCompanyInfo.companyMaxSize!}",
+                                  style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: const Color(0xFF1F1F39),
+                                  ),
+                                ),
+                          disableBorder: false,
+                        ),
+                        seg,
+                        //TODO: change it to google places autocomplete
                         ResumeBuilderInputField(
                           onChanged: (text) {
-                            widget.recruiterProfile.setLastName = text;
+                            widget.recruiterCompanyInfo.setCompanyAddress =
+                                text;
                           },
-                          initialValue: widget.recruiterProfile.lastName,
-                          title: 'Last Name',
-                          hintText: 'Enter your last name',
+                          initialValue:
+                              widget.recruiterCompanyInfo.companyAddress,
+                          title: 'Company Address',
+                          hintText: 'Enter your company address',
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
                           disableBorder: true,
@@ -456,28 +537,28 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            widget.recruiterProfile.setCompanyName = text;
-                          },
-                          initialValue: widget.recruiterProfile.companyName,
-                          title: 'Company',
-                          hintText: 'Enter your company name',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 2.h),
+                          child: ResumeBuilderParagraphField(
+                            initialValue:
+                                widget.recruiterCompanyInfo.companyDescription,
+                            title: 'Company Description (optional)',
+                            onChanged: (text) {
+                              widget.recruiterCompanyInfo
+                                  .setCompanyDescription = text;
+                              setState(() {
+                                textLen = text.length;
+                              });
+                            },
+                            autoFocus: false,
+                            minLines: 5,
+                            maxLines: 8,
+                            hintText: 'Describe your company',
+                            scrollController: _scrollController,
+                            textLen: textLen,
+                          ),
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            widget.recruiterProfile.setJobTitle = text;
-                          },
-                          initialValue: widget.recruiterProfile.jobTitle,
-                          title: 'Job Title',
-                          hintText: 'Enter your job title',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          disableBorder: true,
-                        ),
                       ],
                     ),
                   ),
@@ -493,29 +574,80 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(
               height: 6.25.h,
-              child: ResumeBuilderButton(
-                onPressed: isSaving ? null : saveButtonOnPressed,
-                isHollow: false,
-                child: isSaving
-                    ? SizedBox(
-                        width: 3.18.h,
-                        height: 3.18.h,
-                        child: const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(
-                            Colors.white,
+              child: widget.recruiterUserCredentials.isFirstTimeIn
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: Text(
+                              'Back',
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: kAutismBridgeBlue,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, widget.recruiterProfile);
+                            },
+                            isHollow: true,
                           ),
                         ),
-                      )
-                    : Text(
-                        widget.recruiterUserCredentials.isFirstTimeIn
-                            ? 'Save & Next'
-                            : 'Save',
-                        style: TextStyle(
-                          fontSize: 12.5.sp,
-                          color: Colors.white,
+                        SizedBox(
+                          width: 4.w,
                         ),
-                      ),
-              ),
+                        Expanded(
+                          child: ResumeBuilderButton(
+                            child: isSaving
+                                ? SizedBox(
+                                    width: 3.18.h,
+                                    height: 3.18.h,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    'Save',
+                                    style: TextStyle(
+                                      fontSize: 12.5.sp,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                            onPressed: isSaving
+                                ? null
+                                : () {
+                                    saveButtonOnPressed();
+                                  },
+                            isHollow: false,
+                          ),
+                        ),
+                      ],
+                    )
+                  : ResumeBuilderButton(
+                      onPressed: isSaving ? null : saveButtonOnPressed,
+                      isHollow: false,
+                      child: isSaving
+                          ? SizedBox(
+                              width: 3.18.h,
+                              height: 3.18.h,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              widget.recruiterUserCredentials.isFirstTimeIn
+                                  ? 'Save & Next'
+                                  : 'Save',
+                              style: TextStyle(
+                                fontSize: 12.5.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
             ),
           ),
         ),

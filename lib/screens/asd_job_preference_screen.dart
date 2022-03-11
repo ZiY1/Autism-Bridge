@@ -119,6 +119,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
             size: 30.0,
           ),
         );
+        return;
       }
 
       userJobPreferenceList!.removeAt(widget.listIndex!);
@@ -196,20 +197,32 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
 
     if (widget.isFirstTimeIn) {
       // Update isFirstTimeIn to false in all_users collection
-      await FirebaseFirestore.instance
-          .collection('all_users')
-          .doc(widget.asdUserCredentials.userId)
-          .update({
-        'isFirstTimeIn': false,
-      });
+      try {
+        await FirebaseFirestore.instance
+            .collection('all_users')
+            .doc(widget.asdUserCredentials.userId)
+            .update({
+          'isFirstTimeIn': false,
+        });
 
-      // Update isFirstTimeIn to false in job_seeker_users collection
-      await FirebaseFirestore.instance
-          .collection('job_seeker_users')
-          .doc(widget.asdUserCredentials.userId)
-          .update({
-        'isFirstTimeIn': false,
-      });
+        // Update isFirstTimeIn to false in job_seeker_users collection
+        await FirebaseFirestore.instance
+            .collection('job_seeker_users')
+            .doc(widget.asdUserCredentials.userId)
+            .update({
+          'isFirstTimeIn': false,
+        });
+      } on FirebaseException catch (e) {
+        Utils.showSnackBar(
+          e.message,
+          const Icon(
+            Icons.error_sharp,
+            color: Colors.red,
+            size: 30.0,
+          ),
+        );
+        return;
+      }
 
       // Update the userCredential class
       widget.asdUserCredentials.setIsFirstTimeIn = false;
@@ -294,6 +307,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
             size: 30.0,
           ),
         );
+        return;
       }
 
       // Update the list userJobPreferenceList

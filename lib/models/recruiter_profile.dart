@@ -61,49 +61,58 @@ class RecruiterProfile {
 
   static Future<void> createRecruiterProfileInFirestore(
       {required String userId}) async {
-    await FirebaseFirestore.instance
-        .collection('recruiter_profile')
-        .doc(userId)
-        .set({
-      'profileImageUrl': '',
-      'firstName': '',
-      'lastName': '',
-      'companyName': '',
-      'jobTitle': '',
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('recruiter_profile')
+          .doc(userId)
+          .set({
+        'profileImageUrl': '',
+        'firstName': '',
+        'lastName': '',
+        'companyName': '',
+        'jobTitle': '',
+      });
+    } on FirebaseException {
+      rethrow;
+    }
   }
 
   // This method tries to read personal details data from firestore from 'userId',
   static Future<RecruiterProfile?> readRecruiterProfileDataFromFirestore(
       String userId) async {
     RecruiterProfile? recruiterProfile;
-    await FirebaseFirestore.instance
-        .collection('recruiter_profile')
-        .doc(userId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        final String profileImageUrl = data['profileImageUrl'];
-        final String firstName = data['firstName'];
-        final String lastName = data['lastName'];
-        final String companyName = data['companyName'];
-        final String jobTitle = data['jobTitle'];
-        final File profileImage =
-            await RegularHelpers.urlToFile(profileImageUrl);
 
-        recruiterProfile = RecruiterProfile(
-          userId: userId,
-          profileImage: profileImage,
-          profileImageUrl: profileImageUrl,
-          firstName: firstName,
-          lastName: lastName,
-          companyName: companyName,
-          jobTitle: jobTitle,
-        );
-      }
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('recruiter_profile')
+          .doc(userId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          Map<String, dynamic> data =
+              documentSnapshot.data() as Map<String, dynamic>;
+          final String profileImageUrl = data['profileImageUrl'];
+          final String firstName = data['firstName'];
+          final String lastName = data['lastName'];
+          final String companyName = data['companyName'];
+          final String jobTitle = data['jobTitle'];
+          final File profileImage =
+              await RegularHelpers.urlToFile(profileImageUrl);
+
+          recruiterProfile = RecruiterProfile(
+            userId: userId,
+            profileImage: profileImage,
+            profileImageUrl: profileImageUrl,
+            firstName: firstName,
+            lastName: lastName,
+            companyName: companyName,
+            jobTitle: jobTitle,
+          );
+        }
+      });
+    } on FirebaseException {
+      rethrow;
+    }
 
     return recruiterProfile;
   }
@@ -123,15 +132,19 @@ class RecruiterProfile {
   }
 
   Future<void> updateRecruiterProfileToFirestore() async {
-    await FirebaseFirestore.instance
-        .collection('recruiter_profile')
-        .doc(_userId)
-        .update({
-      'profileImageUrl': _profileImageUrl,
-      'firstName': _firstName,
-      'lastName': _lastName,
-      'companyName': _companyName,
-      'jobTitle': _jobTitle,
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('recruiter_profile')
+          .doc(_userId)
+          .update({
+        'profileImageUrl': _profileImageUrl,
+        'firstName': _firstName,
+        'lastName': _lastName,
+        'companyName': _companyName,
+        'jobTitle': _jobTitle,
+      });
+    } on FirebaseException {
+      rethrow;
+    }
   }
 }

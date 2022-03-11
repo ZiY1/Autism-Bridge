@@ -5,20 +5,20 @@ import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
+import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
-import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/screens/recruiter_home_screen.dart';
 import 'package:autism_bridge/screens/recruiter_profile_screen.dart';
+import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-import 'package:autism_bridge/models/Employer.dart';
-
+import '../color_constants.dart';
 import 'asd_personal_details_screen.dart';
 
 class DetermineUserTypeLoadingScreen extends StatefulWidget {
@@ -42,13 +42,13 @@ class _DetermineUserTypeLoadingScreenState
 
   RecruiterUserCredentials? recruiterUserCredentials;
 
-  //Employer? employer;
-
   Resume? userResume;
 
   List<JobPreference?>? userJobPreferenceList;
 
   RecruiterProfile? recruiterProfile;
+
+  RecruiterCompanyInfo? recruiterCompanyInfo;
 
   Future<void> checkUserType() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -181,16 +181,6 @@ class _DetermineUserTypeLoadingScreenState
                         documentSnapshot.data() as Map<String, dynamic>;
                     isFirstTimeIn = data['isFirstTimeIn'];
 
-                    // store credential into the Employer class
-                    // employer = Employer(
-                    //     userId: userId,
-                    //     userUrlProfilePicture: userUrlProfilePicture,
-                    //     userFirstName: userFirstName,
-                    //     userLastName: userLastName,
-                    //     userEmail: userEmail,
-                    //     userPassword: userPassword,
-                    //     userNewMessages: userNewMessages);
-
                     // store credential into the RecruiterUserCredentials class
                     recruiterUserCredentials = RecruiterUserCredentials(
                       userId: userId,
@@ -208,12 +198,34 @@ class _DetermineUserTypeLoadingScreenState
                       jobTitle: null,
                     );
 
+                    RecruiterCompanyInfo? recruiterCompanyInfoTemp =
+                        RecruiterCompanyInfo(
+                      userId: userId,
+                      companyLogoImage: null,
+                      companyLogoImageUrl: null,
+                      companyName: null,
+                      companyMinSize: null,
+                      companyMaxSize: null,
+                      companyAddress: null,
+                      companyDescription: null,
+                    );
+
                     if (!isFirstTimeIn) {
-                      recruiterProfileTemp = await RecruiterProfile
-                          .readRecruiterProfileDataFromFirestore(userId);
+                      try {
+                        recruiterProfileTemp = await RecruiterProfile
+                            .readRecruiterProfileDataFromFirestore(userId);
+                        recruiterCompanyInfoTemp = await RecruiterCompanyInfo
+                            .readRecruiterCompanyInfoFromFirestore(userId);
+                      } on FirebaseException catch (e) {
+                        Utils.showSnackBar(
+                          e.message,
+                          kErrorIcon,
+                        );
+                      }
                     }
 
                     recruiterProfile = recruiterProfileTemp;
+                    recruiterCompanyInfo = recruiterCompanyInfoTemp;
                   } else {
                     developer.log('Document does not exist on the database',
                         name:
@@ -275,11 +287,16 @@ class _DetermineUserTypeLoadingScreenState
             } else {
               if (recruiterUserCredentials!.isFirstTimeIn) {
                 return RecruiterProfileScreen(
-                    recruiterUserCredentials: recruiterUserCredentials!,
-                    recruiterProfile: recruiterProfile!);
+                  recruiterUserCredentials: recruiterUserCredentials!,
+                  recruiterProfile: recruiterProfile!,
+                  recruiterCompanyInfo: recruiterCompanyInfo!,
+                );
               } else {
                 return RecruiterHomeScreen(
-                    recruiterUserCredentials: recruiterUserCredentials!);
+                  recruiterUserCredentials: recruiterUserCredentials!,
+                  recruiterProfile: recruiterProfile!,
+                  recruiterCompanyInfo: recruiterCompanyInfo!,
+                );
               }
             }
           }

@@ -1,4 +1,6 @@
 import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/models/recruiter_company_info.dart';
+import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
@@ -14,9 +16,15 @@ class RecruiterHomeScreen extends StatefulWidget {
 
   final RecruiterUserCredentials recruiterUserCredentials;
 
+  final RecruiterProfile recruiterProfile;
+
+  final RecruiterCompanyInfo recruiterCompanyInfo;
+
   const RecruiterHomeScreen({
     Key? key,
     required this.recruiterUserCredentials,
+    required this.recruiterProfile,
+    required this.recruiterCompanyInfo,
   }) : super(key: key);
 
   @override

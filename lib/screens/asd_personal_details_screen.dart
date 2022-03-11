@@ -268,7 +268,7 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
         collectionName: 'cv_personal_details',
         docID: widget.asdUserCredentials.userId);
     if (!docExists) {
-      PersonalDetails.createPersonalDetailsInFirestore(
+      await PersonalDetails.createPersonalDetailsInFirestore(
           userId: widget.asdUserCredentials.userId);
     }
 

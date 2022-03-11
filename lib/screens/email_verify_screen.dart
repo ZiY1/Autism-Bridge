@@ -105,10 +105,13 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
       // Wait for seconds
       await Future.delayed(const Duration(seconds: maxSeconds));
       // Enable the resend button
+      if (!mounted) return;
+
       setState(() {
         canResendEmail = true;
       });
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       setState(() {
         canResendEmail = true;
       });

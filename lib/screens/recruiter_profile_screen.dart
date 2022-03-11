@@ -26,13 +26,13 @@ class RecruiterProfileScreen extends StatefulWidget {
 
   final RecruiterProfile recruiterProfile;
 
-  final RecruiterCompanyInfo recruiterCompanyInfo;
+  final RecruiterCompanyInfo? recruiterCompanyInfo;
 
   const RecruiterProfileScreen({
     Key? key,
     required this.recruiterUserCredentials,
     required this.recruiterProfile,
-    required this.recruiterCompanyInfo,
+    this.recruiterCompanyInfo,
   }) : super(key: key);
 
   @override
@@ -106,7 +106,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
           builder: (context) => RecruiterCompanyInfoScreen(
             recruiterUserCredentials: widget.recruiterUserCredentials,
             recruiterProfile: widget.recruiterProfile,
-            recruiterCompanyInfo: widget.recruiterCompanyInfo,
+            recruiterCompanyInfo: widget.recruiterCompanyInfo!,
           ),
         ),
       );

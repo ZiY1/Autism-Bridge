@@ -8,7 +8,6 @@ import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -225,11 +224,13 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
                 iconPath: 'images/icon_job.png',
+                scale: 3.425,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
                 onPressed: messageBtnOnPressed,
                 iconPath: 'images/icon_message.png',
+                scale: 3.425,
               ),
               Image.asset(
                 'images/icon_search.png',
@@ -239,12 +240,14 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: homeBtnOnPressed,
-                iconPath: 'images/icon_home.png',
+                iconPath: 'images/icon_vr.png',
+                scale: 1.6,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                 onPressed: meBtnOnPressed,
                 iconPath: 'images/icon_me.png',
+                scale: 3.425,
               ),
             ],
           ),
@@ -254,7 +257,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               MyBottomNavBarLabel(
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
-                labelName: ' Jobs  ',
+                labelName: ' Jobs ',
               ),
               // SizedBox(
               //   width: 9.w,
@@ -278,7 +281,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               MyBottomNavBarLabel(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: homeBtnOnPressed,
-                labelName: 'Home    ',
+                labelName: 'VR        ',
               ),
               // SizedBox(
               //   width: 12.2.w,

@@ -1,158 +1,112 @@
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/constants.dart';
-import 'package:autism_bridge/models/asd_user_credentials.dart';
-import 'package:autism_bridge/models/autism_challenge_data.dart';
-import 'package:autism_bridge/models/education_data.dart';
-import 'package:autism_bridge/models/employment_history_data.dart';
-import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/personal_details_data.dart';
-import 'package:autism_bridge/models/professional_summary_data.dart';
-import 'package:autism_bridge/models/resume_data.dart';
-import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/models/recruiter_company_info.dart';
+import 'package:autism_bridge/models/recruiter_profile.dart';
+import 'package:autism_bridge/models/recruiter_user_credentials.dart';
+import 'package:autism_bridge/screens/recruiter_company_info_screen.dart';
+import 'package:autism_bridge/screens/recruiter_profile_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../main.dart';
-import 'asd_manage_job_preference_screen.dart';
-import 'asd_personal_details_screen.dart';
-import 'asd_resume_builder_screen.dart';
 
-class AsdMeScreen extends StatefulWidget {
-  static const id = 'asd_me_screen';
+class RecruiterMeScreen extends StatefulWidget {
+  static const id = 'recruiter_me_screen';
 
-  final AsdUserCredentials asdUserCredentials;
+  final RecruiterUserCredentials recruiterUserCredentials;
 
-  final Resume userResume;
+  final RecruiterProfile recruiterProfile;
 
-  final Function(Resume) onValueChanged;
+  //final Function(RecruiterProfile) onValueChanged;
 
-  const AsdMeScreen({
+  const RecruiterMeScreen({
     Key? key,
-    required this.asdUserCredentials,
-    required this.userResume,
-    required this.onValueChanged,
+    required this.recruiterUserCredentials,
+    required this.recruiterProfile,
+    //required this.onValueChanged,
   }) : super(key: key);
 
   @override
-  _AsdMeScreenState createState() => _AsdMeScreenState();
+  _RecruiterMeScreenState createState() => _RecruiterMeScreenState();
 }
 
-class _AsdMeScreenState extends State<AsdMeScreen> {
+class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
   final _auth = FirebaseAuth.instance;
 
   Image? autismCareImage;
 
   Future<void> editMyProfileOnPressed() async {
-    final PersonalDetails? updatedPersonalDetails = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdPersonalDetailsScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userResume: widget.userResume,
-          isFirstTimeIn: false,
+    Utils.showProgressIndicator(context);
+    try {
+      RecruiterProfile? recruiterProfileTemp =
+          await RecruiterProfile.readRecruiterProfileDataFromFirestore(
+              widget.recruiterUserCredentials.userId);
+      recruiterProfileTemp = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RecruiterProfileScreen(
+            recruiterUserCredentials: widget.recruiterUserCredentials,
+            recruiterProfile: recruiterProfileTemp!,
+          ),
         ),
-      ),
-    );
+      );
 
-    // Return non-null means changes have made in AsdPersonalDetailsScreen
-    // so update the userPersonalDetails to updatedPersonalDetails
-    if (updatedPersonalDetails != null) {
-      setState(() {
-        widget.userResume.setPersonalDetails = updatedPersonalDetails;
-      });
+      if (recruiterProfileTemp != null) {
+        widget.recruiterProfile.setProfileImageUrl =
+            recruiterProfileTemp.profileImageUrl;
+        widget.recruiterProfile.setCompanyName =
+            recruiterProfileTemp.companyName;
+        widget.recruiterProfile.setJobTitle = recruiterProfileTemp.jobTitle;
+        setState(() {
+          widget.recruiterProfile.setProfileImage =
+              recruiterProfileTemp!.profileImage;
+          widget.recruiterProfile.setFirstName = recruiterProfileTemp.firstName;
+          widget.recruiterProfile.setLastName = recruiterProfileTemp.lastName;
+        });
+      }
+      //widget.onValueChanged(widget.userResume);
+      navigatorKey.currentState!.pop();
+    } on FirebaseException catch (e) {
+      navigatorKey.currentState!.pop();
+      Utils.showSnackBar(
+        e.message,
+        kErrorIcon,
+      );
+      return;
     }
-    widget.onValueChanged(widget.userResume);
   }
 
-  Future<void> resumeBuilderBtnOnPressed() async {
+  Future<void> companyInfoBtnOnPressed() async {
     Utils.showProgressIndicator(context);
 
-    PersonalDetails? userPersonalDetails =
-        await PersonalDetails.readPersonalDetailsDataFromFirestore(
-            widget.asdUserCredentials.userId);
+    try {
+      RecruiterCompanyInfo? recruiterCompanyInfoTemp =
+          await RecruiterCompanyInfo.readRecruiterCompanyInfoFromFirestore(
+              widget.recruiterUserCredentials.userId);
+      navigatorKey.currentState!.pop();
 
-    ProfessionalSummary? userProfessionalSummary =
-        await ProfessionalSummary.readProfessionalSummaryDataFromFirestore(
-            widget.asdUserCredentials.userId);
-
-    // try to read cv_employment_history of current users' subcollection employment_histories in firestore
-    // Store it/them in List<EmploymentHistory?> userEmploymentHistory
-    // Two Cases:
-    // 1. has no data, so userEmploymentHistory has a list of null
-    // 2. has data, so userEmploymentHistory has a list of EmploymentHistory obj
-
-    List<EmploymentHistory?> userEmploymentHistoryList =
-        await EmploymentHistory.readAllEmploymentHistoryDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    List<Education?> userEducationList =
-        await Education.readAllEducationDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    List<Skill?> userSkillList = await Skill.readAllSkillDataFromFirestore(
-        userId: widget.asdUserCredentials.userId);
-
-    List<AutismChallenge?> userAutismChallengeList =
-        await AutismChallenge.readAllAutismChallengeDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    widget.userResume.setPersonalDetails = userPersonalDetails;
-    widget.userResume.setProfessionalSummary = userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList = userEmploymentHistoryList;
-    widget.userResume.setEducationList = userEducationList;
-    widget.userResume.setSkillList = userSkillList;
-    widget.userResume.setAutismChallengeList = userAutismChallengeList;
-
-    navigatorKey.currentState!.pop();
-
-    Resume resumeTemp = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdResumeBuilderScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userResume: widget.userResume,
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RecruiterCompanyInfoScreen(
+            recruiterUserCredentials: widget.recruiterUserCredentials,
+            recruiterCompanyInfo: recruiterCompanyInfoTemp!,
+          ),
         ),
-      ),
-    );
-
-    setState(() {
-      widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
-    });
-    widget.userResume.setProfessionalSummary =
-        resumeTemp.userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList =
-        resumeTemp.userEmploymentHistoryList;
-    widget.userResume.setEducationList = resumeTemp.userEducationList;
-    widget.userResume.setSkillList = resumeTemp.userSkillList;
-    widget.userResume.setAutismChallengeList =
-        resumeTemp.userAutismChallengeList;
-
-    widget.onValueChanged(widget.userResume);
-  }
-
-  Future<void> jobPreferenceBtnOnPressed() async {
-    Utils.showProgressIndicator(context);
-
-    List<JobPreference?> userJobPreferenceList =
-        await JobPreference.readAllJobPreferenceDataFromFirestore(
-            userId: widget.asdUserCredentials.userId);
-
-    navigatorKey.currentState!.pop();
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdManageJobPreferenceScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userJobPreferenceList: userJobPreferenceList,
-        ),
-      ),
-    );
+      );
+    } on FirebaseException catch (e) {
+      navigatorKey.currentState!.pop();
+      Utils.showSnackBar(
+        e.message,
+        kErrorIcon,
+      );
+      return;
+    }
   }
 
   @override
@@ -180,7 +134,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.userResume.userPersonalDetails!.firstName} ${widget.userResume.userPersonalDetails!.lastName}',
+                        '${widget.recruiterProfile.firstName} ${widget.recruiterProfile.lastName}',
                         style: TextStyle(
                           fontSize: 18.sp,
                           color: kTitleBlack,
@@ -219,17 +173,12 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                         height: double.infinity,
                         width: double.infinity,
                         color: kBackgroundRiceWhite,
-                        child: widget.userResume.userPersonalDetails == null
-                            ? const Icon(
-                                CupertinoIcons.person_alt,
-                                color: Color(0xFFBEC4D5),
-                                size: 40.0,
-                              )
-                            : FittedBox(
-                                child: Image.file(widget.userResume
-                                    .userPersonalDetails!.profileImage),
-                                fit: BoxFit.fill,
-                              ),
+                        child: FittedBox(
+                          child: Image.file(
+                            widget.recruiterProfile.profileImage!,
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
@@ -243,19 +192,19 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                 children: const [
                   MeSavedWidgets(
                     totalNumber: '0',
-                    sectionName: '  Job Chats  ',
+                    sectionName: 'Applicant Chats',
                   ),
                   MeSavedWidgets(
                     totalNumber: '0',
-                    sectionName: 'Sent Resumes ',
+                    sectionName: 'Received Resumes',
                   ),
                   MeSavedWidgets(
                     totalNumber: '0',
-                    sectionName: 'My Interviews',
+                    sectionName: 'Sent Interviews',
                   ),
                   MeSavedWidgets(
                     totalNumber: '0',
-                    sectionName: '  Saved Jobs ',
+                    sectionName: 'Saved Applicants',
                   ),
                 ],
               ),
@@ -281,35 +230,10 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 0.5.h),
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: resumeBuilderBtnOnPressed,
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            Image.asset(
-                              'images/icon_resume.png',
-                              scale: 1.5,
-                            ),
-                            SizedBox(
-                              width: 2.5.w,
-                            ),
-                            const Text(
-                              'Resume Builder',
-                              style: TextStyle(color: kTitleBlack),
-                            ),
-                          ],
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: kRegistrationSubtitleGrey,
-                          size: 22,
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 0.5.h),
                       child: GestureDetector(
-                        onTap: jobPreferenceBtnOnPressed,
+                        onTap: companyInfoBtnOnPressed,
                         child: ListTile(
                           title: Row(
                             children: [
@@ -321,7 +245,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                                 width: 2.7.w,
                               ),
                               const Text(
-                                'Job Preferences',
+                                'Company Information',
                                 style: TextStyle(color: kTitleBlack),
                               ),
                             ],

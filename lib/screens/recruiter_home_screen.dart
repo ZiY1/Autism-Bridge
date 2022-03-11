@@ -2,6 +2,7 @@ import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
+import 'package:autism_bridge/screens/recruiter_me_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
@@ -75,22 +76,9 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
     super.initState();
 
     screens.add(
-      Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(
-                  'Message Screen \n${widget.recruiterUserCredentials.userId} \n${widget.recruiterUserCredentials.userEmail}'),
-              GestureDetector(
-                onTap: () {
-                  _auth.signOut();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, WelcomeScreen.id, (route) => false);
-                },
-                child: const Text('Sign Out'),
-              ),
-            ],
-          ),
+      const Center(
+        child: Text(
+          'Candidates Screen',
         ),
       ),
     );
@@ -110,8 +98,9 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
       ),
     );
     screens.add(
-      const Center(
-        child: Text('Me Screen'),
+      RecruiterMeScreen(
+        recruiterUserCredentials: widget.recruiterUserCredentials,
+        recruiterProfile: widget.recruiterProfile,
       ),
     );
 
@@ -221,12 +210,14 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
-                iconPath: 'images/icon_job.png',
+                iconPath: 'images/icon_cv.png',
+                scale: 1.625,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
                 onPressed: messageBtnOnPressed,
                 iconPath: 'images/icon_message.png',
+                scale: 3.425,
               ),
               Image.asset(
                 'images/icon_search.png',
@@ -236,12 +227,14 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: homeBtnOnPressed,
-                iconPath: 'images/icon_home.png',
+                iconPath: 'images/icon_vr.png',
+                scale: 1.6,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                 onPressed: meBtnOnPressed,
                 iconPath: 'images/icon_me.png',
+                scale: 3.425,
               ),
             ],
           ),
@@ -251,7 +244,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               MyBottomNavBarLabel(
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
-                labelName: ' Jobs  ',
+                labelName: '   Jobs   ',
               ),
               // SizedBox(
               //   width: 9.w,
@@ -267,7 +260,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               MyBottomNavBarLabel(
                 isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
                 onPressed: searchBtnOnPressed,
-                labelName: 'Search  ',
+                labelName: 'Search     ',
               ),
               // SizedBox(
               //   width: 8.9.w,
@@ -275,7 +268,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               MyBottomNavBarLabel(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: homeBtnOnPressed,
-                labelName: 'Home    ',
+                labelName: 'VR        ',
               ),
               // SizedBox(
               //   width: 12.2.w,

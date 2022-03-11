@@ -27,14 +27,14 @@ class RecruiterCompanyInfoScreen extends StatefulWidget {
 
   final RecruiterUserCredentials recruiterUserCredentials;
 
-  final RecruiterProfile recruiterProfile;
+  final RecruiterProfile? recruiterProfile;
 
   final RecruiterCompanyInfo recruiterCompanyInfo;
 
   const RecruiterCompanyInfoScreen({
     Key? key,
     required this.recruiterUserCredentials,
-    required this.recruiterProfile,
+    this.recruiterProfile,
     required this.recruiterCompanyInfo,
   }) : super(key: key);
 
@@ -113,7 +113,7 @@ class _RecruiterCompanyInfoScreenState
         // Update isFirstTimeIn to false in all_users collection
         await FirebaseFirestore.instance
             .collection('all_users')
-            .doc(widget.recruiterProfile.userId)
+            .doc(widget.recruiterUserCredentials.userId)
             .update({
           'isFirstTimeIn': false,
         });
@@ -121,7 +121,7 @@ class _RecruiterCompanyInfoScreenState
         // Update isFirstTimeIn to false in job_seeker_users collection
         await FirebaseFirestore.instance
             .collection('recruiter_users')
-            .doc(widget.recruiterProfile.userId)
+            .doc(widget.recruiterUserCredentials.userId)
             .update({
           'isFirstTimeIn': false,
         });
@@ -141,7 +141,7 @@ class _RecruiterCompanyInfoScreenState
         MaterialPageRoute(
           builder: (context) => RecruiterHomeScreen(
             recruiterUserCredentials: widget.recruiterUserCredentials,
-            recruiterProfile: widget.recruiterProfile,
+            recruiterProfile: widget.recruiterProfile!,
             recruiterCompanyInfo: widget.recruiterCompanyInfo,
           ),
         ),

@@ -3,12 +3,10 @@ import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/screens/recruiter_me_screen.dart';
-import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_icon.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -33,8 +31,6 @@ class RecruiterHomeScreen extends StatefulWidget {
 }
 
 class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
-  final _auth = FirebaseAuth.instance;
-
   int bottomNavBarCurrentIndex = 0;
 
   List<Widget> screens = [];
@@ -178,14 +174,20 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
           firstRow: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(left: 0.68.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 10.92.w,
               // ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(left: 0.25.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 30.07.w,
@@ -193,8 +195,11 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               const MyBottomNavBarIndicator(
                 isSelected: false,
               ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(right: 0.3.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 11.1.w,
@@ -241,42 +246,57 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
           thirdRow: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
-                onPressed: jobBtnOnPressed,
-                labelName: '   Jobs   ',
+              Padding(
+                padding: EdgeInsets.only(left: 3.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                  onPressed: jobBtnOnPressed,
+                  labelName: 'applicant',
+                ),
               ),
               // SizedBox(
               //   width: 9.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-                onPressed: messageBtnOnPressed,
-                labelName: 'Message',
+              Padding(
+                padding: EdgeInsets.only(left: 0.4.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                  onPressed: messageBtnOnPressed,
+                  labelName: 'Message ',
+                ),
               ),
               // SizedBox(
               //   width: 7.35.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
-                onPressed: searchBtnOnPressed,
-                labelName: 'Search     ',
+              Padding(
+                padding: EdgeInsets.only(right: 1.9.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
+                  onPressed: searchBtnOnPressed,
+                  labelName: ' Search ',
+                ),
               ),
               // SizedBox(
               //   width: 8.9.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                onPressed: homeBtnOnPressed,
-                labelName: 'VR        ',
+              Padding(
+                padding: EdgeInsets.only(right: 2.8.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                  onPressed: homeBtnOnPressed,
+                  labelName: '   VR   ',
+                ),
               ),
               // SizedBox(
               //   width: 12.2.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
-                onPressed: meBtnOnPressed,
-                labelName: '  Me   ',
+              Padding(
+                padding: EdgeInsets.only(right: 3.5.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                  onPressed: meBtnOnPressed,
+                  labelName: '   Me   ',
+                ),
               ),
             ],
           ),

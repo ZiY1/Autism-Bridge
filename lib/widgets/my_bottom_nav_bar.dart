@@ -56,10 +56,7 @@ class MyBottomNavBar extends StatelessWidget {
                     SizedBox(
                       height: 0.75.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 3.65.h, right: 3.65.h),
-                      child: thirdRow,
-                    ),
+                    thirdRow,
                   ],
                 ),
               ),

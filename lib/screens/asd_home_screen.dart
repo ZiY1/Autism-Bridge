@@ -191,14 +191,20 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
           firstRow: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(left: 0.05.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 10.92.w,
               // ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(right: 0.6.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 30.07.w,
@@ -206,8 +212,11 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               const MyBottomNavBarIndicator(
                 isSelected: false,
               ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(right: 0.6.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                ),
               ),
               // SizedBox(
               //   width: 11.1.w,
@@ -254,42 +263,57 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
           thirdRow: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
-                onPressed: jobBtnOnPressed,
-                labelName: ' Jobs ',
+              Padding(
+                padding: EdgeInsets.only(left: 3.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
+                  onPressed: jobBtnOnPressed,
+                  labelName: '   Jobs   ',
+                ),
               ),
               // SizedBox(
               //   width: 9.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-                onPressed: messageBtnOnPressed,
-                labelName: 'Message',
+              Padding(
+                padding: EdgeInsets.only(left: 0.2.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                  onPressed: messageBtnOnPressed,
+                  labelName: 'Message ',
+                ),
               ),
               // SizedBox(
               //   width: 7.35.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
-                onPressed: searchBtnOnPressed,
-                labelName: 'Search  ',
+              Padding(
+                padding: EdgeInsets.only(right: 0.9.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
+                  onPressed: searchBtnOnPressed,
+                  labelName: ' Search ',
+                ),
               ),
               // SizedBox(
               //   width: 8.9.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                onPressed: homeBtnOnPressed,
-                labelName: 'VR        ',
+              Padding(
+                padding: EdgeInsets.only(right: 2.29.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
+                  onPressed: homeBtnOnPressed,
+                  labelName: '   VR   ',
+                ),
               ),
               // SizedBox(
               //   width: 12.2.w,
               // ),
-              MyBottomNavBarLabel(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
-                onPressed: meBtnOnPressed,
-                labelName: '  Me   ',
+              Padding(
+                padding: EdgeInsets.only(right: 3.5.h),
+                child: MyBottomNavBarLabel(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                  onPressed: meBtnOnPressed,
+                  labelName: '   Me   ',
+                ),
               ),
             ],
           ),

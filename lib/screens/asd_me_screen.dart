@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../color_constants.dart';
 import '../main.dart';
 import 'asd_manage_job_preference_screen.dart';
 import 'asd_personal_details_screen.dart';
@@ -48,25 +49,45 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
   Image? autismCareImage;
 
   Future<void> editMyProfileOnPressed() async {
-    final PersonalDetails? updatedPersonalDetails = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AsdPersonalDetailsScreen(
-          asdUserCredentials: widget.asdUserCredentials,
-          userResume: widget.userResume,
-          isFirstTimeIn: false,
-        ),
-      ),
-    );
+    Utils.showProgressIndicator(context);
 
-    // Return non-null means changes have made in AsdPersonalDetailsScreen
-    // so update the userPersonalDetails to updatedPersonalDetails
-    if (updatedPersonalDetails != null) {
-      setState(() {
-        widget.userResume.setPersonalDetails = updatedPersonalDetails;
-      });
+    try {
+      PersonalDetails? userPersonalDetails =
+          await PersonalDetails.readPersonalDetailsDataFromFirestore(
+              widget.asdUserCredentials.userId);
+      widget.userResume.setPersonalDetails = userPersonalDetails;
+
+      navigatorKey.currentState!.pop();
+
+      final PersonalDetails? updatedPersonalDetails = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AsdPersonalDetailsScreen(
+            asdUserCredentials: widget.asdUserCredentials,
+            userResume: widget.userResume,
+            isFirstTimeIn: false,
+          ),
+        ),
+      );
+
+      // Return non-null means changes have made in AsdPersonalDetailsScreen
+      // so update the userPersonalDetails to updatedPersonalDetails
+      if (updatedPersonalDetails != null) {
+        setState(() {
+          widget.userResume.setPersonalDetails = updatedPersonalDetails;
+        });
+      }
+
+      widget.onValueChanged(widget.userResume);
+      //widget.onValueChanged(widget.userResume);
+    } on FirebaseException catch (e) {
+      navigatorKey.currentState!.pop();
+      Utils.showSnackBar(
+        e.message,
+        kErrorIcon,
+      );
+      return;
     }
-    widget.onValueChanged(widget.userResume);
   }
 
   Future<void> resumeBuilderBtnOnPressed() async {
@@ -264,11 +285,14 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
               height: 1.5.h,
             ),
             MyCardWidget(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
-                child: FittedBox(
-                  child: autismCareImage,
-                  fit: BoxFit.fill,
+              child: SizedBox(
+                height: 27.h,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+                  child: FittedBox(
+                    child: Image.asset('images/undraw_AR.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
             ),
@@ -287,8 +311,8 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                         title: Row(
                           children: [
                             Image.asset(
-                              'images/icon_resume.png',
-                              scale: 1.5,
+                              'images/icon_my_cv.png',
+                              scale: 1.3,
                             ),
                             SizedBox(
                               width: 2.5.w,
@@ -306,31 +330,28 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 0.5.h),
-                      child: GestureDetector(
-                        onTap: jobPreferenceBtnOnPressed,
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Image.asset(
-                                'images/icon_career.png',
-                                scale: 1.8,
-                              ),
-                              SizedBox(
-                                width: 2.7.w,
-                              ),
-                              const Text(
-                                'Job Preferences',
-                                style: TextStyle(color: kTitleBlack),
-                              ),
-                            ],
-                          ),
-                          trailing: const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: kRegistrationSubtitleGrey,
-                            size: 22,
-                          ),
+                    GestureDetector(
+                      onTap: jobPreferenceBtnOnPressed,
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Image.asset(
+                              'images/icon_job_seek.png',
+                              scale: 1.35,
+                            ),
+                            SizedBox(
+                              width: 2.7.w,
+                            ),
+                            const Text(
+                              'Job Preferences',
+                              style: TextStyle(color: kTitleBlack),
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: kRegistrationSubtitleGrey,
+                          size: 22,
                         ),
                       ),
                     ),
@@ -347,31 +368,28 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 0.5.h),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 0.4.h),
-                      child: GestureDetector(
-                        onTap: () {
-                          _auth.signOut();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, WelcomeScreen.id, (route) => false);
-                        },
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              const Icon(
-                                Icons.exit_to_app_rounded,
-                                color: Colors.red,
-                                size: 38,
-                              ),
-                              SizedBox(
-                                width: 2.5.w,
-                              ),
-                              const Text(
-                                'Sign Out',
-                                style: TextStyle(color: kTitleBlack),
-                              ),
-                            ],
-                          ),
+                    GestureDetector(
+                      onTap: () {
+                        _auth.signOut();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, WelcomeScreen.id, (route) => false);
+                      },
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            const Icon(
+                              Icons.exit_to_app_rounded,
+                              color: Colors.red,
+                              size: 38,
+                            ),
+                            SizedBox(
+                              width: 2.5.w,
+                            ),
+                            const Text(
+                              'Sign Out',
+                              style: TextStyle(color: kTitleBlack),
+                            ),
+                          ],
                         ),
                       ),
                     ),

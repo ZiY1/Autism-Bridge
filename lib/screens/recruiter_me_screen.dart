@@ -46,6 +46,9 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
       RecruiterProfile? recruiterProfileTemp =
           await RecruiterProfile.readRecruiterProfileDataFromFirestore(
               widget.recruiterUserCredentials.userId);
+
+      navigatorKey.currentState!.pop();
+
       recruiterProfileTemp = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -69,8 +72,6 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
           widget.recruiterProfile.setLastName = recruiterProfileTemp.lastName;
         });
       }
-      //widget.onValueChanged(widget.userResume);
-      navigatorKey.currentState!.pop();
     } on FirebaseException catch (e) {
       navigatorKey.currentState!.pop();
       Utils.showSnackBar(
@@ -88,6 +89,7 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
       RecruiterCompanyInfo? recruiterCompanyInfoTemp =
           await RecruiterCompanyInfo.readRecruiterCompanyInfoFromFirestore(
               widget.recruiterUserCredentials.userId);
+
       navigatorKey.currentState!.pop();
 
       Navigator.push(
@@ -216,7 +218,7 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
                 child: FittedBox(
-                  child: autismCareImage,
+                  child: Image.asset('images/welcome_vr_interview.png'),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -233,13 +235,43 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
                     Padding(
                       padding: EdgeInsets.only(left: 0.5.h),
                       child: GestureDetector(
+                        onTap: () {
+                          //TODO
+                        },
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              Image.asset(
+                                'images/icon_new_job.png',
+                                scale: 1.35,
+                              ),
+                              SizedBox(
+                                width: 2.7.w,
+                              ),
+                              const Text(
+                                'Job Posting',
+                                style: TextStyle(color: kTitleBlack),
+                              ),
+                            ],
+                          ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: kRegistrationSubtitleGrey,
+                            size: 22,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 0.5.h),
+                      child: GestureDetector(
                         onTap: companyInfoBtnOnPressed,
                         child: ListTile(
                           title: Row(
                             children: [
                               Image.asset(
-                                'images/icon_career.png',
-                                scale: 1.8,
+                                'images/icon_company.png',
+                                scale: 1.35,
                               ),
                               SizedBox(
                                 width: 2.7.w,

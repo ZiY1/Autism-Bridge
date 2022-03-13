@@ -24,4 +24,6 @@ const kPickerCancelGrey = Color(0xFF878787);
 
 const kDarkTextGrey = Color(0xFF878787);
 
+const kAutismBridgeLightBlue = Color(0xFFE7F0F9);
+
 const kResumeBuilderCardRadius = 8.0;

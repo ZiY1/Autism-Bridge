@@ -5,6 +5,26 @@ const employmentTypeList = '''[
   "Volunteer",
   "Any Type"
 ]''';
+
+const educationRequireList = '''[
+  "None",
+  "High School",
+  "Associate",
+  "Bachelor",
+  "Master",
+  "Doctor"
+]''';
+
+const experienceRequireList = '''[
+  "None",
+  "1 Year",
+  "2 Years",
+  "3 Years",
+  "4 Years",
+  "5 Years",
+  "> 5 Years"
+]''';
+
 //TODO: finish this
 const salaryRageList = '''[
     {

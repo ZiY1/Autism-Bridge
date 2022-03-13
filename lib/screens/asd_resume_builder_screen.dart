@@ -796,48 +796,54 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : EdgeInsets.only(
                                             top: 0.75.h,
                                           ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                currentEmploymentHistory!
-                                                    .employer,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: subTitleTextStyle,
-                                              ),
-                                              Text(
-                                                '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: bodyTextStyle,
-                                              ),
-                                            ],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        employmentHistoryUpdateBtnOnPressed(
+                                          context: context,
+                                          subCollectionId:
+                                              currentEmploymentHistory!
+                                                  .subCollectionId,
+                                          listIndex: index,
+                                        );
+                                      },
+                                      behavior: HitTestBehavior.translucent,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  currentEmploymentHistory!
+                                                      .employer,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: subTitleTextStyle,
+                                                ),
+                                                Text(
+                                                  '${currentEmploymentHistory.jobTitle}  \n${currentEmploymentHistory.startDate} - ${currentEmploymentHistory.endDate}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: bodyTextStyle,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          alignment: Alignment.centerRight,
-                                          onPressed: () {
-                                            employmentHistoryUpdateBtnOnPressed(
-                                              context: context,
-                                              subCollectionId:
-                                                  currentEmploymentHistory
-                                                      .subCollectionId,
-                                              listIndex: index,
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            color: kRegistrationSubtitleGrey,
-                                            size: arrowBtnSize,
+                                          const IconButton(
+                                            alignment: Alignment.centerRight,
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: kRegistrationSubtitleGrey,
+                                              size: arrowBtnSize,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -905,46 +911,51 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : EdgeInsets.only(
                                             top: 0.75.h,
                                           ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                currentEducation!.school,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: subTitleTextStyle,
-                                              ),
-                                              Text(
-                                                '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: bodyTextStyle,
-                                              ),
-                                            ],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        educationUpdateBtnOnPressed(
+                                            context: context,
+                                            subCollectionId: currentEducation!
+                                                .subCollectionId,
+                                            listIndex: index);
+                                      },
+                                      behavior: HitTestBehavior.translucent,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  currentEducation!.school,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: subTitleTextStyle,
+                                                ),
+                                                Text(
+                                                  '${currentEducation.degree} • ${currentEducation.major} \n${currentEducation.startDate} - ${currentEducation.endDate}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: bodyTextStyle,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          alignment: Alignment.centerRight,
-                                          onPressed: () {
-                                            educationUpdateBtnOnPressed(
-                                                context: context,
-                                                subCollectionId:
-                                                    currentEducation
-                                                        .subCollectionId,
-                                                listIndex: index);
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            color: kRegistrationSubtitleGrey,
-                                            size: arrowBtnSize,
+                                          const IconButton(
+                                            alignment: Alignment.centerRight,
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: kRegistrationSubtitleGrey,
+                                              size: arrowBtnSize,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -1012,44 +1023,50 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : EdgeInsets.only(
                                             top: 0.75.h,
                                           ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                currentSkill!.skillName,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: subTitleTextStyle,
-                                              ),
-                                              Text(
-                                                currentSkill.skillLevel,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: bodyTextStyle,
-                                              ),
-                                            ],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        skillUpdateBtnOnPressed(
+                                            context: context,
+                                            subCollectionId:
+                                                currentSkill!.subCollectionId,
+                                            listIndex: index);
+                                      },
+                                      behavior: HitTestBehavior.translucent,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  currentSkill!.skillName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: subTitleTextStyle,
+                                                ),
+                                                Text(
+                                                  currentSkill.skillLevel,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: bodyTextStyle,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          alignment: Alignment.centerRight,
-                                          onPressed: () {
-                                            skillUpdateBtnOnPressed(
-                                                context: context,
-                                                subCollectionId: currentSkill
-                                                    .subCollectionId,
-                                                listIndex: index);
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            color: kRegistrationSubtitleGrey,
-                                            size: arrowBtnSize,
+                                          const IconButton(
+                                            alignment: Alignment.centerRight,
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: kRegistrationSubtitleGrey,
+                                              size: arrowBtnSize,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -1134,48 +1151,54 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                                         : EdgeInsets.only(
                                             top: 0.75.h,
                                           ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        autismChallengeUpdateBtnOnPressed(
+                                            context: context,
+                                            subCollectionId:
                                                 currentAutismChallenge!
-                                                    .challengeName,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: subTitleTextStyle,
-                                              ),
-                                              Text(
-                                                currentAutismChallenge
-                                                    .challengeLevel,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: bodyTextStyle,
-                                              ),
-                                            ],
+                                                    .subCollectionId,
+                                            listIndex: index);
+                                      },
+                                      behavior: HitTestBehavior.translucent,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  currentAutismChallenge!
+                                                      .challengeName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: subTitleTextStyle,
+                                                ),
+                                                Text(
+                                                  currentAutismChallenge
+                                                      .challengeLevel,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  style: bodyTextStyle,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          alignment: Alignment.centerRight,
-                                          onPressed: () {
-                                            autismChallengeUpdateBtnOnPressed(
-                                                context: context,
-                                                subCollectionId:
-                                                    currentAutismChallenge
-                                                        .subCollectionId,
-                                                listIndex: index);
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            color: kRegistrationSubtitleGrey,
-                                            size: arrowBtnSize,
+                                          const IconButton(
+                                            alignment: Alignment.centerRight,
+                                            onPressed: null,
+                                            icon: Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: kRegistrationSubtitleGrey,
+                                              size: arrowBtnSize,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },

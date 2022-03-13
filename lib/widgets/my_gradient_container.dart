@@ -21,7 +21,7 @@ class MyGradientContainer extends StatelessWidget {
             0.35,
           ],
           colors: [
-            Color(0xFFE7F0F9),
+            kAutismBridgeLightBlue,
             //kAutismBridgeBlue,
             kBackgroundRiceWhite,
           ],

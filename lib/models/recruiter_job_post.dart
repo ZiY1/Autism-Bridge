@@ -204,7 +204,11 @@ class RecruiterJobPost {
 
   Future<void> addMyJobPostToAllJobPostInFirestore() async {
     try {
-      await FirebaseFirestore.instance.collection('all_jobs').doc(_userId).set({
+      await FirebaseFirestore.instance
+          .collection('all_jobs')
+          .doc(_subCollectionId)
+          .set({
+        'collectionId': _userId,
         'subCollectionId': _subCollectionId,
         'employmentType': _employmentType,
         'jobName': _jobName,
@@ -255,8 +259,9 @@ class RecruiterJobPost {
     try {
       await FirebaseFirestore.instance
           .collection('all_jobs')
-          .doc(_userId)
+          .doc(_subCollectionId)
           .update({
+        'collectionId': _userId,
         'subCollectionId': _subCollectionId,
         'employmentType': _employmentType,
         'jobName': _jobName,
@@ -291,11 +296,11 @@ class RecruiterJobPost {
   }
 
   static Future<void> deleteMyJobPostToAllJobPostInFirestore(
-      {required String userId}) async {
+      {required String subCollectionId}) async {
     try {
       await FirebaseFirestore.instance
           .collection('all_jobs')
-          .doc(userId)
+          .doc(subCollectionId)
           .delete();
     } on FirebaseException {
       rethrow;

@@ -1,4 +1,4 @@
-import 'package:autism_bridge/color_constants.dart';
+import 'package:autism_bridge/icon_constants.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_company_info_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
@@ -97,6 +97,10 @@ class _RecruiterCompanyInfoScreenState
     //   );
     //   return;
     // }
+
+    if (widget.recruiterCompanyInfo.companyDescription == null) {
+      widget.recruiterCompanyInfo.setCompanyDescription = '';
+    }
 
     setState(() {
       isSaving = true;

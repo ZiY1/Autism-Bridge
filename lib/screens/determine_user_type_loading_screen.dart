@@ -18,7 +18,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-import '../color_constants.dart';
+import '../icon_constants.dart';
 import 'asd_personal_details_screen.dart';
 
 class DetermineUserTypeLoadingScreen extends StatefulWidget {

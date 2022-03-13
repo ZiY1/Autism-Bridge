@@ -1,9 +1,12 @@
-import 'package:autism_bridge/color_constants.dart';
+import 'package:autism_bridge/icon_constants.dart';
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
+import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/screens/recruiter_company_info_screen.dart';
+import 'package:autism_bridge/screens/recruiter_manage_post_job_screen.dart';
+import 'package:autism_bridge/screens/recruiter_post_job_screen.dart';
 import 'package:autism_bridge/screens/recruiter_profile_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
@@ -80,6 +83,27 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
       );
       return;
     }
+  }
+
+  Future<void> jobPostingBtnOnPressed() async {
+    Utils.showProgressIndicator(context);
+
+    List<RecruiterJobPost?> recruiterJobPostList =
+        await RecruiterJobPost.readAllMyJobPostFromFirestore(
+      userId: widget.recruiterUserCredentials.userId,
+    );
+
+    navigatorKey.currentState!.pop();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecruiterManagePostJobScreen(
+          recruiterUserCredentials: widget.recruiterUserCredentials,
+          recruiterJobPostList: recruiterJobPostList,
+        ),
+      ),
+    );
   }
 
   Future<void> companyInfoBtnOnPressed() async {
@@ -236,7 +260,7 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
                       padding: EdgeInsets.only(left: 0.5.h),
                       child: GestureDetector(
                         onTap: () {
-                          //TODO
+                          jobPostingBtnOnPressed();
                         },
                         child: ListTile(
                           title: Row(

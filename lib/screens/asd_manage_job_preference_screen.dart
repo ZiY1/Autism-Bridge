@@ -264,58 +264,65 @@ class _AsdManageJobPreferenceScreenState
                                       userJobPreferenceList![index];
                                   return Column(
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                currentJobPreference!
-                                                    .getJobTitle,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: kTitleBlack,
-                                                  fontSize: 11.5.sp,
+                                      GestureDetector(
+                                        onTap: () {
+                                          jobPreferenceUpdateBtnOnPressed(
+                                              context: context,
+                                              subCollectionId:
+                                                  currentJobPreference!
+                                                      .getSubCollectionId,
+                                              listIndex: index);
+                                        },
+                                        behavior: HitTestBehavior.translucent,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  currentJobPreference!
+                                                      .getJobTitle,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: kTitleBlack,
+                                                    fontSize: 11.5.sp,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                currentJobPreference
-                                                        .getMaxSalary.isEmpty
-                                                    ? '${currentJobPreference.getMinSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
-                                                    : '${currentJobPreference.getMinSalary} - ${currentJobPreference.getMaxSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color:
-                                                        kRegistrationSubtitleGrey,
-                                                    fontSize: 9.sp),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                            alignment: Alignment.centerRight,
-                                            onPressed: () {
-                                              jobPreferenceUpdateBtnOnPressed(
-                                                  context: context,
-                                                  subCollectionId:
-                                                      currentJobPreference
-                                                          .getSubCollectionId,
-                                                  listIndex: index);
-                                            },
-                                            icon: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: kRegistrationSubtitleGrey,
-                                              size: 20.5,
+                                                Text(
+                                                  currentJobPreference
+                                                          .getMaxSalary.isEmpty
+                                                      ? '${currentJobPreference.getMinSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
+                                                      : '${currentJobPreference.getMinSalary} - ${currentJobPreference.getMaxSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color:
+                                                          kRegistrationSubtitleGrey,
+                                                      fontSize: 9.sp),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
+                                            const IconButton(
+                                              alignment: Alignment.centerRight,
+                                              onPressed: null,
+                                              icon: Icon(
+                                                Icons.arrow_forward_ios,
+                                                color:
+                                                    kRegistrationSubtitleGrey,
+                                                size: 20.5,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       index == userJobPreferenceList!.length - 1
                                           ? const SizedBox.shrink()
                                           : Divider(
-                                              height: 2.2.h,
+                                              height: 2.8.h,
                                               thickness: 0.95,
                                               color: const Color(0xFFF0F0F2),
                                             ),

@@ -1,23 +1,69 @@
 import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:autism_bridge/widgets/asd_job_app_bar.dart';
 import 'package:flutter/material.dart';
+
+import '../constants.dart';
 
 class AsdJobScreen extends StatefulWidget {
   static const id = 'asd_job_screen';
 
+  final int currentTabIndex;
+
   final JobPreference userJobPreference;
 
-  const AsdJobScreen({Key? key, required this.userJobPreference})
+  final List<Tab> tabTextList;
+
+  final Function(int) tabListenerCallback;
+
+  const AsdJobScreen(
+      {Key? key,
+      required this.currentTabIndex,
+      required this.userJobPreference,
+      required this.tabTextList,
+      required this.tabListenerCallback})
       : super(key: key);
 
   @override
   _AsdJobScreenState createState() => _AsdJobScreenState();
 }
 
-class _AsdJobScreenState extends State<AsdJobScreen> {
+class _AsdJobScreenState extends State<AsdJobScreen>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  TabController? _tabController;
+
+  // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: widget.tabTextList.length,
+      initialIndex: widget.currentTabIndex,
+      vsync: this,
+    );
+    _tabController!.addListener(() {
+      widget.tabListenerCallback(_tabController!.index);
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController!.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    super.build(context);
+    return Scaffold(
+      backgroundColor: kBackgroundRiceWhite,
+      appBar: AsdJobAppBar(
+        tabController: _tabController,
+        jobTextList: widget.tabTextList,
+        appBar: AppBar(),
+      ),
       // child: ListView.builder(
       //   itemBuilder: (BuildContext context, int index) {
       //     return Center(child: Text(widget.userJobPreference.getJobTitle));
@@ -26,7 +72,7 @@ class _AsdJobScreenState extends State<AsdJobScreen> {
       //   // shrinkWrap: true,
       //   // physics: const NeverScrollableScrollPhysics(),
       // ),
-      child: Center(
+      body: Center(
         child: Text(widget.userJobPreference.getJobTitle),
       ),
     );

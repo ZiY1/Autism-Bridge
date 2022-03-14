@@ -31,21 +31,18 @@ class AsdHomeScreen extends StatefulWidget {
   State<AsdHomeScreen> createState() => _AsdHomeScreenState();
 }
 
-class _AsdHomeScreenState extends State<AsdHomeScreen>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+class _AsdHomeScreenState extends State<AsdHomeScreen> {
   Resume? userResume;
 
   List<JobPreference?>? userJobPreferenceList;
 
   int bottomNavBarCurrentIndex = 0;
 
-  TabController? _tabController;
-
   List<Widget> screens = [];
 
-  List<PreferredSizeWidget?> appBars = [];
+  List<Tab> tabNameList = [];
 
-  List<Widget> tabNameList = [];
+  int currentTabIndex = 0;
 
   void resumeOnChanged(Resume resumeTemp) {
     userResume = resumeTemp;
@@ -56,21 +53,43 @@ class _AsdHomeScreenState extends State<AsdHomeScreen>
   }
 
   void jobPreferenceListOnChanged(List<JobPreference?> jobPreferenceListTemp) {
+    tabNameList.clear();
+    if (userJobPreferenceList!.length > jobPreferenceListTemp.length &&
+        currentTabIndex == userJobPreferenceList!.length - 1) {
+      currentTabIndex = jobPreferenceListTemp.length - 1;
+    }
     setState(() {
       userJobPreferenceList = jobPreferenceListTemp;
-    });
-
-    tabNameList.clear();
-    setState(() {
       tabNameListRebuild();
+      screens[0] = AsdJobScreen(
+          currentTabIndex: currentTabIndex,
+          userJobPreference: userJobPreferenceList![currentTabIndex]!,
+          tabTextList: tabNameList,
+          tabListenerCallback: tabListenerOnChanged);
     });
+  }
 
+  void tabListenerOnChanged(int tabIndex) {
+    currentTabIndex = tabIndex;
+    // Need to call setState
     setState(() {
-      _tabController = TabController(
-        length: tabNameList.length,
-        vsync: this,
+      screens[0] = AsdJobScreen(
+        currentTabIndex: currentTabIndex,
+        userJobPreference: userJobPreferenceList![tabIndex]!,
+        tabTextList: tabNameList,
+        tabListenerCallback: tabListenerOnChanged,
       );
     });
+  }
+
+  void tabNameListRebuild() {
+    for (int i = 0; i < userJobPreferenceList!.length; i++) {
+      tabNameList.add(
+        Tab(
+          child: Text(userJobPreferenceList![i]!.getJobTitle),
+        ),
+      );
+    }
   }
 
   void jobBtnOnPressed() {
@@ -103,30 +122,20 @@ class _AsdHomeScreenState extends State<AsdHomeScreen>
     });
   }
 
-  void tabNameListRebuild() {
-    for (int i = 0; i < userJobPreferenceList!.length; i++) {
-      tabNameList.add(
-        Tab(
-          child: Text(userJobPreferenceList![i]!.getJobTitle),
-        ),
-      );
-    }
-  }
-
-  TabController getTabController() {
-    return TabController(length: userJobPreferenceList!.length, vsync: this)
-      ..addListener(update);
-  }
-
-  void update() {
-    final int selectedTabIndex = _tabController!.index;
-    // Need to call setState
-    setState(() {
-      screens[0] = AsdJobScreen(
-        userJobPreference: userJobPreferenceList![selectedTabIndex]!,
-      );
-    });
-  }
+  // TabController getTabController() {
+  //   return TabController(length: userJobPreferenceList!.length, vsync: this)
+  //     ..addListener(update);
+  // }
+  //
+  // void update() {
+  //   final int selectedTabIndex = _tabController!.index;
+  //   // Need to call setState
+  //   setState(() {
+  //     screens[0] = AsdJobScreen(
+  //       userJobPreference: userJobPreferenceList![selectedTabIndex]!,
+  //     );
+  //   });
+  // }
 
   @override
   void initState() {
@@ -135,23 +144,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen>
     userResume = widget.userResume;
 
     userJobPreferenceList = widget.userJobPreferenceList;
-
-    _tabController = TabController(
-      length: userJobPreferenceList!.length,
-      vsync: this,
-    );
-
-    _tabController!.addListener(() {
-      setState(() {});
-      final int selectedTabIndex = _tabController!.index;
-
-      // Need to call setState
-      setState(() {
-        screens[0] = AsdJobScreen(
-          userJobPreference: userJobPreferenceList![selectedTabIndex]!,
-        );
-      });
-    });
 
     tabNameListRebuild();
 
@@ -168,7 +160,10 @@ class _AsdHomeScreenState extends State<AsdHomeScreen>
       //   ],
       // ),
       AsdJobScreen(
+        currentTabIndex: currentTabIndex,
         userJobPreference: userJobPreferenceList![0]!,
+        tabTextList: tabNameList,
+        tabListenerCallback: tabListenerOnChanged,
       ),
     );
     screens.add(
@@ -195,63 +190,19 @@ class _AsdHomeScreenState extends State<AsdHomeScreen>
         onJobPreferenceListValueChanged: jobPreferenceListOnChanged,
       ),
     );
-
-    appBars.add(AppBar(
-      elevation: 0,
-      flexibleSpace: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          TabBar(
-            controller: _tabController,
-            isScrollable: true, // Required
-            unselectedLabelColor: Colors.white.withOpacity(0.8),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 11.7.sp,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              letterSpacing: 0.3,
-            ),
-            labelPadding:
-                EdgeInsets.symmetric(horizontal: 1.5.h), // Space between tabs
-            indicatorColor: Colors.transparent,
-            labelColor: Colors.white,
-            labelStyle: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              letterSpacing: 0.3,
-            ),
-            tabs: tabNameList,
-          ),
-        ],
-      ),
-      backgroundColor: kAutismBridgeBlue,
-    ));
-    appBars.add(AppBar());
-    appBars.add(AppBar());
-    appBars.add(AppBar());
-    appBars.add(null);
   }
 
-  @override
-  void dispose() {
-    _tabController!.dispose();
-    super.dispose();
-  }
-
-  // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
-  @override
-  bool get wantKeepAlive => true;
+  // // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
+  // @override
+  // bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    //super.build(context);
     const double navBarIconSize = 3.425;
     return DefaultTabController(
       length: userJobPreferenceList!.length,
       child: Scaffold(
-        backgroundColor: kBackgroundRiceWhite,
-        appBar: appBars[bottomNavBarCurrentIndex],
         body: screens[bottomNavBarCurrentIndex],
         bottomNavigationBar: MyBottomNavBar(
           middleSearch: GestureDetector(

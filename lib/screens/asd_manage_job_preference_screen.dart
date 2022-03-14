@@ -172,7 +172,7 @@ class _AsdManageJobPreferenceScreenState
             ),
             color: Colors.white,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, userJobPreferenceList);
             },
             margin: EdgeInsets.all(1.35.h),
           ),

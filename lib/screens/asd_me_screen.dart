@@ -30,13 +30,16 @@ class AsdMeScreen extends StatefulWidget {
 
   final Resume userResume;
 
-  final Function(Resume) onValueChanged;
+  final Function(Resume) onResumeValueChanged;
+
+  final Function(List<JobPreference?>) onJobPreferenceListValueChanged;
 
   const AsdMeScreen({
     Key? key,
     required this.asdUserCredentials,
     required this.userResume,
-    required this.onValueChanged,
+    required this.onResumeValueChanged,
+    required this.onJobPreferenceListValueChanged,
   }) : super(key: key);
 
   @override
@@ -44,6 +47,8 @@ class AsdMeScreen extends StatefulWidget {
 }
 
 class _AsdMeScreenState extends State<AsdMeScreen> {
+  Resume? userResume;
+
   final _auth = FirebaseAuth.instance;
 
   Image? autismCareImage;
@@ -55,7 +60,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       PersonalDetails? userPersonalDetails =
           await PersonalDetails.readPersonalDetailsDataFromFirestore(
               widget.asdUserCredentials.userId);
-      widget.userResume.setPersonalDetails = userPersonalDetails;
+      userResume!.setPersonalDetails = userPersonalDetails;
 
       navigatorKey.currentState!.pop();
 
@@ -64,7 +69,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
         MaterialPageRoute(
           builder: (context) => AsdPersonalDetailsScreen(
             asdUserCredentials: widget.asdUserCredentials,
-            userResume: widget.userResume,
+            userResume: userResume!,
             isFirstTimeIn: false,
           ),
         ),
@@ -74,12 +79,11 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       // so update the userPersonalDetails to updatedPersonalDetails
       if (updatedPersonalDetails != null) {
         setState(() {
-          widget.userResume.setPersonalDetails = updatedPersonalDetails;
+          userResume!.setPersonalDetails = updatedPersonalDetails;
         });
       }
 
-      widget.onValueChanged(widget.userResume);
-      //widget.onValueChanged(widget.userResume);
+      widget.onResumeValueChanged(userResume!);
     } on FirebaseException catch (e) {
       navigatorKey.currentState!.pop();
       Utils.showSnackBar(
@@ -122,12 +126,12 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
         await AutismChallenge.readAllAutismChallengeDataFromFirestore(
             userId: widget.asdUserCredentials.userId);
 
-    widget.userResume.setPersonalDetails = userPersonalDetails;
-    widget.userResume.setProfessionalSummary = userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList = userEmploymentHistoryList;
-    widget.userResume.setEducationList = userEducationList;
-    widget.userResume.setSkillList = userSkillList;
-    widget.userResume.setAutismChallengeList = userAutismChallengeList;
+    userResume!.setPersonalDetails = userPersonalDetails;
+    userResume!.setProfessionalSummary = userProfessionalSummary;
+    userResume!.setEmploymentHistoryList = userEmploymentHistoryList;
+    userResume!.setEducationList = userEducationList;
+    userResume!.setSkillList = userSkillList;
+    userResume!.setAutismChallengeList = userAutismChallengeList;
 
     navigatorKey.currentState!.pop();
 
@@ -136,24 +140,21 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       MaterialPageRoute(
         builder: (context) => AsdResumeBuilderScreen(
           asdUserCredentials: widget.asdUserCredentials,
-          userResume: widget.userResume,
+          userResume: userResume!,
         ),
       ),
     );
 
     setState(() {
-      widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
+      userResume!.setPersonalDetails = resumeTemp.userPersonalDetails;
     });
-    widget.userResume.setProfessionalSummary =
-        resumeTemp.userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList =
-        resumeTemp.userEmploymentHistoryList;
-    widget.userResume.setEducationList = resumeTemp.userEducationList;
-    widget.userResume.setSkillList = resumeTemp.userSkillList;
-    widget.userResume.setAutismChallengeList =
-        resumeTemp.userAutismChallengeList;
+    userResume!.setProfessionalSummary = resumeTemp.userProfessionalSummary;
+    userResume!.setEmploymentHistoryList = resumeTemp.userEmploymentHistoryList;
+    userResume!.setEducationList = resumeTemp.userEducationList;
+    userResume!.setSkillList = resumeTemp.userSkillList;
+    userResume!.setAutismChallengeList = resumeTemp.userAutismChallengeList;
 
-    widget.onValueChanged(widget.userResume);
+    widget.onResumeValueChanged(userResume!);
   }
 
   Future<void> jobPreferenceBtnOnPressed() async {
@@ -165,7 +166,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
 
     navigatorKey.currentState!.pop();
 
-    Navigator.push(
+    userJobPreferenceList = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AsdManageJobPreferenceScreen(
@@ -174,11 +175,14 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
         ),
       ),
     );
+
+    widget.onJobPreferenceListValueChanged(userJobPreferenceList);
   }
 
   @override
   void initState() {
     super.initState();
+    userResume = widget.userResume;
     autismCareImage = Image.asset('images/image_diff_btf.png');
   }
 
@@ -201,7 +205,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.userResume.userPersonalDetails!.firstName} ${widget.userResume.userPersonalDetails!.lastName}',
+                        '${userResume!.userPersonalDetails!.firstName} ${userResume!.userPersonalDetails!.lastName}',
                         style: TextStyle(
                           fontSize: 18.sp,
                           color: kTitleBlack,
@@ -240,14 +244,14 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                         height: double.infinity,
                         width: double.infinity,
                         color: kBackgroundRiceWhite,
-                        child: widget.userResume.userPersonalDetails == null
+                        child: userResume!.userPersonalDetails == null
                             ? const Icon(
                                 CupertinoIcons.person_alt,
                                 color: Color(0xFFBEC4D5),
                                 size: 40.0,
                               )
                             : FittedBox(
-                                child: Image.file(widget.userResume
+                                child: Image.file(userResume!
                                     .userPersonalDetails!.profileImage),
                                 fit: BoxFit.fill,
                               ),

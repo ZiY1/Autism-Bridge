@@ -31,30 +31,46 @@ class AsdHomeScreen extends StatefulWidget {
   State<AsdHomeScreen> createState() => _AsdHomeScreenState();
 }
 
-class _AsdHomeScreenState extends State<AsdHomeScreen> {
+class _AsdHomeScreenState extends State<AsdHomeScreen>
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+  Resume? userResume;
+
+  List<JobPreference?>? userJobPreferenceList;
+
   int bottomNavBarCurrentIndex = 0;
 
-  AsdUserCredentials? asdUserCredentials;
+  TabController? _tabController;
 
   List<Widget> screens = [];
 
   List<PreferredSizeWidget?> appBars = [];
 
-  void onResumeChanged(Resume resumeTemp) {
-    widget.userResume.setPersonalDetails = resumeTemp.userPersonalDetails;
-    widget.userResume.setProfessionalSummary =
-        resumeTemp.userProfessionalSummary;
-    widget.userResume.setEmploymentHistoryList =
-        resumeTemp.userEmploymentHistoryList;
-    widget.userResume.setEducationList = resumeTemp.userEducationList;
-    widget.userResume.setSkillList = resumeTemp.userSkillList;
-    widget.userResume.setAutismChallengeList =
-        resumeTemp.userAutismChallengeList;
+  List<Widget> tabNameList = [];
+
+  void resumeOnChanged(Resume resumeTemp) {
+    userResume = resumeTemp;
 
     screens[1] = Center(
-      child: Text(
-          'Job Screen ${widget.userResume.userPersonalDetails!.firstName}'),
+      child: Text('Test Screen ${userResume!.userPersonalDetails!.firstName}'),
     );
+  }
+
+  void jobPreferenceListOnChanged(List<JobPreference?> jobPreferenceListTemp) {
+    setState(() {
+      userJobPreferenceList = jobPreferenceListTemp;
+    });
+
+    tabNameList.clear();
+    setState(() {
+      tabNameListRebuild();
+    });
+
+    setState(() {
+      _tabController = TabController(
+        length: tabNameList.length,
+        vsync: this,
+      );
+    });
   }
 
   void jobBtnOnPressed() {
@@ -87,16 +103,78 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     });
   }
 
+  void tabNameListRebuild() {
+    for (int i = 0; i < userJobPreferenceList!.length; i++) {
+      tabNameList.add(
+        Tab(
+          child: Text(userJobPreferenceList![i]!.getJobTitle),
+        ),
+      );
+    }
+  }
+
+  TabController getTabController() {
+    return TabController(length: userJobPreferenceList!.length, vsync: this)
+      ..addListener(update);
+  }
+
+  void update() {
+    final int selectedTabIndex = _tabController!.index;
+    // Need to call setState
+    setState(() {
+      screens[0] = AsdJobScreen(
+        userJobPreference: userJobPreferenceList![selectedTabIndex]!,
+      );
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
+    userResume = widget.userResume;
+
+    userJobPreferenceList = widget.userJobPreferenceList;
+
+    _tabController = TabController(
+      length: userJobPreferenceList!.length,
+      vsync: this,
+    );
+
+    _tabController!.addListener(() {
+      setState(() {});
+      final int selectedTabIndex = _tabController!.index;
+
+      // Need to call setState
+      setState(() {
+        screens[0] = AsdJobScreen(
+          userJobPreference: userJobPreferenceList![selectedTabIndex]!,
+        );
+      });
+    });
+
+    tabNameListRebuild();
+
     screens.add(
-      const AsdJobScreen(),
+      // TabBarView(
+      //   controller: _controller!,
+      //   children: [
+      //     AsdJobScreen(
+      //       userJobPreference: userJobPreferenceList![0]!,
+      //     ),
+      //     AsdJobScreen(
+      //       userJobPreference: userJobPreferenceList![0]!,
+      //     ),
+      //   ],
+      // ),
+      AsdJobScreen(
+        userJobPreference: userJobPreferenceList![0]!,
+      ),
     );
     screens.add(
-      const Center(
-        child: Text('Message Screen'),
+      Center(
+        child:
+            Text('Test Screen ${userResume!.userPersonalDetails!.firstName}'),
       ),
     );
     screens.add(
@@ -112,8 +190,9 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     screens.add(
       AsdMeScreen(
         asdUserCredentials: widget.asdUserCredentials,
-        userResume: widget.userResume,
-        onValueChanged: onResumeChanged,
+        userResume: userResume!,
+        onResumeValueChanged: resumeOnChanged,
+        onJobPreferenceListValueChanged: jobPreferenceListOnChanged,
       ),
     );
 
@@ -123,6 +202,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TabBar(
+            controller: _tabController,
             isScrollable: true, // Required
             unselectedLabelColor: Colors.white.withOpacity(0.8),
             unselectedLabelStyle: TextStyle(
@@ -141,11 +221,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               fontFamily: 'Poppins',
               letterSpacing: 0.3,
             ),
-            tabs: const [
-              Tab(text: 'Software Engineer'),
-              Tab(text: 'UI Designer'),
-              Tab(text: 'Product Manager'),
-            ],
+            tabs: tabNameList,
           ),
         ],
       ),
@@ -158,10 +234,21 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
   }
 
   @override
+  void dispose() {
+    _tabController!.dispose();
+    super.dispose();
+  }
+
+  // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     const double navBarIconSize = 3.425;
     return DefaultTabController(
-      length: 3,
+      length: userJobPreferenceList!.length,
       child: Scaffold(
         backgroundColor: kBackgroundRiceWhite,
         appBar: appBars[bottomNavBarCurrentIndex],

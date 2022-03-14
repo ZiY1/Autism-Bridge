@@ -515,7 +515,7 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                           onPressed: () {
                             showJobCategoryPicker();
                           },
-                          title: 'Desired Job Category & Title',
+                          title: 'Job Category',
                           bodyText: jobCategory == null && jobTitle == null
                               ? Text(
                                   'Select your category & job title',
@@ -538,10 +538,10 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                           onPressed: () {
                             showEmpTypePicker();
                           },
-                          title: 'Job Type',
+                          title: 'Employment Type',
                           bodyText: employmentType == null
                               ? Text(
-                                  'select the job type',
+                                  'select the employment type',
                                   style: TextStyle(
                                     fontSize: 9.5.sp,
                                     color: Colors.grey.shade400,

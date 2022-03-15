@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
 import 'package:autism_bridge/screens/determine_user_type_loading_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/registration_button.dart';
@@ -210,8 +211,10 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                       ),
                       onPressed: () {
                         _auth.signOut();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, WelcomeScreen.id, (route) => false);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            ScreenTransitionAnimation.createBackRoute(
+                                destScreen: const WelcomeScreen()),
+                            (route) => false);
                       },
                       child: Text(
                         'Cancel',

@@ -8,6 +8,7 @@ import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -375,8 +376,10 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     GestureDetector(
                       onTap: () {
                         _auth.signOut();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, WelcomeScreen.id, (route) => false);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            ScreenTransitionAnimation.createBackRoute(
+                                destScreen: const WelcomeScreen()),
+                            (route) => false);
                       },
                       child: ListTile(
                         title: Row(

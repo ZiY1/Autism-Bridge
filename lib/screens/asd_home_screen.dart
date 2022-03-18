@@ -1,5 +1,6 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/job_display.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_job_screen.dart';
@@ -44,6 +45,8 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
 
   int currentTabIndex = 0;
 
+  List<JobDisplay> jobDisplayEmptyList = [];
+
   void resumeOnChanged(Resume resumeTemp) {
     userResume = resumeTemp;
 
@@ -66,7 +69,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         userJobPreference: userJobPreferenceList![currentTabIndex]!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
-        userResume: userResume!,
       );
     });
   }
@@ -80,7 +82,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         userJobPreference: userJobPreferenceList![tabIndex]!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
-        userResume: userResume!,
       );
     });
   }
@@ -152,7 +153,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         userJobPreference: userJobPreferenceList![0]!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
-        userResume: userResume!,
       ),
     );
     screens.add(

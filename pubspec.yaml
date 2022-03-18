@@ -63,8 +63,12 @@ dependencies:
   dotted_border: ^2.0.0+2
 
 dev_dependencies:
+  # test_api: ^0.4.9
+
+  test: any
+
   flutter_test:
-    sdk: flutter
+   sdk: flutter
 
   flutter_lints: ^1.0.0
 

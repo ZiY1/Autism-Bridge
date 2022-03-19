@@ -66,24 +66,26 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       tabNameListRebuild();
       screens[0] = AsdJobScreen(
         currentTabIndex: currentTabIndex,
-        userJobPreference: userJobPreferenceList![currentTabIndex]!,
+        userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
       );
     });
   }
 
-  void tabListenerOnChanged(int tabIndex) {
+  Future<void> tabListenerOnChanged(int tabIndex) async {
     currentTabIndex = tabIndex;
     // Need to call setState
+    //print(userJobPreferenceList![tabIndex]!.getJobTitle);
     setState(() {
       screens[0] = AsdJobScreen(
         currentTabIndex: currentTabIndex,
-        userJobPreference: userJobPreferenceList![tabIndex]!,
+        userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
       );
     });
+    //_asdJobScreenState.
   }
 
   void tabNameListRebuild() {
@@ -150,7 +152,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       // ),
       AsdJobScreen(
         currentTabIndex: currentTabIndex,
-        userJobPreference: userJobPreferenceList![0]!,
+        userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
         tabListenerCallback: tabListenerOnChanged,
       ),

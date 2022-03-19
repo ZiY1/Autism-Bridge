@@ -2,9 +2,9 @@ import 'package:autism_bridge/models/job_display.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
-import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/asd_job_app_bar.dart';
 import 'package:autism_bridge/widgets/my_job_card.dart';
+import 'package:autism_bridge/widgets/refresh_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -15,7 +15,7 @@ class AsdJobScreen extends StatefulWidget {
 
   final int currentTabIndex;
 
-  final JobPreference userJobPreference;
+  final List<JobPreference?> userJobPreferenceList;
 
   final List<Tab> tabTextList;
 
@@ -24,7 +24,7 @@ class AsdJobScreen extends StatefulWidget {
   const AsdJobScreen({
     Key? key,
     required this.currentTabIndex,
-    required this.userJobPreference,
+    required this.userJobPreferenceList,
     required this.tabTextList,
     required this.tabListenerCallback,
   }) : super(key: key);
@@ -34,9 +34,11 @@ class AsdJobScreen extends StatefulWidget {
 }
 
 class _AsdJobScreenState extends State<AsdJobScreen>
-    with TickerProviderStateMixin {
-  // , AutomaticKeepAliveClientMixin
-  final _firestore = FirebaseFirestore.instance;
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<_AsdJobScreenState> _asdJobScreenState =
+      GlobalKey<_AsdJobScreenState>();
 
   TabController? _tabController;
 
@@ -60,15 +62,25 @@ class _AsdJobScreenState extends State<AsdJobScreen>
 
     //TODO: implement the salary condition
     // If these two condition are not specific, no need to make them as a condition
-    if (widget.userJobPreference.getEmploymentType == 'Any Type' &&
-        widget.userJobPreference.getMinSalary == 'None') {
+    if (widget.userJobPreferenceList[_tabController!.index]!
+                .getEmploymentType ==
+            'Any Type' &&
+        widget.userJobPreferenceList[_tabController!.index]!.getMinSalary ==
+            'None') {
       await FirebaseFirestore.instance
           .collection("all_jobs")
           .where('jobCategory',
-              isEqualTo: widget.userJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: widget.userJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: widget.userJobPreference.getJobState)
-          .where('jobCity', isEqualTo: widget.userJobPreference.getJobCity)
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
+          .where('jobTitle',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
+          .where('jobState',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobState)
+          .where('jobCity',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
           .get()
           .then((querySnapshot) async {
         for (var singleJob in querySnapshot.docs) {
@@ -122,20 +134,26 @@ class _AsdJobScreenState extends State<AsdJobScreen>
           // add the jobDisplay class to the list
           filteredJobList.add(jobDisplayTemp);
         }
-
-        // filteredJobList = filteredJobDisplayList;
-        //print(filteredJobList.length);
       });
     }
     // If jobSeekerJobPreference.getEmploymentType is 'Any Type', no need to make it as a condition
-    else if (widget.userJobPreference.getEmploymentType == 'Any Type') {
+    else if (widget
+            .userJobPreferenceList[_tabController!.index]!.getEmploymentType ==
+        'Any Type') {
       FirebaseFirestore.instance
           .collection("all_jobs")
           .where('jobCategory',
-              isEqualTo: widget.userJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: widget.userJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: widget.userJobPreference.getJobState)
-          .where('jobCity', isEqualTo: widget.userJobPreference.getJobCity)
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
+          .where('jobTitle',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
+          .where('jobState',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobState)
+          .where('jobCity',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
           .get()
           .then((querySnapshot) {
         for (var singleJob in querySnapshot.docs) {
@@ -144,16 +162,26 @@ class _AsdJobScreenState extends State<AsdJobScreen>
       });
     }
     // If jobSeekerJobPreference.getMinSalary is 'Any Type', no need to make it as a condition
-    else if (widget.userJobPreference.getMinSalary == 'None') {
+    else if (widget
+            .userJobPreferenceList[_tabController!.index]!.getMinSalary ==
+        'None') {
       FirebaseFirestore.instance
           .collection("all_jobs")
           .where('employmentType',
-              isEqualTo: widget.userJobPreference.getEmploymentType)
+              isEqualTo: widget.userJobPreferenceList[_tabController!.index]!
+                  .getEmploymentType)
           .where('jobCategory',
-              isEqualTo: widget.userJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: widget.userJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: widget.userJobPreference.getJobState)
-          .where('jobCity', isEqualTo: widget.userJobPreference.getJobCity)
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
+          .where('jobTitle',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
+          .where('jobState',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobState)
+          .where('jobCity',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
           .get()
           .then((querySnapshot) {
         for (var singleJob in querySnapshot.docs) {
@@ -166,12 +194,20 @@ class _AsdJobScreenState extends State<AsdJobScreen>
       FirebaseFirestore.instance
           .collection("all_jobs")
           .where('employmentType',
-              isEqualTo: widget.userJobPreference.getEmploymentType)
+              isEqualTo: widget.userJobPreferenceList[_tabController!.index]!
+                  .getEmploymentType)
           .where('jobCategory',
-              isEqualTo: widget.userJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: widget.userJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: widget.userJobPreference.getJobState)
-          .where('jobCity', isEqualTo: widget.userJobPreference.getJobCity)
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
+          .where('jobTitle',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
+          .where('jobState',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobState)
+          .where('jobCity',
+              isEqualTo: widget
+                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
           .get()
           .then((querySnapshot) {
         for (var singleJob in querySnapshot.docs) {
@@ -179,30 +215,33 @@ class _AsdJobScreenState extends State<AsdJobScreen>
         }
       });
     }
-    //filteredJobList = filteredJobDisplayList;
   }
 
-  // // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
-  // @override
-  // bool get wantKeepAlive => true;
+  // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    print('called');
-    myFuture = filterJobFromFirestore();
 
     _tabController = TabController(
       length: widget.tabTextList.length,
       initialIndex: widget.currentTabIndex,
       vsync: this,
     );
+
+    setState(() {
+      myFuture = filterJobFromFirestore();
+    });
+
     _tabController!.addListener(() {
-      widget.tabListenerCallback(_tabController!.index);
       if (_tabController!.indexIsChanging) {
-        //filteredJobList = [];
-        myFuture = filterJobFromFirestore();
-        filteredJobList = [];
+        widget.tabListenerCallback(_tabController!.index);
+        setState(() {
+          filteredJobList = [];
+          myFuture = filterJobFromFirestore();
+        });
       }
     });
   }
@@ -215,90 +254,95 @@ class _AsdJobScreenState extends State<AsdJobScreen>
 
   @override
   Widget build(BuildContext context) {
-    //super.build(context);
+    super.build(context);
+    // setState(() {
+    //   filteredJobList = [];
+    //   myFuture = filterJobFromFirestore();
+    // });
+
     return Scaffold(
+      key: _asdJobScreenState,
       backgroundColor: kBackgroundRiceWhite,
       appBar: AsdJobAppBar(
         tabController: _tabController,
         jobTextList: widget.tabTextList,
         appBar: AppBar(),
       ),
-      // child: ListView.builder(
-      //   itemBuilder: (BuildContext context, int index) {
-      //     return Center(child: Text(widget.userJobPreference.getJobTitle));
-      //   },
-      //   itemCount: 0,
-      //   // shrinkWrap: true,
-      //   // physics: const NeverScrollableScrollPhysics(),
-      // ),
-      // body: Center(
-      //   child: Text(widget.userJobPreference.getJobTitle),
-      // ),
-      body: futureBuilder(),
+      body: RefreshWidget(
+        key: _refreshIndicatorKey,
+        onRefresh: onRefresh,
+        child: FutureBuilder(
+            future: myFuture,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasError) {
+                return Scaffold(
+                  body: SafeArea(
+                      child: Column(
+                    children: const [Text('Something went wrong')],
+                  )),
+                );
+              }
+              if (snapshot.hasData && !snapshot.data!.exists) {
+                return Scaffold(
+                  body: SafeArea(
+                      child: Column(
+                    children: const [Text('Document does not exist')],
+                  )),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                return buildJobList();
+              }
+              return const Scaffold(
+                body: SafeArea(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
+            }),
+      ),
     );
   }
 
-  Widget futureBuilder() {
-    return FutureBuilder(
-        future: myFuture,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(
-              body: SafeArea(
-                  child: Column(
-                children: const [Text('Something went wrong')],
-              )),
-            );
-          }
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return Scaffold(
-              body: SafeArea(
-                  child: Column(
-                children: const [Text('Document does not exist')],
-              )),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            //print(filteredJobList.length);
-            if (filteredJobList.isNotEmpty) {
-              return ListView.builder(
-                padding: EdgeInsets.only(
-                  left: 1.5.h,
-                  right: 1.5.h,
-                  top: 0.5.h,
-                  bottom: 2.5.h,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  final JobDisplay currentJobDisplay = filteredJobList[index];
-                  return MyJobCard(
-                      companyLogo: currentJobDisplay
-                          .recruiterCompanyInfo.companyLogoImage!,
-                      companyName:
-                          currentJobDisplay.recruiterCompanyInfo.companyName!,
-                      jobName: currentJobDisplay.recruiterJobPost.jobName!,
-                      jobCity: currentJobDisplay.recruiterJobPost.jobCity!,
-                      jobState: currentJobDisplay.recruiterJobPost.jobState!,
-                      employmentType:
-                          currentJobDisplay.recruiterJobPost.employmentType!,
-                      jobOnPressed: null,
-                      bookmarkOnPressed: null);
-                },
-                itemCount: filteredJobList.length,
-// shrinkWrap: true,
+  Future onRefresh() async {
+    setState(() {
+      filteredJobList = [];
+      myFuture = filterJobFromFirestore();
+    });
+  }
+
+  Widget buildJobList() {
+    if (filteredJobList.isEmpty) {
+      return const Center(child: Text('List Empty'));
+    } else {
+      return ListView.builder(
+        padding: EdgeInsets.only(
+          left: 1.5.h,
+          right: 1.5.h,
+          top: 0.5.h,
+          bottom: 2.5.h,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          final JobDisplay currentJobDisplay = filteredJobList[index];
+          return MyJobCard(
+              companyLogo:
+                  currentJobDisplay.recruiterCompanyInfo.companyLogoImage!,
+              companyName: currentJobDisplay.recruiterCompanyInfo.companyName!,
+              jobName: currentJobDisplay.recruiterJobPost.jobName!,
+              jobCity: currentJobDisplay.recruiterJobPost.jobCity!,
+              jobState: currentJobDisplay.recruiterJobPost.jobState!,
+              employmentType:
+                  currentJobDisplay.recruiterJobPost.employmentType!,
+              jobOnPressed: null,
+              bookmarkOnPressed: null);
+        },
+        itemCount: filteredJobList.length,
+        // shrinkWrap: true,
+        // primary: false,
 // physics: const NeverScrollableScrollPhysics(),
-              );
-            } else {
-              return const Center(child: Text('list empty'));
-            }
-          }
-          return const Scaffold(
-            body: SafeArea(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        });
+      );
+    }
   }
 }
 

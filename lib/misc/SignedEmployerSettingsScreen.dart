@@ -8,10 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
-import 'package:autism_bridge/models/Employer.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeScreen.dart';
+import 'package:autism_bridge/misc/Employer.dart';
 
-import 'package:autism_bridge/widgets/ImageWidget.dart';
+import 'package:autism_bridge/misc/ImageWidget.dart';
 
 class EmployerSettingsScreen extends StatefulWidget {
   static String routeName = "ChangeSettingsPage";

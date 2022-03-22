@@ -1,7 +1,7 @@
 import 'package:autism_bridge/constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/education_data.dart';
-import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';

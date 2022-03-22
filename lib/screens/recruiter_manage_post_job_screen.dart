@@ -1,5 +1,6 @@
 import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
+import 'package:autism_bridge/num_constants.dart';
 import 'package:autism_bridge/screens/recruiter_post_job_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
@@ -201,10 +202,14 @@ class _RecruiterManagePostJobScreenState
                                                   ),
                                                 ),
                                                 Text(
-                                                  currentJobPost
-                                                          .maxSalary!.isEmpty
-                                                      ? '${currentJobPost.minSalary}  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
-                                                      : '${currentJobPost.minSalary} - ${currentJobPost.maxSalary}  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}',
+                                                  currentJobPost.maxSalary! ==
+                                                          kEmpty
+                                                      ? currentJobPost
+                                                                  .minSalary ==
+                                                              kNone
+                                                          ? 'None  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
+                                                          : '${currentJobPost.minSalary}k  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
+                                                      : '${currentJobPost.minSalary}k - ${currentJobPost.maxSalary}k  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(

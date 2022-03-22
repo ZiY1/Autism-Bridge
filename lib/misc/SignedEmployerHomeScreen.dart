@@ -1,18 +1,18 @@
 // Imported Screen
-import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
-import 'package:autism_bridge/screens/SignedEmployerHomeMainContent.dart';
-import 'package:autism_bridge/screens/SignedEmployerMessagingScreen.dart';
-import 'package:autism_bridge/screens/SignedEmployerProfileScreen.dart';
-import 'package:autism_bridge/screens/SignedEmployerSettingsScreen.dart';
+import 'SignInEmployerScreen.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeMainContent.dart';
+import 'SignedEmployerMessagingScreen.dart';
+import 'SignedEmployerProfileScreen.dart';
+import 'package:autism_bridge/misc/SignedEmployerSettingsScreen.dart';
 // Imported libraries
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 // Imported Customized Widgets
-import 'package:autism_bridge/widgets/NotificationIcon.dart';
+import 'package:autism_bridge/misc/NotificationIcon.dart';
 // Imported models
-import 'package:autism_bridge/models/Employer.dart';
+import 'package:autism_bridge/misc/Employer.dart';
 
 // Global variable
 final FirebaseFirestore autismBridgeFireBaseFireStore =

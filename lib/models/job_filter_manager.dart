@@ -50,8 +50,8 @@ class JobFilterManager {
           String jobAddress = singleJobData['jobAddress'];
           String minExperience = singleJobData['minExperience'];
           String minEducation = singleJobData['minEducation'];
-          String minSalary = singleJobData['minSalary'];
-          String maxSalary = singleJobData['maxSalary'];
+          double minSalary = singleJobData['minSalary'];
+          double maxSalary = singleJobData['maxSalary'];
           String jobDescription = singleJobData['jobDescription'];
 
           // Create a RecruiterJobPost class

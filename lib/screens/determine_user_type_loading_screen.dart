@@ -50,7 +50,7 @@ class _DetermineUserTypeLoadingScreenState
 
   RecruiterCompanyInfo? recruiterCompanyInfo;
 
-  Future<void> checkUserType() async {
+  Future<void> fetchUserInfo() async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
     try {
       await FirebaseFirestore.instance
@@ -248,10 +248,18 @@ class _DetermineUserTypeLoadingScreenState
     }
   }
 
+  Future? myFutureTicket;
+
+  @override
+  void initState() {
+    super.initState();
+    myFutureTicket = fetchUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: checkUserType(),
+        future: myFutureTicket,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return Scaffold(
@@ -300,6 +308,7 @@ class _DetermineUserTypeLoadingScreenState
               }
             }
           }
+          // TODO: make a skeleton UI for loading
           return const Scaffold(
             body: SafeArea(
               child: Center(

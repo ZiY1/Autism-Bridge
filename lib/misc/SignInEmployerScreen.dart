@@ -1,3 +1,4 @@
+import 'package:autism_bridge/screens/email_verify_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,13 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:autism_bridge/screens/login_screen.dart';
 
-import 'package:autism_bridge/screens/JoinInEmployerScreen.dart';
-import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
+import 'package:autism_bridge/misc/JoinInEmployerScreen.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeScreen.dart';
 
-import 'package:autism_bridge/widgets/emailFieldWidget.dart';
-import 'package:autism_bridge/widgets/passwordFieldWidget.dart';
-
-import 'email_verify_screen.dart';
+import 'emailFieldWidget.dart';
+import 'passwordFieldWidget.dart';
 
 class SignInEmployerPage extends StatefulWidget {
   static String nameRoute = '/Sign_In_Page?';

@@ -1,6 +1,6 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_job_preference_screen.dart';

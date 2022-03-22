@@ -1,5 +1,6 @@
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
+import 'package:autism_bridge/num_constants.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -294,9 +295,14 @@ class _AsdManageJobPreferenceScreenState
                                                 ),
                                                 Text(
                                                   currentJobPreference
-                                                          .getMaxSalary.isEmpty
-                                                      ? '${currentJobPreference.getMinSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
-                                                      : '${currentJobPreference.getMinSalary} - ${currentJobPreference.getMaxSalary}  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}',
+                                                              .getMaxSalary ==
+                                                          kEmpty
+                                                      ? currentJobPreference
+                                                                  .getMinSalary ==
+                                                              kNone
+                                                          ? 'None  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
+                                                          : '${currentJobPreference.getMinSalary}k  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
+                                                      : '${currentJobPreference.getMinSalary}k - ${currentJobPreference.getMaxSalary}k  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(

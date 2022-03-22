@@ -1,11 +1,7 @@
 import 'dart:async';
-
 import 'package:autism_bridge/emums/user_type_enum.dart';
 import 'package:autism_bridge/models/welcome_item.dart';
 import 'package:autism_bridge/screens/login_screen.dart';
-
-import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:autism_bridge/widgets/slide_dot.dart';
 import 'package:autism_bridge/widgets/slide_item.dart';
@@ -55,14 +51,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     setState(() {
       _currentPage = index;
     });
-  }
-
-  // Function that takes the Navigator to Employer Sign in Page
-  void goToSignInEmployerPage(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(
-      SignInEmployerPage.nameRoute,
-      arguments: null,
-    );
   }
 
   @override

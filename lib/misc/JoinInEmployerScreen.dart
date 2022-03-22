@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
+import 'SignInEmployerScreen.dart';
 
-import 'package:autism_bridge/screens/JoinInEmployerScreen2.dart';
+import 'JoinInEmployerScreen2.dart';
 
-import 'package:autism_bridge/widgets/emailFieldWidget.dart';
+import 'emailFieldWidget.dart';
 
-import 'package:autism_bridge/widgets/passwordFieldWidget.dart';
+import 'passwordFieldWidget.dart';
 
 class JoinInEmployerPage extends StatefulWidget {
   static String nameRoute = '/Join_In_Page?';

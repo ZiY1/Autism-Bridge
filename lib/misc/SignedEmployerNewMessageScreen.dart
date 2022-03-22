@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:autism_bridge/screens/SignedEmployerMessagingScreen.dart';
+import 'SignedEmployerMessagingScreen.dart';
 
 class EmployerSendNewMessageScreen extends StatefulWidget {
   static const routeName = "New_Message";

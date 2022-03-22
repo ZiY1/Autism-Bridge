@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
-import 'package:autism_bridge/screens/SignedEmployerNewMessageScreen.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeScreen.dart';
+import 'SignedEmployerNewMessageScreen.dart';
 
-import 'package:autism_bridge/widgets/MessagTile.dart';
-import 'package:autism_bridge/models/Employer.dart';
+import 'package:autism_bridge/misc/MessagTile.dart';
+import 'package:autism_bridge/misc/Employer.dart';
 
 class EmployerMessagingScreen extends StatefulWidget {
   static const nameRoute = "MyMessages";
@@ -29,7 +29,6 @@ class _EmployerMessagingScreenState extends State<EmployerMessagingScreen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
     Employer signedEmployer = routeArgs['signedEmployer'] as Employer;
-
 
     // Extract user info from the Navigator
     Navigator.of(ctx).popAndPushNamed(

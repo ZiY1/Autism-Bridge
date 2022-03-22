@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:autism_bridge/widgets/SignedEmployerHomeCardWidgets.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeCardWidgets.dart';
 
 class EmployerHomeTabSearch extends StatefulWidget {
   static String routeName = "Recuiter_MainPage";

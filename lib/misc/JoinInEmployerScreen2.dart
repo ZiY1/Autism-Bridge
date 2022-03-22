@@ -1,3 +1,4 @@
+import 'package:autism_bridge/screens/email_verify_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
@@ -14,9 +15,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:path_provider/path_provider.dart';
 
-import 'package:autism_bridge/screens/SignInEmployerScreen.dart';
-
-import 'email_verify_screen.dart';
+import 'SignInEmployerScreen.dart';
 
 class JoinInEmployerSecondPage extends StatefulWidget {
   // Keep track of the name of the Page

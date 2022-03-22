@@ -7,19 +7,22 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:autism_bridge/models/Employer.dart';
-import 'package:autism_bridge/screens/SignedEmployerHomeScreen.dart';
+import 'package:autism_bridge/misc/Employer.dart';
+import 'package:autism_bridge/misc/SignedEmployerHomeScreen.dart';
 
-import 'package:autism_bridge/widgets/ImageWidget.dart';
+import 'package:autism_bridge/misc/ImageWidget.dart';
 
-import 'package:autism_bridge/widgets/ConnectionsNumberWidget.dart';
+import 'package:autism_bridge/misc/ConnectionsNumberWidget.dart';
 
 class EmployerProfilePage extends StatefulWidget {
   static String routeName = "EmployerProfilePage";
 
   final Employer employer;
 
-  const EmployerProfilePage({Key? key, required this.employer,}) : super(key: key);
+  const EmployerProfilePage({
+    Key? key,
+    required this.employer,
+  }) : super(key: key);
 
   @override
   _EmployerProfilePageState createState() => _EmployerProfilePageState();
@@ -72,7 +75,6 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
       // Cast it as a File object
       File pickedImageFile = File(pickedImage!.path);
 
-      
       // Change the urlProfilePicture in the data base
       widget.employer.changeUrlProfilePicture(pickedImageFile);
 

@@ -9,8 +9,8 @@ class JobPreference {
   String _jobTitle;
   String _jobCity;
   String _jobState;
-  String _minSalary;
-  String _maxSalary;
+  double _minSalary;
+  double _maxSalary;
 
   JobPreference({
     required String userId,
@@ -20,8 +20,8 @@ class JobPreference {
     required String jobTitle,
     required String jobCity,
     required String jobState,
-    required String minSalary,
-    required String maxSalary,
+    required double minSalary,
+    required double maxSalary,
   })  : _userId = userId,
         _subCollectionId = subCollectionId,
         _employmentType = employmentType,
@@ -47,8 +47,8 @@ class JobPreference {
     String jobTitle;
     String jobCity;
     String jobState;
-    String minSalary;
-    String maxSalary;
+    double minSalary;
+    double maxSalary;
 
     try {
       await FirebaseFirestore.instance
@@ -163,9 +163,9 @@ class JobPreference {
 
   set setJobState(String jobState) => _jobState = jobState;
 
-  set setMinSalary(String minSalary) => _minSalary = minSalary;
+  set setMinSalary(double minSalary) => _minSalary = minSalary;
 
-  set setMaxSalary(String maxSalary) => _maxSalary = maxSalary;
+  set setMaxSalary(double maxSalary) => _maxSalary = maxSalary;
 
   // Getters
   String get getUserId => _userId;
@@ -182,7 +182,7 @@ class JobPreference {
 
   String get getJobState => _jobState;
 
-  String get getMinSalary => _minSalary;
+  double get getMinSalary => _minSalary;
 
-  String get getMaxSalary => _maxSalary;
+  double get getMaxSalary => _maxSalary;
 }

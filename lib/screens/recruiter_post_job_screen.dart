@@ -1,7 +1,8 @@
 import 'package:autism_bridge/icon_constants.dart';
-import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
+import 'package:autism_bridge/num_constants.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -15,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
+
+import '../regular_helpers.dart';
 
 class RecruiterPostJobScreen extends StatefulWidget {
   static const id = 'recruiter_post_job_screen';
@@ -72,9 +75,9 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
 
   String? minEducation;
 
-  String? minSalary;
+  double? minSalary;
 
-  String? maxSalary;
+  double? maxSalary;
 
   String? jobDescription;
 
@@ -396,8 +399,8 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
         String rightValueTemp = rightValueTempWithWhiteSpace.substring(
             1, rightValueTempWithWhiteSpace.length);
         setState(() {
-          minSalary = leftValueTemp;
-          maxSalary = rightValueTemp;
+          minSalary = RegularHelpers.getSalaryAsNumberStr(leftValueTemp);
+          maxSalary = RegularHelpers.getSalaryAsNumberStr(rightValueTemp);
         });
       },
       smallerText: false,
@@ -636,9 +639,13 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                                   ),
                                 )
                               : Text(
-                                  maxSalary!.isEmpty
-                                      ? minSalary!
-                                      : "${minSalary!} - ${maxSalary!}",
+                                  maxSalary! == kEmpty
+                                      ? minSalary == kNone
+                                          ? "None"
+                                          : minSalary == kMinSalaryLimit
+                                              ? "< ${minSalary}k"
+                                              : "> ${minSalary}k"
+                                      : "${minSalary!}k - ${maxSalary!}k",
                                   style: TextStyle(
                                     fontSize: 11.sp,
                                     color: const Color(0xFF1F1F39),

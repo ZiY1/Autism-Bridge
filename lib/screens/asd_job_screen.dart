@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../constants.dart';
+import '../num_constants.dart';
 
 class AsdJobScreen extends StatefulWidget {
   static const id = 'asd_job_screen';
@@ -61,159 +62,176 @@ class _AsdJobScreenState extends State<AsdJobScreen>
     //TODO: create a map for recruiterCompanyInfo
 
     //TODO: implement the salary condition
+    JobPreference userCurrentJobPreference =
+        widget.userJobPreferenceList[_tabController!.index]!;
     // If these two condition are not specific, no need to make them as a condition
-    if (widget.userJobPreferenceList[_tabController!.index]!
-                .getEmploymentType ==
-            'Any Type' &&
-        widget.userJobPreferenceList[_tabController!.index]!.getMinSalary ==
-            'None') {
+    if (userCurrentJobPreference.getEmploymentType == 'Any Type' &&
+        userCurrentJobPreference.getMinSalary == kNone) {
       await FirebaseFirestore.instance
           .collection("all_jobs")
           .where('jobCategory',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
-          .where('jobTitle',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
-          .where('jobState',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobState)
-          .where('jobCity',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
+              isEqualTo: userCurrentJobPreference.getJobCategory)
+          .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+          .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+          .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
           .get()
           .then((querySnapshot) async {
-        for (var singleJob in querySnapshot.docs) {
-          //print(singleJob.data()['jobName']);
-          var singleJobData = singleJob.data();
-
-          // Read all fields
-          String userId = singleJobData['collectionId'];
-          String subCollectionId = singleJobData['subCollectionId'];
-          String employmentType = singleJobData['employmentType'];
-          String jobName = singleJobData['jobName'];
-          String jobCategory = singleJobData['jobCategory'];
-          String jobTitle = singleJobData['jobTitle'];
-          String jobCity = singleJobData['jobCity'];
-          String jobState = singleJobData['jobState'];
-          String jobAddress = singleJobData['jobAddress'];
-          String minExperience = singleJobData['minExperience'];
-          String minEducation = singleJobData['minEducation'];
-          String minSalary = singleJobData['minSalary'];
-          String maxSalary = singleJobData['maxSalary'];
-          String jobDescription = singleJobData['jobDescription'];
-
-          // Create a RecruiterJobPost class
-          RecruiterJobPost recruiterJobPostTemp = RecruiterJobPost(
-              userId: userId,
-              subCollectionId: subCollectionId,
-              employmentType: employmentType,
-              jobName: jobName,
-              jobCategory: jobCategory,
-              jobTitle: jobTitle,
-              jobCity: jobCity,
-              jobState: jobState,
-              jobAddress: jobAddress,
-              minExperience: minExperience,
-              minEducation: minEducation,
-              minSalary: minSalary,
-              maxSalary: maxSalary,
-              jobDescription: jobDescription);
-
-          // Fetch the corresponding RecruiterCompanyInfo
-          // TODO: add exception handling
-          RecruiterCompanyInfo? recruiterCompanyInfoTemp =
-              await RecruiterCompanyInfo.readRecruiterCompanyInfoFromFirestore(
-                  userId);
-
-          // Create a jobDisplay class
-          JobDisplay jobDisplayTemp = JobDisplay(
-              recruiterJobPost: recruiterJobPostTemp,
-              recruiterCompanyInfo: recruiterCompanyInfoTemp!);
-
-          // add the jobDisplay class to the list
-          filteredJobList.add(jobDisplayTemp);
-        }
+        await jobFiltering(querySnapshot);
       });
     }
     // If jobSeekerJobPreference.getEmploymentType is 'Any Type', no need to make it as a condition
-    else if (widget
-            .userJobPreferenceList[_tabController!.index]!.getEmploymentType ==
-        'Any Type') {
-      FirebaseFirestore.instance
-          .collection("all_jobs")
-          .where('jobCategory',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
-          .where('jobTitle',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
-          .where('jobState',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobState)
-          .where('jobCity',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
-          .get()
-          .then((querySnapshot) {
-        for (var singleJob in querySnapshot.docs) {
-          print(singleJob.data()['jobName']);
-        }
-      });
+    else if (userCurrentJobPreference.getEmploymentType == 'Any Type') {
+      if (userCurrentJobPreference.getMaxSalary == kEmpty) {
+        await FirebaseFirestore.instance
+            .collection("all_jobs")
+            .where('jobCategory',
+                isEqualTo: userCurrentJobPreference.getJobCategory)
+            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
+            .where(
+              'maxSalary',
+              isEqualTo: userCurrentJobPreference.getMaxSalary,
+            )
+            .where(
+              'minSalary',
+              isEqualTo: userCurrentJobPreference.getMinSalary,
+            )
+            .get()
+            .then((querySnapshot) async {
+          await jobFiltering(querySnapshot);
+        });
+      } else {
+        await FirebaseFirestore.instance
+            .collection("all_jobs")
+            .where('jobCategory',
+                isEqualTo: userCurrentJobPreference.getJobCategory)
+            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
+            .where('minSalary',
+                isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
+            .get()
+            .then((querySnapshot) async {
+          await jobFiltering(querySnapshot);
+        });
+      }
     }
-    // If jobSeekerJobPreference.getMinSalary is 'Any Type', no need to make it as a condition
-    else if (widget
-            .userJobPreferenceList[_tabController!.index]!.getMinSalary ==
-        'None') {
-      FirebaseFirestore.instance
+    // If jobSeekerJobPreference.getMinSalary is 'None', no need to make it as a condition
+    else if (userCurrentJobPreference.getMinSalary == kNone) {
+      await FirebaseFirestore.instance
           .collection("all_jobs")
           .where('employmentType',
-              isEqualTo: widget.userJobPreferenceList[_tabController!.index]!
-                  .getEmploymentType)
+              whereIn: [userCurrentJobPreference.getEmploymentType, 'Any Type'])
           .where('jobCategory',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
-          .where('jobTitle',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
-          .where('jobState',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobState)
-          .where('jobCity',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
+              isEqualTo: userCurrentJobPreference.getJobCategory)
+          .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+          .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+          .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
           .get()
-          .then((querySnapshot) {
-        for (var singleJob in querySnapshot.docs) {
-          print(singleJob.data()['jobName']);
-        }
-      });
+          .then((querySnapshot) async {
+            await jobFiltering(querySnapshot);
+          });
     }
     // Every preference is specific
     else {
-      FirebaseFirestore.instance
-          .collection("all_jobs")
-          .where('employmentType',
-              isEqualTo: widget.userJobPreferenceList[_tabController!.index]!
-                  .getEmploymentType)
-          .where('jobCategory',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCategory)
-          .where('jobTitle',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobTitle)
-          .where('jobState',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobState)
-          .where('jobCity',
-              isEqualTo: widget
-                  .userJobPreferenceList[_tabController!.index]!.getJobCity)
-          .get()
-          .then((querySnapshot) {
-        for (var singleJob in querySnapshot.docs) {
-          print(singleJob.data()['jobName']);
-        }
-      });
+      if (userCurrentJobPreference.getMaxSalary == kEmpty) {
+        await FirebaseFirestore.instance
+            .collection("all_jobs")
+            .where('employmentType', whereIn: [
+              userCurrentJobPreference.getEmploymentType,
+              'Any Type'
+            ])
+            .where('jobCategory',
+                isEqualTo: userCurrentJobPreference.getJobCategory)
+            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
+            .where(
+              'maxSalary',
+              isEqualTo: userCurrentJobPreference.getMaxSalary,
+            )
+            .where(
+              'minSalary',
+              isEqualTo: userCurrentJobPreference.getMinSalary,
+            )
+            .get()
+            .then((querySnapshot) async {
+              await jobFiltering(querySnapshot);
+            });
+      } else {
+        await FirebaseFirestore.instance
+            .collection("all_jobs")
+            .where('employmentType', whereIn: [
+              userCurrentJobPreference.getEmploymentType,
+              'Any Type'
+            ])
+            .where('jobCategory',
+                isEqualTo: userCurrentJobPreference.getJobCategory)
+            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
+            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
+            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
+            .where('minSalary',
+                isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
+            .get()
+            .then((querySnapshot) async {
+              await jobFiltering(querySnapshot);
+            });
+      }
+    }
+  }
+
+  Future<void> jobFiltering(
+      QuerySnapshot<Map<String, dynamic>> querySnapshot) async {
+    for (var singleJob in querySnapshot.docs) {
+      var singleJobData = singleJob.data();
+
+      // Read all fields
+      String userId = singleJobData['collectionId'];
+      String subCollectionId = singleJobData['subCollectionId'];
+      String employmentType = singleJobData['employmentType'];
+      String jobName = singleJobData['jobName'];
+      String jobCategory = singleJobData['jobCategory'];
+      String jobTitle = singleJobData['jobTitle'];
+      String jobCity = singleJobData['jobCity'];
+      String jobState = singleJobData['jobState'];
+      String jobAddress = singleJobData['jobAddress'];
+      String minExperience = singleJobData['minExperience'];
+      String minEducation = singleJobData['minEducation'];
+      double minSalary = singleJobData['minSalary'];
+      double maxSalary = singleJobData['maxSalary'];
+      String jobDescription = singleJobData['jobDescription'];
+
+      // Create a RecruiterJobPost class
+      RecruiterJobPost recruiterJobPostTemp = RecruiterJobPost(
+          userId: userId,
+          subCollectionId: subCollectionId,
+          employmentType: employmentType,
+          jobName: jobName,
+          jobCategory: jobCategory,
+          jobTitle: jobTitle,
+          jobCity: jobCity,
+          jobState: jobState,
+          jobAddress: jobAddress,
+          minExperience: minExperience,
+          minEducation: minEducation,
+          minSalary: minSalary,
+          maxSalary: maxSalary,
+          jobDescription: jobDescription);
+
+      // Fetch the corresponding RecruiterCompanyInfo
+      // TODO: add exception handling
+      RecruiterCompanyInfo? recruiterCompanyInfoTemp =
+          await RecruiterCompanyInfo.readRecruiterCompanyInfoFromFirestore(
+              userId);
+
+      // Create a jobDisplay class
+      JobDisplay jobDisplayTemp = JobDisplay(
+          recruiterJobPost: recruiterJobPostTemp,
+          recruiterCompanyInfo: recruiterCompanyInfoTemp!);
+
+      // add the jobDisplay class to the list
+      filteredJobList.add(jobDisplayTemp);
     }
   }
 
@@ -275,30 +293,20 @@ class _AsdJobScreenState extends State<AsdJobScreen>
             future: myFuture,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasError) {
-                return Scaffold(
-                  body: SafeArea(
-                      child: Column(
-                    children: const [Text('Something went wrong')],
-                  )),
+                return const Center(
+                  child: Text('Something went wrong'),
                 );
               }
               if (snapshot.hasData && !snapshot.data!.exists) {
-                return Scaffold(
-                  body: SafeArea(
-                      child: Column(
-                    children: const [Text('Document does not exist')],
-                  )),
+                return const Center(
+                  child: Text('Document does not exist'),
                 );
               }
               if (snapshot.connectionState == ConnectionState.done) {
                 return buildJobList();
               }
-              return const Scaffold(
-                body: SafeArea(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }),
       ),

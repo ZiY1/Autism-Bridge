@@ -12,8 +12,8 @@ class RecruiterJobPost {
   String? _jobAddress;
   String? _minExperience;
   String? _minEducation;
-  String? _minSalary;
-  String? _maxSalary;
+  double? _minSalary;
+  double? _maxSalary;
   String? _jobDescription;
 
   RecruiterJobPost({
@@ -28,8 +28,8 @@ class RecruiterJobPost {
     required String? jobAddress,
     required String? minExperience,
     required String? minEducation,
-    required String? minSalary,
-    required String? maxSalary,
+    required double? minSalary,
+    required double? maxSalary,
     required String? jobDescription,
   })  : _userId = userId,
         _subCollectionId = subCollectionId,
@@ -69,9 +69,9 @@ class RecruiterJobPost {
 
   String? get minEducation => _minEducation;
 
-  String? get minSalary => _minSalary;
+  double? get minSalary => _minSalary;
 
-  String? get maxSalary => _maxSalary;
+  double? get maxSalary => _maxSalary;
 
   String? get jobDescription => _jobDescription;
 
@@ -95,9 +95,9 @@ class RecruiterJobPost {
 
   set setMinEducation(String? minEducation) => _minEducation = minEducation;
 
-  set setMinSalary(String? minSalary) => _minSalary = minSalary;
+  set setMinSalary(double? minSalary) => _minSalary = minSalary;
 
-  set setMaxSalary(String? maxSalary) => _maxSalary = maxSalary;
+  set setMaxSalary(double? maxSalary) => _maxSalary = maxSalary;
 
   set setJobDescription(String? jobDescription) =>
       _jobDescription = jobDescription;
@@ -120,8 +120,8 @@ class RecruiterJobPost {
     String jobAddress;
     String minExperience;
     String minEducation;
-    String minSalary;
-    String maxSalary;
+    double minSalary;
+    double maxSalary;
     String jobDescription;
 
     try {

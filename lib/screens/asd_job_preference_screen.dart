@@ -1,7 +1,9 @@
+import 'package:autism_bridge/icon_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/job_preference_picker_list.dart';
+import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/regular_helpers.dart';
 import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
@@ -14,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
+
+import '../num_constants.dart';
 
 class AsdJobPreferenceScreen extends StatefulWidget {
   static const id = 'asd_job_preference_screen';
@@ -60,9 +64,9 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
 
   String? preferredState;
 
-  String? preferredMinSalary;
+  double? preferredMinSalary;
 
-  String? preferredMaxSalary;
+  double? preferredMaxSalary;
 
   bool isSaving = false;
 
@@ -113,11 +117,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
       } on FirebaseException catch (e) {
         Utils.showSnackBar(
           e.message,
-          const Icon(
-            Icons.error_sharp,
-            color: Colors.red,
-            size: 30.0,
-          ),
+          kErrorIcon,
         );
         return;
       }
@@ -137,11 +137,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
     if (preferredEmploymentType == null || preferredEmploymentType!.isEmpty) {
       Utils.showSnackBar(
         'Please enter your desired employment type',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
+        kErrorIcon,
       );
       return;
     }
@@ -151,11 +147,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
         preferredJobTitle!.isEmpty) {
       Utils.showSnackBar(
         'Please select your desired job categories & title',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
+        kErrorIcon,
       );
       return;
     }
@@ -165,22 +157,14 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
         preferredState!.isEmpty) {
       Utils.showSnackBar(
         'Please select your desired city & state to work',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
+        kErrorIcon,
       );
       return;
     }
     if (preferredMinSalary == null || preferredMaxSalary == null) {
       Utils.showSnackBar(
         'Please select your desired salary range',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
+        kErrorIcon,
       );
       return;
     }
@@ -389,8 +373,10 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
         String rightValueTemp = rightValueTempWithWhiteSpace.substring(
             1, rightValueTempWithWhiteSpace.length);
         setState(() {
-          preferredMinSalary = leftValueTemp;
-          preferredMaxSalary = rightValueTemp;
+          preferredMinSalary =
+              RegularHelpers.getSalaryAsNumberStr(leftValueTemp);
+          preferredMaxSalary =
+              RegularHelpers.getSalaryAsNumberStr(rightValueTemp);
         });
       },
       smallerText: false,
@@ -628,9 +614,14 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                                   ),
                                 )
                               : Text(
-                                  preferredMaxSalary!.isEmpty
-                                      ? preferredMinSalary!
-                                      : "${preferredMinSalary!} - ${preferredMaxSalary!}",
+                                  preferredMaxSalary! == kEmpty
+                                      ? preferredMinSalary == kNone
+                                          ? 'None'
+                                          : preferredMinSalary ==
+                                                  kMinSalaryLimit
+                                              ? '< ${preferredMinSalary}k'
+                                              : '> ${preferredMinSalary}k'
+                                      : '${preferredMinSalary!}k - ${preferredMaxSalary!}k',
                                   style: TextStyle(
                                     fontSize: 11.sp,
                                     color: const Color(0xFF1F1F39),

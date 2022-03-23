@@ -3,11 +3,9 @@ import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/widgets/asd_job_app_bar.dart';
-import 'package:autism_bridge/widgets/my_job_card.dart';
-import 'package:autism_bridge/widgets/refresh_widget.dart';
+import 'package:autism_bridge/widgets/asd_job_body.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import '../constants.dart';
 import '../num_constants.dart';
 
@@ -36,34 +34,28 @@ class AsdJobScreen extends StatefulWidget {
 
 class _AsdJobScreenState extends State<AsdJobScreen>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
   final GlobalKey<_AsdJobScreenState> _asdJobScreenState =
       GlobalKey<_AsdJobScreenState>();
 
   TabController? _tabController;
 
-  List<JobDisplay> filteredJobList = [];
+  List<JobDisplay>? filteredJobList;
 
-  Future? myFuture;
+  List<Widget> jobWidgetList = [];
 
-  Future<void> filterJobFromFirestore() async {
-    // TODO: modified where you store the min max salary to store integers rather than string
-
+  Future<List<JobDisplay>> filterJobFromFirestore(int index) async {
     // 1. Read the RecruiterJobPost by filtering with JobPreference
     // 2. For each RecruiterJobPost, fetch its corresponding RecruiterCompanyInfo
     //    if there is no key in the map, then store it in an map
     //    {key: docId, value: RecruiterCompanyInfo}.
     //    Otherwise, use the value of the key.
     // 3. Create a Job class containing RecruiterJobPost with its corresponding
+    List<JobDisplay> filteredJobDisplayList = [];
 
-    //List<JobDisplay> filteredJobDisplayList = [];
+    //TODO: maybe create a map for recruiterCompanyInfo?
 
-    //TODO: create a map for recruiterCompanyInfo
-
-    //TODO: implement the salary condition
     JobPreference userCurrentJobPreference =
-        widget.userJobPreferenceList[_tabController!.index]!;
+        widget.userJobPreferenceList[index]!;
     // If these two condition are not specific, no need to make them as a condition
     if (userCurrentJobPreference.getEmploymentType == 'Any Type' &&
         userCurrentJobPreference.getMinSalary == kNone) {
@@ -76,7 +68,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
           .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
           .get()
           .then((querySnapshot) async {
-        await jobFiltering(querySnapshot);
+        filteredJobDisplayList = await jobFiltering(querySnapshot);
+        return filteredJobDisplayList;
       });
     }
     // If jobSeekerJobPreference.getEmploymentType is 'Any Type', no need to make it as a condition
@@ -99,7 +92,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
             )
             .get()
             .then((querySnapshot) async {
-          await jobFiltering(querySnapshot);
+          filteredJobDisplayList = await jobFiltering(querySnapshot);
+          return filteredJobDisplayList;
         });
       } else {
         await FirebaseFirestore.instance
@@ -113,7 +107,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
                 isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
             .get()
             .then((querySnapshot) async {
-          await jobFiltering(querySnapshot);
+          filteredJobDisplayList = await jobFiltering(querySnapshot);
+          return filteredJobDisplayList;
         });
       }
     }
@@ -130,7 +125,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
           .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
           .get()
           .then((querySnapshot) async {
-            await jobFiltering(querySnapshot);
+            filteredJobDisplayList = await jobFiltering(querySnapshot);
+            return filteredJobDisplayList;
           });
     }
     // Every preference is specific
@@ -157,7 +153,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
             )
             .get()
             .then((querySnapshot) async {
-              await jobFiltering(querySnapshot);
+              filteredJobDisplayList = await jobFiltering(querySnapshot);
+              return filteredJobDisplayList;
             });
       } else {
         await FirebaseFirestore.instance
@@ -175,14 +172,18 @@ class _AsdJobScreenState extends State<AsdJobScreen>
                 isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
             .get()
             .then((querySnapshot) async {
-              await jobFiltering(querySnapshot);
+              filteredJobDisplayList = await jobFiltering(querySnapshot);
+              return filteredJobDisplayList;
             });
       }
     }
+    return filteredJobDisplayList;
   }
 
-  Future<void> jobFiltering(
+  Future<List<JobDisplay>> jobFiltering(
       QuerySnapshot<Map<String, dynamic>> querySnapshot) async {
+    List<JobDisplay> filteredJobListTemp = [];
+
     for (var singleJob in querySnapshot.docs) {
       var singleJobData = singleJob.data();
 
@@ -231,8 +232,12 @@ class _AsdJobScreenState extends State<AsdJobScreen>
           recruiterCompanyInfo: recruiterCompanyInfoTemp!);
 
       // add the jobDisplay class to the list
-      filteredJobList.add(jobDisplayTemp);
+      filteredJobListTemp.add(jobDisplayTemp);
     }
+    // setState(() {
+    //   filteredJobList = filteredJobListTemp;
+    // });
+    return filteredJobListTemp;
   }
 
   // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
@@ -249,17 +254,12 @@ class _AsdJobScreenState extends State<AsdJobScreen>
       vsync: this,
     );
 
-    setState(() {
-      myFuture = filterJobFromFirestore();
-    });
+    initJobWidgetList();
+    buildJobWidgetList();
 
     _tabController!.addListener(() {
       if (_tabController!.indexIsChanging) {
         widget.tabListenerCallback(_tabController!.index);
-        setState(() {
-          filteredJobList = [];
-          myFuture = filterJobFromFirestore();
-        });
       }
     });
   }
@@ -273,10 +273,6 @@ class _AsdJobScreenState extends State<AsdJobScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // setState(() {
-    //   filteredJobList = [];
-    //   myFuture = filterJobFromFirestore();
-    // });
 
     return Scaffold(
       key: _asdJobScreenState,
@@ -286,72 +282,61 @@ class _AsdJobScreenState extends State<AsdJobScreen>
         jobTextList: widget.tabTextList,
         appBar: AppBar(),
       ),
-      body: RefreshWidget(
-        key: _refreshIndicatorKey,
-        onRefresh: onRefresh,
-        child: FutureBuilder(
-            future: myFuture,
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Something went wrong'),
-                );
-              }
-              if (snapshot.hasData && !snapshot.data!.exists) {
-                return const Center(
-                  child: Text('Document does not exist'),
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.done) {
-                return buildJobList();
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }),
+      body: TabBarView(
+        controller: _tabController,
+        children: jobWidgetList,
       ),
     );
   }
 
-  Future onRefresh() async {
+  void initJobWidgetList() {
+    List<Widget> jobWidgetListTemp = [];
+    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
+      jobWidgetListTemp.add(AsdJobBody(
+        filteredJobList: null,
+        onRefreshCallback: buildJobWidgetList,
+      ));
+    }
     setState(() {
-      filteredJobList = [];
-      myFuture = filterJobFromFirestore();
+      jobWidgetList = jobWidgetListTemp;
     });
   }
 
-  Widget buildJobList() {
-    if (filteredJobList.isEmpty) {
-      return const Center(child: Text('List Empty'));
-    } else {
-      return ListView.builder(
-        padding: EdgeInsets.only(
-          left: 1.5.h,
-          right: 1.5.h,
-          top: 0.5.h,
-          bottom: 2.5.h,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          final JobDisplay currentJobDisplay = filteredJobList[index];
-          return MyJobCard(
-              companyLogo:
-                  currentJobDisplay.recruiterCompanyInfo.companyLogoImage!,
-              companyName: currentJobDisplay.recruiterCompanyInfo.companyName!,
-              jobName: currentJobDisplay.recruiterJobPost.jobName!,
-              jobCity: currentJobDisplay.recruiterJobPost.jobCity!,
-              jobState: currentJobDisplay.recruiterJobPost.jobState!,
-              employmentType:
-                  currentJobDisplay.recruiterJobPost.employmentType!,
-              jobOnPressed: null,
-              bookmarkOnPressed: null);
-        },
-        itemCount: filteredJobList.length,
-        // shrinkWrap: true,
-        // primary: false,
-// physics: const NeverScrollableScrollPhysics(),
-      );
+  Future<void> buildJobWidgetList() async {
+    List<JobDisplay>? filteredJobListTemp = [];
+    List<Widget> jobWidgetListTemp = [];
+    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
+      filteredJobListTemp = await filterJobFromFirestore(i);
+      jobWidgetListTemp.add(AsdJobBody(
+        filteredJobList: filteredJobListTemp,
+        onRefreshCallback: buildJobWidgetList,
+      ));
     }
+    setState(() {
+      jobWidgetList = jobWidgetListTemp;
+    });
   }
+
+  // TODO: fix this, not working for refresh
+// Future<void> refreshJobWidget() async {
+//   List<JobDisplay>? filteredJobListTemp = [];
+//   //List<Widget> jobWidgetListTemp = [];
+//   // for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
+//   //   filteredJobListTemp = await filterJobFromFirestore(i);
+//   //   jobWidgetListTemp.add(AsdJobBody(
+//   //     filteredJobList: filteredJobListTemp,
+//   //     onRefreshCallback: refreshJobWidget,
+//   //   ));
+//   // }
+//   filteredJobListTemp = await filterJobFromFirestore(_tabController!.index);
+//
+//   setState(() {
+//     jobWidgetList[_tabController!.index] = AsdJobBody(
+//       filteredJobList: filteredJobListTemp,
+//       onRefreshCallback: refreshJobWidget,
+//     );
+//   });
+// }
 }
 
 // Testing btn
@@ -394,3 +379,35 @@ class _AsdJobScreenState extends State<AsdJobScreen>
 // // shrinkWrap: true,
 // // physics: const NeverScrollableScrollPhysics(),
 // );
+
+// Reference: future builder implementation
+// children: [
+//   // build a list of tabview body in init
+//   // for each body pass the corresponding filteredJobList
+//   // onRefresh re-fetches the the corresponding filteredJobList and rebuild the widget
+//   RefreshWidget(
+//     //key: _refreshIndicatorKey,
+//     onRefresh: onRefresh,
+//     // child: FutureBuilder(
+//     //     future: myFuture,
+//     //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+//     //       if (snapshot.hasError) {
+//     //         return const Center(
+//     //           child: Text('Something went wrong'),
+//     //         );
+//     //       }
+//     //       if (snapshot.hasData && !snapshot.data!.exists) {
+//     //         return const Center(
+//     //           child: Text('Document does not exist'),
+//     //         );
+//     //       }
+//     //       if (snapshot.connectionState == ConnectionState.done) {
+//     //         return buildJobList();
+//     //       }
+//     //       return const Center(
+//     //         child: CircularProgressIndicator(),
+//     //       );
+//     //     }),
+//     child: buildJobList(),
+//   ),
+// ],

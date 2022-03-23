@@ -7,7 +7,6 @@ import 'package:autism_bridge/widgets/dismiss_keyboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'widgets/utils.dart';
 import 'package:sizer/sizer.dart';
-import 'package:autism_bridge/misc/JoinInEmployerScreen.dart';
 import 'package:autism_bridge/misc/SignedEmployerSettingsScreen.dart';
 
 void main() async {

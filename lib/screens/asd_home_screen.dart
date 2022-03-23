@@ -139,18 +139,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     tabNameListRebuild();
 
     screens.add(
-      // TODO: change to TabBarView
-      // TabBarView(
-      //   controller: _controller!,
-      //   children: [
-      //     AsdJobScreen(
-      //       userJobPreference: userJobPreferenceList![0]!,
-      //     ),
-      //     AsdJobScreen(
-      //       userJobPreference: userJobPreferenceList![0]!,
-      //     ),
-      //   ],
-      // ),
       AsdJobScreen(
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,

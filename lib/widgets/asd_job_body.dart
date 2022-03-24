@@ -19,17 +19,29 @@ class AsdJobBody extends StatefulWidget {
 }
 
 class _AsdJobBodyState extends State<AsdJobBody> {
+  List<JobDisplay>? filteredJobList;
+  Iterable<JobDisplay>? reversedFilteredJobList;
+
+  @override
+  void initState() {
+    super.initState();
+    filteredJobList = widget.filteredJobList;
+    if (widget.filteredJobList != null) {
+      reversedFilteredJobList = widget.filteredJobList!.reversed;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildJobList();
   }
 
   Widget buildJobList() {
-    if (widget.filteredJobList == null) {
+    if (filteredJobList == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (widget.filteredJobList!.isEmpty) {
+    } else if (filteredJobList!.isEmpty) {
       return RefreshWidget(
         onRefresh: widget.onRefreshCallback,
         child: ListView(children: [
@@ -54,7 +66,8 @@ class _AsdJobBodyState extends State<AsdJobBody> {
             bottom: 2.5.h,
           ),
           itemBuilder: (BuildContext context, int index) {
-            final JobDisplay currentJobDisplay = widget.filteredJobList![index];
+            final JobDisplay currentJobDisplay =
+                reversedFilteredJobList!.elementAt(index);
             return MyJobCard(
                 companyLogo:
                     currentJobDisplay.recruiterCompanyInfo.companyLogoImage!,
@@ -65,7 +78,10 @@ class _AsdJobBodyState extends State<AsdJobBody> {
                 jobState: currentJobDisplay.recruiterJobPost.jobState!,
                 employmentType:
                     currentJobDisplay.recruiterJobPost.employmentType!,
-                jobOnPressed: null,
+                jobOnPressed: () {
+                  //TODO:
+                  // current index: filteredJobList!.length - index - 1;
+                },
                 bookmarkOnPressed: null);
           },
           itemCount: widget.filteredJobList!.length,

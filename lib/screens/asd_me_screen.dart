@@ -8,6 +8,7 @@ import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/regular_helpers.dart';
 import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
@@ -161,9 +162,14 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
   Future<void> jobPreferenceBtnOnPressed() async {
     Utils.showProgressIndicator(context);
 
+    // userJobPreferenceList fetched from firebase
+    /// !!! dart object pass by reference
     List<JobPreference?> userJobPreferenceList =
         await JobPreference.readAllJobPreferenceDataFromFirestore(
             userId: widget.asdUserCredentials.userId);
+
+    // copy the userJobPreferenceList
+    List<JobPreference?> oldUserJobPreferenceList = [...userJobPreferenceList];
 
     navigatorKey.currentState!.pop();
 
@@ -177,7 +183,12 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       ),
     );
 
-    widget.onJobPreferenceListValueChanged(userJobPreferenceList);
+    // call the callback function only when the item of oldUserJobPreferenceList
+    // is different from userJobPreferenceList
+    if (!RegularHelpers.areListsEqual(
+        userJobPreferenceList, oldUserJobPreferenceList)) {
+      widget.onJobPreferenceListValueChanged(userJobPreferenceList);
+    }
   }
 
   @override

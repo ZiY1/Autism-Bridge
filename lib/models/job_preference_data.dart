@@ -32,6 +32,32 @@ class JobPreference {
         _minSalary = minSalary,
         _maxSalary = maxSalary;
 
+  @override
+  bool operator ==(other) {
+    return (other is JobPreference) &&
+        other.getUserId == _userId &&
+        other.getSubCollectionId == _subCollectionId &&
+        other.getEmploymentType == _employmentType &&
+        other.getJobCategory == _jobCategory &&
+        other.getJobTitle == _jobTitle &&
+        other.getJobCity == _jobCity &&
+        other.getJobState == _jobState &&
+        other.getMinSalary == _minSalary &&
+        other.getMaxSalary == _maxSalary;
+  }
+
+  @override
+  int get hashCode =>
+      _userId.hashCode ^
+      _subCollectionId.hashCode ^
+      _employmentType.hashCode ^
+      _jobCategory.hashCode ^
+      _jobTitle.hashCode ^
+      _jobCity.hashCode ^
+      _jobState.hashCode ^
+      _minSalary.hashCode ^
+      _maxSalary.hashCode;
+
   // This static method read all job preferences data (total 3) of a particular user from firestore
   static Future<List<JobPreference?>> readAllJobPreferenceDataFromFirestore(
       {required String userId}) async {

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,5 +37,22 @@ class RegularHelpers {
       // get rid of the end 'k'
       return double.parse(salaryStr.substring(0, salaryStr.length - 1));
     }
+  }
+
+  static bool areListsEqual(
+      List<JobPreference?> list1, List<JobPreference?> list2) {
+    // check if both are lists
+    if (list1.length != list2.length) {
+      return false;
+    }
+
+    // check if elements are equal
+    for (int i = 0; i < list1.length; i++) {
+      if (!(list1[i] == list2[i])) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

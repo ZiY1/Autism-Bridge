@@ -65,6 +65,11 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
       userJobPreferenceList = jobPreferenceListTemp;
       tabNameListRebuild();
       screens[0] = AsdJobScreen(
+        // Why passing UniqueKey only here?
+        // because the indexedStack preserves the state of widgets so init state
+        // will not be called, unless there is a UniqueKey
+        // Here we need to call init since the numbers of tabs changed
+        key: UniqueKey(),
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -79,6 +84,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     //print(userJobPreferenceList![tabIndex]!.getJobTitle);
     setState(() {
       screens[0] = AsdJobScreen(
+        //key: UniqueKey(),
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -116,7 +122,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     });
   }
 
-  void homeBtnOnPressed() {
+  void vrBtnOnPressed() {
     setState(() {
       bottomNavBarCurrentIndex = 3;
     });
@@ -140,6 +146,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
 
     screens.add(
       AsdJobScreen(
+        //key: UniqueKey(),
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -178,7 +185,11 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     return DefaultTabController(
       length: userJobPreferenceList!.length,
       child: Scaffold(
-        body: screens[bottomNavBarCurrentIndex],
+        // Use IndexedStack to preserve the state of widget when change tabs
+        body: IndexedStack(
+          index: bottomNavBarCurrentIndex,
+          children: screens,
+        ),
         bottomNavigationBar: MyBottomNavBar(
           middleSearch: GestureDetector(
             onTap: searchBtnOnPressed,
@@ -261,7 +272,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                onPressed: homeBtnOnPressed,
+                onPressed: vrBtnOnPressed,
                 iconPath: 'images/icon_vr.png',
                 scale: 1.6,
               ),
@@ -313,7 +324,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                 padding: EdgeInsets.only(right: 2.29.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
-                  onPressed: homeBtnOnPressed,
+                  onPressed: vrBtnOnPressed,
                   labelName: '   VR   ',
                 ),
               ),

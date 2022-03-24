@@ -39,8 +39,6 @@ class _AsdJobScreenState extends State<AsdJobScreen>
 
   TabController? _tabController;
 
-  List<JobDisplay>? filteredJobList;
-
   List<Widget> jobWidgetList = [];
 
   Future<List<JobDisplay>> filterJobFromFirestore(int index) async {
@@ -293,6 +291,7 @@ class _AsdJobScreenState extends State<AsdJobScreen>
     List<Widget> jobWidgetListTemp = [];
     for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
       jobWidgetListTemp.add(AsdJobBody(
+        key: UniqueKey(),
         filteredJobList: null,
         onRefreshCallback: buildJobWidgetList,
       ));
@@ -303,11 +302,12 @@ class _AsdJobScreenState extends State<AsdJobScreen>
   }
 
   Future<void> buildJobWidgetList() async {
-    List<JobDisplay>? filteredJobListTemp = [];
+    List<JobDisplay> filteredJobListTemp = [];
     List<Widget> jobWidgetListTemp = [];
     for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
       filteredJobListTemp = await filterJobFromFirestore(i);
       jobWidgetListTemp.add(AsdJobBody(
+        key: UniqueKey(),
         filteredJobList: filteredJobListTemp,
         onRefreshCallback: buildJobWidgetList,
       ));
@@ -318,25 +318,8 @@ class _AsdJobScreenState extends State<AsdJobScreen>
   }
 
   // TODO: fix this, not working for refresh
-// Future<void> refreshJobWidget() async {
-//   List<JobDisplay>? filteredJobListTemp = [];
-//   //List<Widget> jobWidgetListTemp = [];
-//   // for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
-//   //   filteredJobListTemp = await filterJobFromFirestore(i);
-//   //   jobWidgetListTemp.add(AsdJobBody(
-//   //     filteredJobList: filteredJobListTemp,
-//   //     onRefreshCallback: refreshJobWidget,
-//   //   ));
-//   // }
-//   filteredJobListTemp = await filterJobFromFirestore(_tabController!.index);
-//
-//   setState(() {
-//     jobWidgetList[_tabController!.index] = AsdJobBody(
-//       filteredJobList: filteredJobListTemp,
-//       onRefreshCallback: refreshJobWidget,
-//     );
-//   });
-// }
+  // Future<void> refreshJobWidget() async {
+  // }
 }
 
 // Testing btn

@@ -301,7 +301,11 @@ class _AsdManageJobPreferenceScreenState
                                                                   .getMinSalary ==
                                                               kNone
                                                           ? 'None  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
-                                                          : '${currentJobPreference.getMinSalary}k  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
+                                                          : currentJobPreference
+                                                                      .getMinSalary ==
+                                                                  kMinSalaryLimit
+                                                              ? '< ${currentJobPreference.getMinSalary}k •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
+                                                              : '> ${currentJobPreference.getMinSalary}k •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}'
                                                       : '${currentJobPreference.getMinSalary}k - ${currentJobPreference.getMaxSalary}k  •  ${currentJobPreference.getJobCity}  •  ${currentJobPreference.getEmploymentType}',
                                                   overflow:
                                                       TextOverflow.ellipsis,

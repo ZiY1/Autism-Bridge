@@ -1,16 +1,17 @@
+import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_display.dart';
+import 'package:autism_bridge/models/job_filter_manager.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
-import 'package:autism_bridge/models/recruiter_company_info.dart';
-import 'package:autism_bridge/models/recruiter_job_post.dart';
+import 'package:autism_bridge/screens/asd_job_view_screen.dart';
 import 'package:autism_bridge/widgets/asd_job_app_bar.dart';
 import 'package:autism_bridge/widgets/asd_job_body.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
-import '../num_constants.dart';
 
 class AsdJobScreen extends StatefulWidget {
   static const id = 'asd_job_screen';
+
+  final AsdUserCredentials asdUserCredentials;
 
   final int currentTabIndex;
 
@@ -22,6 +23,7 @@ class AsdJobScreen extends StatefulWidget {
 
   const AsdJobScreen({
     Key? key,
+    required this.asdUserCredentials,
     required this.currentTabIndex,
     required this.userJobPreferenceList,
     required this.tabTextList,
@@ -41,202 +43,54 @@ class _AsdJobScreenState extends State<AsdJobScreen>
 
   List<Widget> jobWidgetList = [];
 
-  Future<List<JobDisplay>> filterJobFromFirestore(int index) async {
-    // 1. Read the RecruiterJobPost by filtering with JobPreference
-    // 2. For each RecruiterJobPost, fetch its corresponding RecruiterCompanyInfo
-    //    if there is no key in the map, then store it in an map
-    //    {key: docId, value: RecruiterCompanyInfo}.
-    //    Otherwise, use the value of the key.
-    // 3. Create a Job class containing RecruiterJobPost with its corresponding
-    List<JobDisplay> filteredJobDisplayList = [];
-
-    //TODO: maybe create a map for recruiterCompanyInfo?
-
-    JobPreference userCurrentJobPreference =
-        widget.userJobPreferenceList[index]!;
-    // If these two condition are not specific, no need to make them as a condition
-    if (userCurrentJobPreference.getEmploymentType == 'Any Type' &&
-        userCurrentJobPreference.getMinSalary == kNone) {
-      await FirebaseFirestore.instance
-          .collection("all_jobs")
-          .where('jobCategory',
-              isEqualTo: userCurrentJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-          .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-          .get()
-          .then((querySnapshot) async {
-        filteredJobDisplayList = await jobFiltering(querySnapshot);
-        return filteredJobDisplayList;
-      });
+  void initJobWidgetList() {
+    List<Widget> jobWidgetListTemp = [];
+    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
+      jobWidgetListTemp.add(AsdJobBody(
+        key: UniqueKey(),
+        filteredJobList: null,
+        onRefreshCallback: buildJobWidgetList,
+        jobOnPressedCallback: jobOnPressed,
+      ));
     }
-    // If jobSeekerJobPreference.getEmploymentType is 'Any Type', no need to make it as a condition
-    else if (userCurrentJobPreference.getEmploymentType == 'Any Type') {
-      if (userCurrentJobPreference.getMaxSalary == kEmpty) {
-        await FirebaseFirestore.instance
-            .collection("all_jobs")
-            .where('jobCategory',
-                isEqualTo: userCurrentJobPreference.getJobCategory)
-            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-            .where(
-              'maxSalary',
-              isEqualTo: userCurrentJobPreference.getMaxSalary,
-            )
-            .where(
-              'minSalary',
-              isEqualTo: userCurrentJobPreference.getMinSalary,
-            )
-            .get()
-            .then((querySnapshot) async {
-          filteredJobDisplayList = await jobFiltering(querySnapshot);
-          return filteredJobDisplayList;
-        });
-      } else {
-        await FirebaseFirestore.instance
-            .collection("all_jobs")
-            .where('jobCategory',
-                isEqualTo: userCurrentJobPreference.getJobCategory)
-            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-            .where('minSalary',
-                isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
-            .get()
-            .then((querySnapshot) async {
-          filteredJobDisplayList = await jobFiltering(querySnapshot);
-          return filteredJobDisplayList;
-        });
-      }
-    }
-    // If jobSeekerJobPreference.getMinSalary is 'None', no need to make it as a condition
-    else if (userCurrentJobPreference.getMinSalary == kNone) {
-      await FirebaseFirestore.instance
-          .collection("all_jobs")
-          .where('employmentType',
-              whereIn: [userCurrentJobPreference.getEmploymentType, 'Any Type'])
-          .where('jobCategory',
-              isEqualTo: userCurrentJobPreference.getJobCategory)
-          .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-          .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-          .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-          .get()
-          .then((querySnapshot) async {
-            filteredJobDisplayList = await jobFiltering(querySnapshot);
-            return filteredJobDisplayList;
-          });
-    }
-    // Every preference is specific
-    else {
-      if (userCurrentJobPreference.getMaxSalary == kEmpty) {
-        await FirebaseFirestore.instance
-            .collection("all_jobs")
-            .where('employmentType', whereIn: [
-              userCurrentJobPreference.getEmploymentType,
-              'Any Type'
-            ])
-            .where('jobCategory',
-                isEqualTo: userCurrentJobPreference.getJobCategory)
-            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-            .where(
-              'maxSalary',
-              isEqualTo: userCurrentJobPreference.getMaxSalary,
-            )
-            .where(
-              'minSalary',
-              isEqualTo: userCurrentJobPreference.getMinSalary,
-            )
-            .get()
-            .then((querySnapshot) async {
-              filteredJobDisplayList = await jobFiltering(querySnapshot);
-              return filteredJobDisplayList;
-            });
-      } else {
-        await FirebaseFirestore.instance
-            .collection("all_jobs")
-            .where('employmentType', whereIn: [
-              userCurrentJobPreference.getEmploymentType,
-              'Any Type'
-            ])
-            .where('jobCategory',
-                isEqualTo: userCurrentJobPreference.getJobCategory)
-            .where('jobTitle', isEqualTo: userCurrentJobPreference.getJobTitle)
-            .where('jobState', isEqualTo: userCurrentJobPreference.getJobState)
-            .where('jobCity', isEqualTo: userCurrentJobPreference.getJobCity)
-            .where('minSalary',
-                isGreaterThanOrEqualTo: userCurrentJobPreference.getMinSalary)
-            .get()
-            .then((querySnapshot) async {
-              filteredJobDisplayList = await jobFiltering(querySnapshot);
-              return filteredJobDisplayList;
-            });
-      }
-    }
-    return filteredJobDisplayList;
+    if (!mounted) return;
+    setState(() {
+      jobWidgetList = jobWidgetListTemp;
+    });
   }
 
-  Future<List<JobDisplay>> jobFiltering(
-      QuerySnapshot<Map<String, dynamic>> querySnapshot) async {
+  Future<void> buildJobWidgetList() async {
     List<JobDisplay> filteredJobListTemp = [];
-
-    for (var singleJob in querySnapshot.docs) {
-      var singleJobData = singleJob.data();
-
-      // Read all fields
-      String userId = singleJobData['collectionId'];
-      String subCollectionId = singleJobData['subCollectionId'];
-      String employmentType = singleJobData['employmentType'];
-      String jobName = singleJobData['jobName'];
-      String jobCategory = singleJobData['jobCategory'];
-      String jobTitle = singleJobData['jobTitle'];
-      String jobCity = singleJobData['jobCity'];
-      String jobState = singleJobData['jobState'];
-      String jobAddress = singleJobData['jobAddress'];
-      String minExperience = singleJobData['minExperience'];
-      String minEducation = singleJobData['minEducation'];
-      double minSalary = singleJobData['minSalary'];
-      double maxSalary = singleJobData['maxSalary'];
-      String jobDescription = singleJobData['jobDescription'];
-
-      // Create a RecruiterJobPost class
-      RecruiterJobPost recruiterJobPostTemp = RecruiterJobPost(
-          userId: userId,
-          subCollectionId: subCollectionId,
-          employmentType: employmentType,
-          jobName: jobName,
-          jobCategory: jobCategory,
-          jobTitle: jobTitle,
-          jobCity: jobCity,
-          jobState: jobState,
-          jobAddress: jobAddress,
-          minExperience: minExperience,
-          minEducation: minEducation,
-          minSalary: minSalary,
-          maxSalary: maxSalary,
-          jobDescription: jobDescription);
-
-      // Fetch the corresponding RecruiterCompanyInfo
-      // TODO: add exception handling
-      RecruiterCompanyInfo? recruiterCompanyInfoTemp =
-          await RecruiterCompanyInfo.readRecruiterCompanyInfoFromFirestore(
-              userId);
-
-      // Create a jobDisplay class
-      JobDisplay jobDisplayTemp = JobDisplay(
-          recruiterJobPost: recruiterJobPostTemp,
-          recruiterCompanyInfo: recruiterCompanyInfoTemp!);
-
-      // add the jobDisplay class to the list
-      filteredJobListTemp.add(jobDisplayTemp);
+    List<Widget> jobWidgetListTemp = [];
+    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
+      filteredJobListTemp = await JobFilterManager.filterJobFromFirestore(
+          userJobPreferenceList: widget.userJobPreferenceList, index: i);
+      jobWidgetListTemp.add(AsdJobBody(
+        key: UniqueKey(),
+        filteredJobList: filteredJobListTemp,
+        onRefreshCallback: buildJobWidgetList,
+        jobOnPressedCallback: jobOnPressed,
+      ));
     }
-    // setState(() {
-    //   filteredJobList = filteredJobListTemp;
-    // });
-    return filteredJobListTemp;
+    if (!mounted) return;
+    setState(() {
+      jobWidgetList = jobWidgetListTemp;
+    });
   }
+
+  void jobOnPressed(JobDisplay jobDisplay) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AsdJobViewScreen(
+              asdUserCredentials: widget.asdUserCredentials,
+              jobDisplay: jobDisplay)),
+    );
+  }
+
+  // TODO: fix this, not working for refresh
+  // Future<void> refreshJobWidget() async {
+  // }
 
   // The Mixin AutomaticKeepAliveClientMixin is used to preserve the state of the tab
   @override
@@ -286,40 +140,6 @@ class _AsdJobScreenState extends State<AsdJobScreen>
       ),
     );
   }
-
-  void initJobWidgetList() {
-    List<Widget> jobWidgetListTemp = [];
-    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
-      jobWidgetListTemp.add(AsdJobBody(
-        key: UniqueKey(),
-        filteredJobList: null,
-        onRefreshCallback: buildJobWidgetList,
-      ));
-    }
-    setState(() {
-      jobWidgetList = jobWidgetListTemp;
-    });
-  }
-
-  Future<void> buildJobWidgetList() async {
-    List<JobDisplay> filteredJobListTemp = [];
-    List<Widget> jobWidgetListTemp = [];
-    for (int i = 0; i < widget.userJobPreferenceList.length; i++) {
-      filteredJobListTemp = await filterJobFromFirestore(i);
-      jobWidgetListTemp.add(AsdJobBody(
-        key: UniqueKey(),
-        filteredJobList: filteredJobListTemp,
-        onRefreshCallback: buildJobWidgetList,
-      ));
-    }
-    setState(() {
-      jobWidgetList = jobWidgetListTemp;
-    });
-  }
-
-  // TODO: fix this, not working for refresh
-  // Future<void> refreshJobWidget() async {
-  // }
 }
 
 // Testing btn

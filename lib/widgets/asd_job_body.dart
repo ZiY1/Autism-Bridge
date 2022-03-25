@@ -8,10 +8,12 @@ import 'my_job_card.dart';
 class AsdJobBody extends StatefulWidget {
   final List<JobDisplay>? filteredJobList;
   final Future<dynamic> Function() onRefreshCallback;
+  final Function(JobDisplay jobDisplay) jobOnPressedCallback;
   const AsdJobBody({
     Key? key,
     required this.filteredJobList,
     required this.onRefreshCallback,
+    required this.jobOnPressedCallback,
   }) : super(key: key);
 
   @override
@@ -81,13 +83,14 @@ class _AsdJobBodyState extends State<AsdJobBody> {
                 jobOnPressed: () {
                   //TODO:
                   // current index: filteredJobList!.length - index - 1;
+                  widget.jobOnPressedCallback(currentJobDisplay);
                 },
                 bookmarkOnPressed: null);
           },
           itemCount: widget.filteredJobList!.length,
           // shrinkWrap: true,
           // primary: false,
-// physics: const NeverScrollableScrollPhysics(),
+          // physics: const NeverScrollableScrollPhysics(),
         ),
       );
     }

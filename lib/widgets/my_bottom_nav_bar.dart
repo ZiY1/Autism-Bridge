@@ -6,13 +6,15 @@ class MyBottomNavBar extends StatelessWidget {
   final Widget secondRow;
   final Widget thirdRow;
   final Widget middleSearch;
-  const MyBottomNavBar(
-      {Key? key,
-      required this.firstRow,
-      required this.secondRow,
-      required this.thirdRow,
-      required this.middleSearch})
-      : super(key: key);
+  final bool isIOS;
+  const MyBottomNavBar({
+    Key? key,
+    required this.firstRow,
+    required this.secondRow,
+    required this.thirdRow,
+    required this.middleSearch,
+    required this.isIOS,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class MyBottomNavBar extends StatelessWidget {
       children: [
         Positioned(
           child: Container(
-            height: 12.h,
+            height: isIOS ? 13.h : 11.h,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -65,7 +67,7 @@ class MyBottomNavBar extends StatelessWidget {
         ),
         Positioned(
           left: 42.7.w,
-          bottom: 6.h,
+          bottom: isIOS ? 7.h : 5.h,
           child: Container(
             width: 7.8.h,
             height: 7.8.h,
@@ -77,7 +79,7 @@ class MyBottomNavBar extends StatelessWidget {
         ),
         Positioned(
           left: 44.14.w,
-          bottom: 6.65.h,
+          bottom: isIOS ? 7.65.h : 5.65.h,
           child: middleSearch,
         ),
       ],

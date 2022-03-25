@@ -208,7 +208,11 @@ class _RecruiterManagePostJobScreenState
                                                                   .minSalary ==
                                                               kNone
                                                           ? 'None  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
-                                                          : '${currentJobPost.minSalary}k  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
+                                                          : currentJobPost
+                                                                      .minSalary ==
+                                                                  kMinSalaryLimit
+                                                              ? '< ${currentJobPost.minSalary}k •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
+                                                              : '> ${currentJobPost.minSalary}k •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}'
                                                       : '${currentJobPost.minSalary}k - ${currentJobPost.maxSalary}k  •  ${currentJobPost.jobCity}  •  ${currentJobPost.employmentType}',
                                                   overflow:
                                                       TextOverflow.ellipsis,

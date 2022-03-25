@@ -9,6 +9,7 @@ import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:io' show Platform;
 
 class RecruiterHomeScreen extends StatefulWidget {
   static const id = 'recruiter_home_screen';
@@ -150,6 +151,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
         appBar: appBars[bottomNavBarCurrentIndex],
         body: screens[bottomNavBarCurrentIndex],
         bottomNavigationBar: MyBottomNavBar(
+          isIOS: Platform.isIOS,
           middleSearch: GestureDetector(
             onTap: searchBtnOnPressed,
             child: Container(

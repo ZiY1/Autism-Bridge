@@ -11,6 +11,7 @@ import 'package:autism_bridge/widgets/my_bottom_nav_bar_indicator.dart';
 import 'package:autism_bridge/widgets/my_bottom_nav_bar_label.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:io' show Platform;
 
 class AsdHomeScreen extends StatefulWidget {
   static const id = 'asd_home_screen';
@@ -70,6 +71,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
         // will not be called, unless there is a UniqueKey
         // Here we need to call init since the numbers of tabs changed
         key: UniqueKey(),
+        asdUserCredentials: widget.asdUserCredentials,
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -85,6 +87,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     setState(() {
       screens[0] = AsdJobScreen(
         //key: UniqueKey(),
+        asdUserCredentials: widget.asdUserCredentials,
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -147,6 +150,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
     screens.add(
       AsdJobScreen(
         //key: UniqueKey(),
+        asdUserCredentials: widget.asdUserCredentials,
         currentTabIndex: currentTabIndex,
         userJobPreferenceList: userJobPreferenceList!,
         tabTextList: tabNameList,
@@ -191,6 +195,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
           children: screens,
         ),
         bottomNavigationBar: MyBottomNavBar(
+          isIOS: Platform.isIOS,
           middleSearch: GestureDetector(
             onTap: searchBtnOnPressed,
             child: Container(

@@ -9,7 +9,7 @@ import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 import '../num_constants.dart';
 
 class AsdJobViewScreen extends StatefulWidget {
@@ -152,7 +152,7 @@ class _AsdJobViewScreenState extends State<AsdJobViewScreen>
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(
-                        kResumeBuilderCardRadius,
+                        kCardRadius,
                       ),
                     ),
                     child: TabBar(
@@ -160,7 +160,7 @@ class _AsdJobViewScreenState extends State<AsdJobViewScreen>
                       // give the indicator a decoration (color and border radius)
                       indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                          kResumeBuilderCardRadius,
+                          kCardRadius,
                         ),
                         color: const Color(0xFFFA5805),
                       ),

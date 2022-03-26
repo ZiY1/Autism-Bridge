@@ -22,7 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 
 class AsdResumeBuilderScreen extends StatefulWidget {
   static const id = 'asd_resume_builder_screen';

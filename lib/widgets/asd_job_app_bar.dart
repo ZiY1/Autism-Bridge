@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 
 class AsdJobAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController? _tabController;

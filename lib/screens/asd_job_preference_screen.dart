@@ -8,13 +8,13 @@ import 'package:autism_bridge/screens/asd_home_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 
 import '../num_constants.dart';
@@ -528,105 +528,58 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showEmpTypePicker();
                           },
                           title: 'Desired Employment Type',
-                          bodyText: preferredEmploymentType == null
-                              ? Text(
-                                  'Select your employment type',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  preferredEmploymentType!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: preferredEmploymentType,
+                          hintText: 'Select your employment type',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showJobTitlePicker();
                           },
                           title: 'Desired Job Category & Title',
                           bodyText: preferredJobCategory == null &&
                                   preferredJobTitle == null
-                              ? Text(
-                                  'Select your category & job title',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  "${preferredJobCategory!} , ${preferredJobTitle!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : '${preferredJobCategory!} , ${preferredJobTitle!}',
+                          hintText: 'Select your category & job title',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showCityStatePicker();
                           },
                           title: 'Desired City & State',
                           bodyText:
                               preferredState == null && preferredCity == null
-                                  ? Text(
-                                      'Select your the city & state to work',
-                                      style: TextStyle(
-                                        fontSize: 9.5.sp,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                    )
-                                  : Text(
-                                      "${preferredCity!} , ${preferredState!}",
-                                      style: TextStyle(
-                                        fontSize: 11.sp,
-                                        color: const Color(0xFF1F1F39),
-                                      ),
-                                    ),
+                                  ? null
+                                  : '${preferredCity!} , ${preferredState!}',
+                          hintText: 'Select your city & state',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showSalaryRangePicker();
                           },
                           title: 'Desired Monthly Salary',
                           bodyText: preferredMinSalary == null &&
                                   preferredMaxSalary == null
-                              ? Text(
-                                  'Select your monthly salary range',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  preferredMaxSalary! == kEmpty
-                                      ? preferredMinSalary == kNone
-                                          ? 'None'
-                                          : preferredMinSalary ==
-                                                  kMinSalaryLimit
-                                              ? '< ${preferredMinSalary}k'
-                                              : '> ${preferredMinSalary}k'
-                                      : '${preferredMinSalary!}k - ${preferredMaxSalary!}k',
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : preferredMaxSalary! == kEmpty
+                                  ? preferredMinSalary == kNone
+                                      ? 'None'
+                                      : preferredMinSalary == kMinSalaryLimit
+                                          ? '< ${preferredMinSalary}k'
+                                          : '> ${preferredMinSalary}k'
+                                  : '${preferredMinSalary!}k - ${preferredMaxSalary!}k',
+                          hintText: 'Select your monthly salary range',
                           disableBorder: true,
                         ),
                       ],

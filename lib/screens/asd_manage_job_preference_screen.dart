@@ -6,7 +6,7 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'asd_job_preference_screen.dart';
 

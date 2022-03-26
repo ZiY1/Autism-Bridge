@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
+import '../num_constants.dart';
 
 class ResumeBuilderButton extends StatelessWidget {
   final Function()? onPressed;
@@ -37,7 +38,7 @@ class ResumeBuilderButton extends StatelessWidget {
               ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+            borderRadius: BorderRadius.circular(kCardRadius),
           ),
         ),
         side: isHollow

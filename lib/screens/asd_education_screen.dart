@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
@@ -9,7 +9,7 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/resume_date_toggle.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
@@ -450,26 +450,28 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                           textInputAction: TextInputAction.next,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showDegreePicker();
                           },
                           title: 'Degree',
-                          bodyText: degree == null
-                              ? Text(
-                                  'Select your degree',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  degree!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          // bodyText: degree == null
+                          //     ? Text(
+                          //         'Select your degree',
+                          //         style: TextStyle(
+                          //           fontSize: 9.5.sp,
+                          //           color: Colors.grey.shade400,
+                          //         ),
+                          //       )
+                          //     : Text(
+                          //         degree!,
+                          //         style: TextStyle(
+                          //           fontSize: 11.sp,
+                          //           color: const Color(0xFF1F1F39),
+                          //         ),
+                          //       ),
+                          bodyText: degree,
+                          hintText: 'Select your degree',
                           disableBorder: true,
                         ),
                       ],
@@ -495,33 +497,20 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: ResumeBuilderPicker(
+                              child: InputHolder(
                                 onPressed: () {
                                   startDateTemp = DateFormat('MM/yyyy')
                                       .format(leftSelectedDateTemp);
                                   return showDatePicker(PickerPosition.left);
                                 },
                                 title: 'Start Date',
-                                bodyText: startDate == null
-                                    ? Text(
-                                        'MM/YYYY',
-                                        style: TextStyle(
-                                          fontSize: 9.5.sp,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      )
-                                    : Text(
-                                        startDate!,
-                                        style: TextStyle(
-                                          fontSize: 11.sp,
-                                          color: const Color(0xFF1F1F39),
-                                        ),
-                                      ),
+                                bodyText: startDate,
+                                hintText: 'MM/YYYY',
                                 disableBorder: false,
                               ),
                             ),
                             Expanded(
-                              child: ResumeBuilderPicker(
+                              child: InputHolder(
                                 onPressed: () {
                                   if (isDatePresent) {
                                     return;
@@ -532,21 +521,8 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                                   }
                                 },
                                 title: 'End Date',
-                                bodyText: endDate == null
-                                    ? Text(
-                                        'MM/YYYY',
-                                        style: TextStyle(
-                                          fontSize: 9.5.sp,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      )
-                                    : Text(
-                                        endDate!,
-                                        style: TextStyle(
-                                          fontSize: 11.sp,
-                                          color: const Color(0xFF1F1F39),
-                                        ),
-                                      ),
+                                bodyText: endDate,
+                                hintText: 'MM/YYYY',
                                 disableBorder: false,
                               ),
                             ),
@@ -589,26 +565,15 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showCityStatePicker();
                           },
                           title: 'City & State',
                           bodyText: state == null && city == null
-                              ? Text(
-                                  'Select your work city & state',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  "${city!} , ${state!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : '${city!} , ${state!}',
+                          hintText: 'Select your living state & city',
                           disableBorder: true,
                         ),
                       ],

@@ -8,7 +8,7 @@ import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-import '../constants.dart';
+import '../color_constants.dart';
 import '../firebase_helpers.dart';
 
 class AsdPersonalDetailsScreen extends StatefulWidget {
@@ -625,23 +625,10 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           title: 'Date Of Birth',
-                          bodyText: dateOfBirth != null
-                              ? Text(
-                                  dateOfBirth!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                )
-                              : Text(
-                                  'Select your date of birth',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
+                          bodyText: dateOfBirth,
+                          hintText: 'Select your date of birth',
                           onPressed: () {
                             dateOfBirthTemp = DateFormat('MM/dd/yyyy')
                                 .format(selectedDateTemp);
@@ -709,26 +696,15 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showCityStatePicker();
                           },
                           title: 'Current Living City & State',
                           bodyText: state == null && city == null
-                              ? Text(
-                                  'Select your living state & city',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  "${city!} , ${state!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : '${city!} , ${state!}',
+                          hintText: 'Select your living state & city',
                           disableBorder: false,
                         ),
                         seg,

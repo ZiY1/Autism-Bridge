@@ -11,7 +11,7 @@ import 'dart:io';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 
 class AsdPdfExportScreen extends StatefulWidget {
   final AsdUserCredentials asdUserCredentials;

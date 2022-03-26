@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/education_data.dart';
@@ -10,6 +10,7 @@ import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/regular_helpers.dart';
 import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../icon_constants.dart';
 import '../main.dart';
+import '../num_constants.dart';
 import 'asd_manage_job_preference_screen.dart';
 import 'asd_personal_details_screen.dart';
 import 'asd_resume_builder_screen.dart';
@@ -80,6 +82,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       // Return non-null means changes have made in AsdPersonalDetailsScreen
       // so update the userPersonalDetails to updatedPersonalDetails
       if (updatedPersonalDetails != null) {
+        if (!mounted) return;
         setState(() {
           userResume!.setPersonalDetails = updatedPersonalDetails;
         });
@@ -147,6 +150,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
       ),
     );
 
+    if (!mounted) return;
     setState(() {
       userResume!.setPersonalDetails = resumeTemp.userPersonalDetails;
     });
@@ -277,20 +281,33 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.5.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   MeSavedWidgets(
                     totalNumber: '0',
                     sectionName: '  Job Chats  ',
+                    // TODO: change later, used for temp testing
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TextFieldInputScreen(
+                            title: 'Testing',
+                            hintText: 'Hint test',
+                            keyBoardType: TextInputType.text,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  MeSavedWidgets(
+                  const MeSavedWidgets(
                     totalNumber: '0',
                     sectionName: 'Sent Resumes ',
                   ),
-                  MeSavedWidgets(
+                  const MeSavedWidgets(
                     totalNumber: '0',
                     sectionName: 'My Interviews',
                   ),
-                  MeSavedWidgets(
+                  const MeSavedWidgets(
                     totalNumber: '0',
                     sectionName: '  Saved Jobs ',
                   ),
@@ -304,7 +321,7 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
               child: SizedBox(
                 height: 27.h,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+                  borderRadius: BorderRadius.circular(kCardRadius),
                   child: FittedBox(
                     child: Image.asset('images/undraw_AR.png'),
                     fit: BoxFit.fitWidth,

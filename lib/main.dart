@@ -8,9 +8,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'widgets/utils.dart';
 import 'package:sizer/sizer.dart';
 import 'package:autism_bridge/misc/SignedEmployerSettingsScreen.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await Firebase.initializeApp();
 

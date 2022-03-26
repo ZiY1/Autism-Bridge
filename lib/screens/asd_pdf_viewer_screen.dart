@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 
 class AsdPdfViewerScreen extends StatefulWidget {
   final AsdUserCredentials asdUserCredentials;

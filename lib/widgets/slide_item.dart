@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:autism_bridge/models/welcome_item.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 
 class SlideItem extends StatelessWidget {
   final int index;

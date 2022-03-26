@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:io';
-import '../constants.dart';
+import '../color_constants.dart';
 import '../firebase_helpers.dart';
 
 class RecruiterProfileScreen extends StatefulWidget {

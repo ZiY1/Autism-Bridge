@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
@@ -8,7 +8,7 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/material.dart';
@@ -268,26 +268,13 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                           textInputAction: TextInputAction.next,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             return showPicker();
                           },
                           title: 'Skill Level',
-                          bodyText: skillLevel == null
-                              ? Text(
-                                  'Select your skill level',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  skillLevel!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: skillLevel,
+                          hintText: 'Select your skill level',
                           disableBorder: true,
                         ),
                       ],

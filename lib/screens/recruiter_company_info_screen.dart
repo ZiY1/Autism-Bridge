@@ -10,7 +10,7 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:io';
-import '../constants.dart';
+import '../color_constants.dart';
 import '../firebase_helpers.dart';
 
 class RecruiterCompanyInfoScreen extends StatefulWidget {
@@ -479,32 +479,14 @@ class _RecruiterCompanyInfoScreenState
                           textInputAction: TextInputAction.next,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: showCompanySizeRangePicker,
                           title: 'Company Size',
-                          bodyText: widget.recruiterCompanyInfo
-                                          .companyMinSize ==
-                                      null &&
-                                  widget.recruiterCompanyInfo.companyMaxSize ==
-                                      null
-                              ? Text(
-                                  'Select your company size range',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  widget.recruiterCompanyInfo.companyMaxSize!
-                                          .isEmpty
-                                      ? widget
-                                          .recruiterCompanyInfo.companyMinSize!
-                                      : "${widget.recruiterCompanyInfo.companyMinSize!} - ${widget.recruiterCompanyInfo.companyMaxSize!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: widget
+                                  .recruiterCompanyInfo.companyMaxSize!.isEmpty
+                              ? widget.recruiterCompanyInfo.companyMinSize!
+                              : '${widget.recruiterCompanyInfo.companyMinSize!} - ${widget.recruiterCompanyInfo.companyMaxSize!}',
+                          hintText: 'Select your company size range',
                           disableBorder: false,
                         ),
                         seg,

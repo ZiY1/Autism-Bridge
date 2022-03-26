@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/firebase_helpers.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';

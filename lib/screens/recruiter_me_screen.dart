@@ -1,12 +1,11 @@
 import 'package:autism_bridge/icon_constants.dart';
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/screens/recruiter_company_info_screen.dart';
 import 'package:autism_bridge/screens/recruiter_manage_post_job_screen.dart';
-import 'package:autism_bridge/screens/recruiter_post_job_screen.dart';
 import 'package:autism_bridge/screens/recruiter_profile_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
@@ -17,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../main.dart';
+import '../num_constants.dart';
 
 class RecruiterMeScreen extends StatefulWidget {
   static const id = 'recruiter_me_screen';
@@ -240,7 +240,7 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
             ),
             MyCardWidget(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(kResumeBuilderCardRadius),
+                borderRadius: BorderRadius.circular(kCardRadius),
                 child: FittedBox(
                   child: Image.asset('images/welcome_vr_interview.png'),
                   fit: BoxFit.fill,

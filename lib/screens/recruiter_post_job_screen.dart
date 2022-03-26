@@ -8,13 +8,13 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 
 import '../regular_helpers.dart';
@@ -514,49 +514,25 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                           textInputAction: TextInputAction.next,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showJobCategoryPicker();
                           },
                           title: 'Job Category',
                           bodyText: jobCategory == null && jobTitle == null
-                              ? Text(
-                                  'Select your category & job title',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  "${jobCategory!} , ${jobTitle!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : '${jobCategory!} , ${jobTitle!}',
+                          hintText: 'Select your category & job title',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showEmpTypePicker();
                           },
                           title: 'Employment Type',
-                          bodyText: employmentType == null
-                              ? Text(
-                                  'select the employment type',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  employmentType!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: employmentType,
+                          hintText: 'select the employment type',
                           disableBorder: true,
                         ),
                       ],
@@ -579,78 +555,41 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showMinExperiencePicker();
                           },
                           title: 'Minimum Experience',
-                          bodyText: minExperience == null
-                              ? Text(
-                                  'select the minimum experience required',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  minExperience!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: minExperience,
+                          hintText: 'select the minimum experience required',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showMinEducationPicker();
                           },
                           title: 'Minimum Education',
-                          bodyText: minEducation == null
-                              ? Text(
-                                  'select the minimum education required',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  minEducation!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: minEducation,
+                          hintText: 'select the minimum education required',
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showSalaryRangePicker();
                           },
                           title: 'Job Monthly Salary',
                           bodyText: minSalary == null && maxSalary == null
-                              ? Text(
-                                  'Select the job monthly salary range',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  maxSalary! == kEmpty
-                                      ? minSalary == kNone
-                                          ? "None"
-                                          : minSalary == kMinSalaryLimit
-                                              ? "< ${minSalary}k"
-                                              : "> ${minSalary}k"
-                                      : "${minSalary!}k - ${maxSalary!}k",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : maxSalary! == kEmpty
+                                  ? minSalary == kNone
+                                      ? 'None'
+                                      : minSalary == kMinSalaryLimit
+                                          ? '< ${minSalary}k'
+                                          : '> ${minSalary}k'
+                                  : '${minSalary!}k - ${maxSalary!}k',
+                          hintText: 'Select the job monthly salary range',
                           disableBorder: true,
                         ),
                       ],
@@ -673,26 +612,15 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             showCityStatePicker();
                           },
                           title: 'Job City',
                           bodyText: jobState == null && jobCity == null
-                              ? Text(
-                                  'Select the job city',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  "${jobCity!} , ${jobState!}",
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                              ? null
+                              : '${jobCity!} , ${jobState!}',
+                          hintText: 'Select the job city',
                           disableBorder: false,
                         ),
                         seg,

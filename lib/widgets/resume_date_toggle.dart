@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 
 class ResumeDateToggle extends StatelessWidget {
   final bool isDatePresent;

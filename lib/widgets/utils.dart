@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
+
+import '../num_constants.dart';
 
 class Utils {
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -250,8 +251,7 @@ class Utils {
           height: 13.h,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.all(
-                Radius.circular(kResumeBuilderCardRadius)),
+            borderRadius: const BorderRadius.all(Radius.circular(kCardRadius)),
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF8A959E).withOpacity(0.2),

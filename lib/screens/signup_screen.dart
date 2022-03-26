@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/emums/user_type_enum.dart';
 import 'package:autism_bridge/screens/email_verify_screen.dart';
 import 'package:autism_bridge/screens/login_screen.dart';

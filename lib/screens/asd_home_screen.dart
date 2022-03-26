@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_display.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';

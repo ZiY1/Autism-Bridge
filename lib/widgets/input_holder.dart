@@ -1,16 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class ResumeBuilderPicker extends StatelessWidget {
+class InputHolder extends StatelessWidget {
   final Function() onPressed;
   final String title;
-  final Text bodyText;
+  final String? bodyText;
+  final String hintText;
+  //final Text bodyText;
   final bool disableBorder;
-  const ResumeBuilderPicker({
+  const InputHolder({
     Key? key,
     required this.onPressed,
     required this.title,
     required this.bodyText,
+    required this.hintText,
     required this.disableBorder,
   }) : super(key: key);
 
@@ -20,7 +24,7 @@ class ResumeBuilderPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 1.85.h),
+          padding: EdgeInsets.only(left: 1.85.h, bottom: 0.2.h),
           child: Text(
             title,
             style: TextStyle(
@@ -62,20 +66,46 @@ class ResumeBuilderPicker extends StatelessWidget {
           child: GestureDetector(
             onTap: onPressed,
             child: Container(
-                height: 5.25.h,
-                padding: EdgeInsets.symmetric(vertical: 1.3.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 1.0,
-                      color: disableBorder
-                          ? Colors.white
-                          : const Color(0xFFF0F0F2),
-                    ),
+              height: 5.25.h,
+              padding: EdgeInsets.symmetric(vertical: 1.3.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1.0,
+                    color:
+                        disableBorder ? Colors.white : const Color(0xFFF0F0F2),
                   ),
                 ),
-                child: bodyText),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  bodyText == null
+                      ? Text(
+                          hintText,
+                          style: TextStyle(
+                            fontSize: 9.5.sp,
+                            color: Colors.grey.shade400,
+                          ),
+                        )
+                      : Text(
+                          bodyText!,
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: const Color(0xFF1F1F39),
+                          ),
+                        ),
+                  // const Icon(
+                  //   Icons.arrow_right_rounded,
+                  //   //CupertinoIcons.arrowtriangle_right_fill,
+                  //   color: Color(0xFF858597),
+                  //   //size: 10,
+                  //   //size: 20.0,
+                  // ),
+                ],
+              ),
+            ),
           ),
         ),
       ],

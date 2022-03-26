@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 
 class RegistrationInputField extends StatelessWidget {
   final bool autofocus;

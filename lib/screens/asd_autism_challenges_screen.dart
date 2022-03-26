@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
@@ -7,7 +7,7 @@ import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
-import 'package:autism_bridge/widgets/resume_builder_picker.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
 import 'package:flutter/material.dart';
@@ -271,26 +271,13 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
                           textInputAction: TextInputAction.next,
                         ),
                         seg,
-                        ResumeBuilderPicker(
+                        InputHolder(
                           onPressed: () {
                             return showPicker();
                           },
                           title: 'Challenge Level',
-                          bodyText: challengeLevel == null
-                              ? Text(
-                                  'Select your challenge level',
-                                  style: TextStyle(
-                                    fontSize: 9.5.sp,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                )
-                              : Text(
-                                  challengeLevel!,
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: const Color(0xFF1F1F39),
-                                  ),
-                                ),
+                          bodyText: challengeLevel,
+                          hintText: 'Select your challenge level',
                           disableBorder: true,
                         ),
                       ],

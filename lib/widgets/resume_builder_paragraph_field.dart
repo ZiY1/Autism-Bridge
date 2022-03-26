@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../constants.dart';
+import '../color_constants.dart';
 
 class ResumeBuilderParagraphField extends StatelessWidget {
   final String title;

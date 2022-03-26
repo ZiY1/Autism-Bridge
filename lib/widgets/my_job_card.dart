@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:io';
-import '../constants.dart';
+import '../color_constants.dart';
 import 'my_card_widget.dart';
 
 class MyJobCard extends StatelessWidget {

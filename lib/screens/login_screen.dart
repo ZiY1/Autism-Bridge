@@ -1,4 +1,4 @@
-import 'package:autism_bridge/constants.dart';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/emums/user_type_enum.dart';
 import 'package:autism_bridge/firebase_helpers.dart';
 import 'package:autism_bridge/screens/reset_password_screen.dart';

@@ -8,7 +8,7 @@ import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 
 class RecruiterManagePostJobScreen extends StatefulWidget {
   static const id = 'recruiter_manage_job_post_screen';
@@ -254,8 +254,8 @@ class _RecruiterManagePostJobScreenState
                             : Column(
                                 children: [
                                   ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        kResumeBuilderCardRadius),
+                                    borderRadius:
+                                        BorderRadius.circular(kCardRadius),
                                     child: FittedBox(
                                       child: Image.asset(
                                           'images/undraw_post_job.png'),

@@ -6,7 +6,7 @@ import 'package:autism_bridge/screens/asd_job_view_screen.dart';
 import 'package:autism_bridge/widgets/asd_job_app_bar.dart';
 import 'package:autism_bridge/widgets/asd_job_body.dart';
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import '../color_constants.dart';
 
 class AsdJobScreen extends StatefulWidget {
   static const id = 'asd_job_screen';

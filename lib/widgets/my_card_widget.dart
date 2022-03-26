@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../constants.dart';
+import '../num_constants.dart';
 
 class MyCardWidget extends StatelessWidget {
   final Widget child;
@@ -15,8 +14,7 @@ class MyCardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            const BorderRadius.all(Radius.circular(kResumeBuilderCardRadius)),
+        borderRadius: const BorderRadius.all(Radius.circular(kCardRadius)),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF8A959E).withOpacity(0.2),

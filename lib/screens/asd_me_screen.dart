@@ -10,7 +10,6 @@ import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
 import 'package:autism_bridge/regular_helpers.dart';
 import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
-import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
 import 'package:autism_bridge/widgets/me_saved_widget.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
@@ -287,16 +286,16 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
                     sectionName: '  Job Chats  ',
                     // TODO: change later, used for temp testing
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TextFieldInputScreen(
-                            title: 'Testing',
-                            hintText: 'Hint test',
-                            keyBoardType: TextInputType.text,
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const TextFieldInputScreen(
+                      //       title: 'Testing',
+                      //       hintText: 'Hint test',
+                      //       keyBoardType: TextInputType.text,
+                      //     ),
+                      //   ),
+                      // );
                     },
                   ),
                   const MeSavedWidgets(

@@ -4,10 +4,10 @@ import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_job_preference_screen.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:autism_bridge/widgets/utils.dart';
@@ -605,25 +605,56 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                            onChanged: (text) {
-                              firstName = text;
-                            },
-                            initialValue: firstName,
-                            title: 'First Name',
-                            hintText: 'Enter your first name',
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next),
+                        // ResumeBuilderInputField(
+                        //     onChanged: (text) {
+                        //       firstName = text;
+                        //     },
+                        //     initialValue: firstName,
+                        //     title: 'First Name',
+                        //     hintText: 'Enter your first name',
+                        //     keyboardType: TextInputType.text,
+                        //     textInputAction: TextInputAction.next),
+                        InputHolder(
+                          onPressed: () async {
+                            firstName = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'First Name',
+                                  hintText: 'Enter your first name',
+                                  userInput: firstName,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
+                          },
+                          title: 'First Name',
+                          bodyText: firstName,
+                          hintText: 'Enter your first name',
+                          disableBorder: false,
+                        ),
                         seg,
-                        ResumeBuilderInputField(
-                            onChanged: (text) {
-                              lastName = text;
-                            },
-                            initialValue: lastName,
-                            title: 'Last Name',
-                            hintText: 'Enter your last name',
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next),
+                        InputHolder(
+                          onPressed: () async {
+                            lastName = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Last Name',
+                                  hintText: 'Enter your last name',
+                                  userInput: lastName,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
+                          },
+                          title: 'Last Name',
+                          bodyText: lastName,
+                          hintText: 'Enter your last name',
+                          disableBorder: false,
+                        ),
                         seg,
                         InputHolder(
                           title: 'Date Of Birth',
@@ -655,26 +686,45 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            email = text;
+                        InputHolder(
+                          onPressed: () async {
+                            email = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Email',
+                                  hintText: 'Enter your email',
+                                  userInput: email,
+                                  keyBoardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: email,
                           title: 'Email',
+                          bodyText: email,
                           hintText: 'Enter your email',
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            phone = text;
+                        InputHolder(
+                          onPressed: () async {
+                            phone = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Phone',
+                                  hintText: 'Enter your phone number',
+                                  userInput: phone,
+                                  keyBoardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: phone,
                           title: 'Phone',
+                          bodyText: phone,
                           hintText: 'Enter your phone number',
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
                           disableBorder: true,
                         ),
                       ],
@@ -708,26 +758,45 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            address = text;
+                        InputHolder(
+                          onPressed: () async {
+                            address = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Address',
+                                  hintText: 'Enter your address',
+                                  userInput: address,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: address,
                           title: 'Address',
+                          bodyText: address,
                           hintText: 'Enter your address',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            postalCode = text;
+                        InputHolder(
+                          onPressed: () async {
+                            postalCode = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Postal Code',
+                                  hintText: 'Enter your postal code',
+                                  userInput: postalCode,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: postalCode,
                           title: 'Postal Code',
+                          bodyText: postalCode,
                           hintText: 'Enter your postal code',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
                           disableBorder: true,
                         ),
                       ],

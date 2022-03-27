@@ -1,13 +1,14 @@
 import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/education_data.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/resume_date_toggle.dart';
@@ -428,26 +429,48 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            school = text;
+                        InputHolder(
+                          onPressed: () async {
+                            school = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'School',
+                                  hintText: 'e.g. City College of New York',
+                                  userInput: school,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: schoolsList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: school,
                           title: 'School',
+                          bodyText: school,
                           hintText: 'e.g. City College of New York',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            major = text;
+                        InputHolder(
+                          onPressed: () async {
+                            major = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Major',
+                                  hintText: 'e.g. Computer Science',
+                                  userInput: major,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: majorsList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: major,
                           title: 'Major',
+                          bodyText: major,
                           hintText: 'e.g. Computer Science',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
                         InputHolder(
@@ -455,21 +478,6 @@ class _AsdEducationScreenState extends State<AsdEducationScreen> {
                             showDegreePicker();
                           },
                           title: 'Degree',
-                          // bodyText: degree == null
-                          //     ? Text(
-                          //         'Select your degree',
-                          //         style: TextStyle(
-                          //           fontSize: 9.5.sp,
-                          //           color: Colors.grey.shade400,
-                          //         ),
-                          //       )
-                          //     : Text(
-                          //         degree!,
-                          //         style: TextStyle(
-                          //           fontSize: 11.sp,
-                          //           color: const Color(0xFF1F1F39),
-                          //         ),
-                          //       ),
                           bodyText: degree,
                           hintText: 'Select your degree',
                           disableBorder: true,

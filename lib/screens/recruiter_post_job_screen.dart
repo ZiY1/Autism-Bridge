@@ -1,12 +1,13 @@
 import 'package:autism_bridge/icon_constants.dart';
+import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/num_constants.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -503,15 +504,26 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            jobName = text;
+                        InputHolder(
+                          onPressed: () async {
+                            jobName = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Job Title',
+                                  hintText: 'e.g. Software Engineer',
+                                  userInput: jobName,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: jobTitlesList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: jobName,
                           title: 'Job Title',
-                          hintText: 'Enter the job title',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          bodyText: jobName,
+                          hintText: 'e.g. Software Engineer',
+                          disableBorder: false,
                         ),
                         seg,
                         InputHolder(
@@ -624,15 +636,24 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                           disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            jobAddress = text;
+                        InputHolder(
+                          onPressed: () async {
+                            jobAddress = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Job Address',
+                                  hintText: 'Enter your job full address',
+                                  userInput: jobAddress,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: jobAddress,
                           title: 'Job Address',
-                          hintText: 'Enter the job full address',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          bodyText: jobAddress,
+                          hintText: 'Enter your job full address',
                           disableBorder: true,
                         ),
                       ],

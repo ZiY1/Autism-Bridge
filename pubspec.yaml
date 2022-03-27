@@ -62,6 +62,8 @@ dependencies:
 
   dotted_border: ^2.0.0+2
 
+  flutter_typeahead: ^3.2.4
+
 dev_dependencies:
   # test_api: ^0.4.9
 

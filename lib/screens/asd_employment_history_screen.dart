@@ -1,12 +1,13 @@
 import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
+import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/employment_history_data.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/resume_date_toggle.dart';
@@ -431,26 +432,57 @@ class _AsdEmploymentHistoryScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            jobTitle = text;
+                        // ResumeBuilderInputField(
+                        //   onChanged: (text) {
+                        //     jobTitle = text;
+                        //   },
+                        //   initialValue: jobTitle,
+                        //   title: 'Job Title',
+                        //   hintText: 'e.g. Software Engineer',
+                        //   keyboardType: TextInputType.text,
+                        //   textInputAction: TextInputAction.next,
+                        // ),
+                        InputHolder(
+                          onPressed: () async {
+                            jobTitle = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Job Title',
+                                  hintText: 'e.g. Software Engineer',
+                                  userInput: jobTitle,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: jobTitlesList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: jobTitle,
                           title: 'Job Title',
+                          bodyText: jobTitle,
                           hintText: 'e.g. Software Engineer',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            employer = text;
+                        InputHolder(
+                          onPressed: () async {
+                            employer = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Employer',
+                                  hintText: 'e.g. Google',
+                                  userInput: employer,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: employersList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: employer,
                           title: 'Employer',
+                          bodyText: employer,
                           hintText: 'e.g. Google',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
                           disableBorder: false,
                         ),
                         seg,

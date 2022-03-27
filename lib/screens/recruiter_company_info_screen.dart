@@ -1,14 +1,15 @@
 import 'package:autism_bridge/icon_constants.dart';
+import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_company_info_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 import 'package:autism_bridge/screens/recruiter_home_screen.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -468,15 +469,28 @@ class _RecruiterCompanyInfoScreenState
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            widget.recruiterCompanyInfo.setCompanyName = text;
+                        InputHolder(
+                          onPressed: () async {
+                            widget.recruiterCompanyInfo.setCompanyName =
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Company Name',
+                                  hintText: 'Enter your company name',
+                                  userInput:
+                                      widget.recruiterCompanyInfo.companyName,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: employersList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: widget.recruiterCompanyInfo.companyName,
                           title: 'Company Name',
+                          bodyText: widget.recruiterCompanyInfo.companyName,
                           hintText: 'Enter your company name',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
                         InputHolder(
@@ -491,17 +505,26 @@ class _RecruiterCompanyInfoScreenState
                         ),
                         seg,
                         //TODO: change it to google places autocomplete
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
+                        InputHolder(
+                          onPressed: () async {
                             widget.recruiterCompanyInfo.setCompanyAddress =
-                                text;
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Company Address',
+                                  hintText: 'Enter your company address',
+                                  userInput: widget
+                                      .recruiterCompanyInfo.companyAddress,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue:
-                              widget.recruiterCompanyInfo.companyAddress,
                           title: 'Company Address',
+                          bodyText: widget.recruiterCompanyInfo.companyAddress,
                           hintText: 'Enter your company address',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
                           disableBorder: true,
                         ),
                       ],

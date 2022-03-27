@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,7 +23,7 @@ class InputHolder extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 1.85.h, bottom: 0.2.h),
+          padding: EdgeInsets.only(left: 1.85.h),
           child: Text(
             title,
             style: TextStyle(
@@ -66,7 +65,7 @@ class InputHolder extends StatelessWidget {
           child: GestureDetector(
             onTap: onPressed,
             child: Container(
-              height: 5.25.h,
+              height: 5.35.h,
               padding: EdgeInsets.symmetric(vertical: 1.3.h),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -81,7 +80,7 @@ class InputHolder extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  bodyText == null
+                  bodyText == null || bodyText!.isEmpty
                       ? Text(
                           hintText,
                           style: TextStyle(

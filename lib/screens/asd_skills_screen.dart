@@ -3,10 +3,10 @@ import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/resume_builder_picker_list.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -257,15 +257,25 @@ class _AsdSkillsScreenState extends State<AsdSkillsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            skillName = text;
+                        InputHolder(
+                          onPressed: () async {
+                            skillName = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Skill',
+                                  hintText: 'e.g. Drawing',
+                                  userInput: skillName,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: skillName,
                           title: 'Skill',
+                          bodyText: skillName,
                           hintText: 'e.g. Drawing',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
                         InputHolder(

@@ -2,10 +2,10 @@ import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/autism_challenge_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
-import 'package:autism_bridge/widgets/resume_builder_input_field.dart';
 import 'package:autism_bridge/widgets/resume_builder_paragraph_field.dart';
 import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -260,15 +260,25 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            challengeName = text;
+                        InputHolder(
+                          onPressed: () async {
+                            challengeName = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Challenge',
+                                  hintText: 'e.g. Social Phobia',
+                                  userInput: challengeName,
+                                  keyBoardType: TextInputType.text,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: challengeName,
                           title: 'Challenge',
+                          bodyText: challengeName,
                           hintText: 'e.g. Social Phobia',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
                         InputHolder(

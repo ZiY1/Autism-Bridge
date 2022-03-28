@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/screen_transition_animation/screen_transition_animation.dart';
 import 'package:autism_bridge/screens/determine_user_type_loading_screen.dart';
 import 'package:autism_bridge/screens/welcome_screen.dart';
@@ -129,7 +130,9 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
 
   Future checkEmailVerified() async {
     // call after email verification
-    await _auth.currentUser!.reload();
+    if (_auth.currentUser != null) {
+      await _auth.currentUser!.reload();
+    }
 
     isEmailVerified = _auth.currentUser!.emailVerified;
 
@@ -204,10 +207,11 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                     padding:
                         EdgeInsets.only(left: 1.5.h, right: 1.5.h, top: 1.5.h),
                     child: RegistrationButton(
+                      secondaryBtn: true,
                       greyBtn: false,
                       icon: const Icon(
                         Icons.cancel_sharp,
-                        color: Colors.white,
+                        color: kDarkTextGrey,
                       ),
                       onPressed: () {
                         _auth.signOut();
@@ -220,7 +224,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                         'Cancel',
                         style: TextStyle(
                           fontSize: 12.5.sp,
-                          color: Colors.white,
+                          color: kDarkTextGrey,
                         ),
                       ),
                     ),

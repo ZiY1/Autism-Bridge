@@ -270,12 +270,73 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       textInputAction: TextInputAction.done,
                       isObscureText: isPasswordHidden),
-                  SizedBox(
-                    height: 1.h,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 1.75.h,
+                        ),
+                        child: ShakeWidget(
+                          key: shakeKey,
+                          shakeCount: 3,
+                          shakeOffset: 6,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 3.h,
+                                height: 3.h,
+                                child: Checkbox(
+                                  value: isAgreementChecked,
+                                  side: const BorderSide(
+                                    width: 1.2,
+                                    color: Color(0xFFB8B8D2),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isAgreementChecked = value!;
+                                    });
+                                  },
+                                  activeColor: kAutismBridgeOrange,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 2.w,
+                              ),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text:
+                                        'By creating an account, you have to agree with our ',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 8.1.sp,
+                                      color: const Color(0xFF858597),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                      text: 'term',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 8.6.sp,
+                                        color: const Color(0xFF2A6BAC),
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // TODO:
+                                        }),
+                                ]),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: 1.5.h, right: 1.5.h, top: 3.7.h, bottom: 2.h),
+                        left: 1.5.h, right: 1.5.h, top: 1.h, bottom: 3.5.h),
                     child: RegistrationButton(
                       greyBtn: !(isEmailFieldValid && isPasswordFieldValid),
                       onPressed: isEmailFieldValid &&
@@ -300,56 +361,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 0.65.h, bottom: 1.4.h),
-                    child: ShakeWidget(
-                      key: shakeKey,
-                      shakeCount: 3,
-                      shakeOffset: 6,
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: isAgreementChecked,
-                            side: const BorderSide(
-                              width: 1.2,
-                              color: Color(0xFFB8B8D2),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                isAgreementChecked = value!;
-                              });
-                            },
-                            activeColor: kAutismBridgeOrange,
-                          ),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text:
-                                    'By creating an account, you have to agree with our ',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 8.1.sp,
-                                  color: const Color(0xFF858597),
-                                ),
-                              ),
-                              TextSpan(
-                                  text: 'term',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 8.6.sp,
-                                    color: const Color(0xFF2A6BAC),
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      // TODO:
-                                    }),
-                            ]),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   RichText(

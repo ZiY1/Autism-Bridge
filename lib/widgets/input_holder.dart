@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -94,6 +95,7 @@ class InputHolder extends StatelessWidget {
                             fontSize: 11.sp,
                             color: const Color(0xFF1F1F39),
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                   // const Icon(
                   //   Icons.arrow_right_rounded,

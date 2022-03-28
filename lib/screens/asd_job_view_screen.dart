@@ -229,7 +229,7 @@ class _AsdJobViewScreenState extends State<AsdJobViewScreen>
                                           ),
                                         ),
                                         Text(
-                                          recruiterProfile.jobTitle!,
+                                          '${recruiterProfile.jobTitle!} · ${recruiterProfile.companyName!}',
                                           style: TextStyle(
                                             color: const Color(0xFF939393),
                                             fontSize: 11.sp,

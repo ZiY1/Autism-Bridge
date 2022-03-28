@@ -8,6 +8,7 @@ class RegistrationButton extends StatelessWidget {
   final Function()? onPressed;
   final Widget child;
   final bool greyBtn;
+  final bool? secondaryBtn;
 
   const RegistrationButton({
     Key? key,
@@ -15,6 +16,7 @@ class RegistrationButton extends StatelessWidget {
     required this.onPressed,
     required this.child,
     required this.greyBtn,
+    this.secondaryBtn,
   }) : super(key: key);
 
   @override
@@ -41,9 +43,18 @@ class RegistrationButton extends StatelessWidget {
               ? MaterialStateProperty.all<Color>(
                   kAutismBridgeBlue.withOpacity(0.45),
                 )
-              : MaterialStateProperty.all<Color>(
-                  kAutismBridgeBlue,
-                ),
+              : secondaryBtn == true
+                  ? null
+                  : MaterialStateProperty.all<Color>(
+                      kAutismBridgeBlue,
+                    ),
+          side: secondaryBtn == true
+              ? MaterialStateProperty.all<BorderSide>(
+                  const BorderSide(
+                    color: kDarkTextGrey,
+                  ),
+                )
+              : null,
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),

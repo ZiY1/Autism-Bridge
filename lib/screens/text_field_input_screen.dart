@@ -181,8 +181,10 @@ class _TextFieldInputScreenState extends State<TextFieldInputScreen> {
                             _typeAheadController.text = suggestion;
                             userInput = suggestion;
                           },
+                          //hideKeyboard: false,
                           //getImmediateSuggestions: true,
                           hideSuggestionsOnKeyboardHide: false,
+                          //keepSuggestionsOnSuggestionSelected: true,
                           hideOnEmpty: true,
                           textFieldConfiguration: TextFieldConfiguration(
                             controller: _typeAheadController,

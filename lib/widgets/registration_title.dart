@@ -27,9 +27,10 @@ class RegistrationTitle extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    color: kTitleBlack,
-                    fontSize: 23.sp,
-                    fontWeight: FontWeight.w600),
+                  color: kTitleBlack,
+                  fontSize: 23.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 0.7.h, right: 0.3.h),

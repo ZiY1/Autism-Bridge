@@ -316,16 +316,13 @@ class _AsdMeScreenState extends State<AsdMeScreen> {
             SizedBox(
               height: 1.5.h,
             ),
-            MyCardWidget(
-              child: SizedBox(
-                height: 27.h,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(kCardRadius),
-                  child: FittedBox(
-                    child: Image.asset('images/undraw_AR.png'),
-                    fit: BoxFit.fitWidth,
-                  ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(kCardRadius),
+              child: const FittedBox(
+                child: Image(
+                  image: AssetImage('images/welcome_vr_interview.png'),
                 ),
+                fit: BoxFit.fitWidth,
               ),
             ),
             SizedBox(

@@ -5,6 +5,7 @@ import 'package:autism_bridge/models/recruiter_job_post.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
+import 'package:autism_bridge/widgets/resume_builder_button.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -162,7 +163,7 @@ class _AsdJobViewScreenState extends State<AsdJobViewScreen>
                         borderRadius: BorderRadius.circular(
                           kCardRadius,
                         ),
-                        color: const Color(0xFFFA5805),
+                        color: const Color(0xFF88b4e1), //kAutismBridgeOrange,
                       ),
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
@@ -410,6 +411,27 @@ class _AsdJobViewScreenState extends State<AsdJobViewScreen>
               ],
             )
           ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: kBackgroundRiceWhite,
+          elevation: 0.0,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
+            child: SizedBox(
+              height: 6.25.h,
+              child: MyBottomButton(
+                onPressed: null,
+                isHollow: false,
+                child: Text(
+                  'Apply',
+                  style: TextStyle(
+                    fontSize: 12.5.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

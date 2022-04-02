@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../color_constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
-
 import '../regular_helpers.dart';
 
 class RecruiterPostJobScreen extends StatefulWidget {
@@ -712,7 +711,7 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
             child: SizedBox(
               height: 6.25.h,
               child: widget.isAddingNew
-                  ? ResumeBuilderButton(
+                  ? MyBottomButton(
                       child: isSaving
                           ? SizedBox(
                               width: 3.18.h,
@@ -741,7 +740,7 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
@@ -771,7 +770,7 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                           width: 4.w,
                         ),
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isSaving
                                 ? SizedBox(
                                     width: 3.18.h,

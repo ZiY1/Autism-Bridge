@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -66,7 +65,7 @@ class InputHolder extends StatelessWidget {
           child: GestureDetector(
             onTap: onPressed,
             child: Container(
-              height: 5.35.h,
+              height: 5.75.h,
               padding: EdgeInsets.symmetric(vertical: 1.3.h),
               decoration: BoxDecoration(
                 color: Colors.white,

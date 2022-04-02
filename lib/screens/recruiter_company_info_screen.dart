@@ -588,7 +588,7 @@ class _RecruiterCompanyInfoScreenState
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: Text(
                               'Back',
                               style: TextStyle(
@@ -606,7 +606,7 @@ class _RecruiterCompanyInfoScreenState
                           width: 4.w,
                         ),
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isSaving
                                 ? SizedBox(
                                     width: 3.18.h,
@@ -634,7 +634,7 @@ class _RecruiterCompanyInfoScreenState
                         ),
                       ],
                     )
-                  : ResumeBuilderButton(
+                  : MyBottomButton(
                       onPressed: isSaving ? null : saveButtonOnPressed,
                       isHollow: false,
                       child: isSaving

@@ -7,6 +7,7 @@ import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/professional_summary_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/models/skill_data.dart';
+import 'package:autism_bridge/padding_constants.dart';
 import 'package:autism_bridge/screens/asd_autism_challenges_screen.dart';
 import 'package:autism_bridge/screens/asd_education_screen.dart';
 import 'package:autism_bridge/screens/asd_employment_history_screen.dart';
@@ -432,26 +433,27 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             ),
             children: [
               Padding(
-                  padding: EdgeInsets.only(left: 1.h, top: 2.h),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${double.parse((profileCompleteness * 100).toStringAsFixed(1))} % ',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: kAutismBridgeBlue,
-                          fontWeight: FontWeight.w600,
-                        ),
+                padding: EdgeInsets.only(left: 1.h, top: 2.h),
+                child: Row(
+                  children: [
+                    Text(
+                      '${double.parse((profileCompleteness * 100).toStringAsFixed(1))} % ',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: kAutismBridgeBlue,
+                        fontWeight: FontWeight.w600,
                       ),
-                      Text(
-                        ' Resume   Completeness',
-                        style: TextStyle(
-                          fontSize: 9.5.sp,
-                          color: const Color(0xFF808080),
-                        ),
+                    ),
+                    Text(
+                      ' Resume  Completeness',
+                      style: TextStyle(
+                        fontSize: 9.5.sp,
+                        color: const Color(0xFF808080),
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.only(bottom: 1.5.h),
                 child: LinearPercentIndicator(
@@ -698,11 +700,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                 ),
                 child: MyCardWidget(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 1.5.h,
-                      right: 1.5.h,
-                      bottom: 1.5.h,
-                    ),
+                    padding: kResumeBuilderPadding2,
                     child: Column(
                       children: [
                         Row(
@@ -754,11 +752,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                 ),
                 child: MyCardWidget(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 1.5.h,
-                      right: 1.5.h,
-                      bottom: 1.5.h,
-                    ),
+                    padding: kResumeBuilderPadding2,
                     child: Column(
                       children: [
                         Row(
@@ -871,11 +865,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                 ),
                 child: MyCardWidget(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 1.5.h,
-                      right: 1.5.h,
-                      bottom: 1.5.h,
-                    ),
+                    padding: kResumeBuilderPadding2,
                     child: Column(
                       children: [
                         Row(
@@ -983,11 +973,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                 ),
                 child: MyCardWidget(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 1.5.h,
-                      right: 1.5.h,
-                      bottom: 1.5.h,
-                    ),
+                    padding: kResumeBuilderPadding2,
                     child: Column(
                       children: [
                         Row(
@@ -1094,11 +1080,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
                 ),
                 child: MyCardWidget(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 1.5.h,
-                      right: 1.5.h,
-                      bottom: 1.5.h,
-                    ),
+                    padding: kResumeBuilderPadding2,
                     child: Column(
                       children: [
                         Row(
@@ -1229,7 +1211,7 @@ class _AsdResumeBuilderScreenState extends State<AsdResumeBuilderScreen> {
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(
               height: 6.25.h,
-              child: ResumeBuilderButton(
+              child: MyBottomButton(
                 onPressed: () async {
                   setState(() {
                     isLoading = true;

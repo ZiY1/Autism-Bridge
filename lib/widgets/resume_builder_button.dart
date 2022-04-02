@@ -4,13 +4,13 @@ import 'package:sizer/sizer.dart';
 import '../color_constants.dart';
 import '../num_constants.dart';
 
-class ResumeBuilderButton extends StatelessWidget {
+class MyBottomButton extends StatelessWidget {
   final Function()? onPressed;
   final Widget child;
   final bool isHollow;
   final bool? disableBorder;
 
-  const ResumeBuilderButton({
+  const MyBottomButton({
     Key? key,
     required this.onPressed,
     required this.child,

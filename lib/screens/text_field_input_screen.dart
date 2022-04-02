@@ -187,6 +187,7 @@ class _TextFieldInputScreenState extends State<TextFieldInputScreen> {
                           //keepSuggestionsOnSuggestionSelected: true,
                           hideOnEmpty: true,
                           textFieldConfiguration: TextFieldConfiguration(
+                            autofocus: true,
                             controller: _typeAheadController,
                             decoration: InputDecoration(
                               //helperText: '',

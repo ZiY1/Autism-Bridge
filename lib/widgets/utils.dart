@@ -90,7 +90,7 @@ class Utils {
                           horizontal: 1.5.h, vertical: 1.h),
                       child: SizedBox(
                         height: 5.7.h,
-                        child: ResumeBuilderButton(
+                        child: MyBottomButton(
                             disableBorder: true,
                             onPressed: () {
                               wantDelete = true;
@@ -116,7 +116,7 @@ class Utils {
                       ),
                       child: SizedBox(
                         height: 5.7.h,
-                        child: ResumeBuilderButton(
+                        child: MyBottomButton(
                             onPressed: () {
                               wantDelete = false;
                               Navigator.of(context).pop();

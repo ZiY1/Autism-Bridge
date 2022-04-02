@@ -1,3 +1,4 @@
+import 'package:autism_bridge/color_constants.dart';
 import 'package:autism_bridge/models/job_display.dart';
 import 'package:autism_bridge/widgets/refresh_widget.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +50,14 @@ class _AsdJobBodyState extends State<AsdJobBody> {
         child: ListView(children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Center(
-                child: Text('List Empty'),
+            children: [
+              Image.asset(
+                'images/undraw_questions.png',
+                scale: 1.8,
+              ),
+              const Text(
+                '― No results found ―',
+                style: TextStyle(color: kDarkTextGrey),
               ),
             ],
           )
@@ -68,9 +74,10 @@ class _AsdJobBodyState extends State<AsdJobBody> {
             bottom: 2.5.h,
           ),
           itemBuilder: (BuildContext context, int index) {
-            final JobDisplay currentJobDisplay =
-                reversedFilteredJobList!.elementAt(index);
-            return MyJobCard(
+            if (index < widget.filteredJobList!.length) {
+              final JobDisplay currentJobDisplay =
+                  reversedFilteredJobList!.elementAt(index);
+              return MyJobCard(
                 companyLogo:
                     currentJobDisplay.recruiterCompanyInfo.companyLogoImage!,
                 companyName:
@@ -85,9 +92,24 @@ class _AsdJobBodyState extends State<AsdJobBody> {
                   // current index: filteredJobList!.length - index - 1;
                   widget.jobOnPressedCallback(currentJobDisplay);
                 },
-                bookmarkOnPressed: null);
+                bookmarkOnPressed: null,
+              );
+            } else {
+              return Padding(
+                padding: EdgeInsets.only(top: 2.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      '― No more data ―',
+                      style: TextStyle(color: kDarkTextGrey),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
-          itemCount: widget.filteredJobList!.length,
+          itemCount: widget.filteredJobList!.length + 1,
           // shrinkWrap: true,
           // primary: false,
           // physics: const NeverScrollableScrollPhysics(),

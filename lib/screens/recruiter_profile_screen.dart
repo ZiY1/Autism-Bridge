@@ -1,8 +1,11 @@
 import 'package:autism_bridge/icon_constants.dart';
+import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_profile.dart';
 import 'package:autism_bridge/models/recruiter_user_credentials.dart';
 import 'package:autism_bridge/screens/recruiter_company_info_screen.dart';
+import 'package:autism_bridge/screens/text_field_input_screen.dart';
+import 'package:autism_bridge/widgets/input_holder.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -417,14 +420,15 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                       children: [
                         seg,
                         ResumeBuilderInputField(
-                            onChanged: (text) {
-                              widget.recruiterProfile.setFirstName = text;
-                            },
-                            initialValue: widget.recruiterProfile.firstName,
-                            title: 'First Name',
-                            hintText: 'Enter your first name',
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next),
+                          onChanged: (text) {
+                            widget.recruiterProfile.setFirstName = text;
+                          },
+                          initialValue: widget.recruiterProfile.firstName,
+                          title: 'First Name',
+                          hintText: 'Enter your first name',
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                        ),
                         seg,
                         ResumeBuilderInputField(
                           onChanged: (text) {
@@ -434,7 +438,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                           title: 'Last Name',
                           hintText: 'Enter your last name',
                           keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          textInputAction: TextInputAction.done,
                           disableBorder: true,
                         ),
                       ],
@@ -456,26 +460,71 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
                     child: Column(
                       children: [
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            widget.recruiterProfile.setCompanyName = text;
+                        // ResumeBuilderInputField(
+                        //   onChanged: (text) {
+                        //     widget.recruiterProfile.setCompanyName = text;
+                        //   },
+                        //   initialValue: widget.recruiterProfile.companyName,
+                        //   title: 'Company',
+                        //   hintText: 'Enter your company name',
+                        //   keyboardType: TextInputType.text,
+                        //   textInputAction: TextInputAction.next,
+                        // ),
+                        InputHolder(
+                          onPressed: () async {
+                            widget.recruiterProfile.setCompanyName =
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Company',
+                                  hintText: 'Enter your company name',
+                                  userInput:
+                                      widget.recruiterProfile.companyName,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: employersList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: widget.recruiterProfile.companyName,
-                          title: 'Company',
+                          title: 'Company Name',
+                          bodyText: widget.recruiterProfile.companyName,
                           hintText: 'Enter your company name',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
+                          disableBorder: false,
                         ),
                         seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            widget.recruiterProfile.setJobTitle = text;
+                        // ResumeBuilderInputField(
+                        //   onChanged: (text) {
+                        //     widget.recruiterProfile.setJobTitle = text;
+                        //   },
+                        //   initialValue: widget.recruiterProfile.jobTitle,
+                        //   title: 'Job Title',
+                        //   hintText: 'Enter your job title',
+                        //   keyboardType: TextInputType.text,
+                        //   textInputAction: TextInputAction.done,
+                        //   disableBorder: true,
+                        // ),
+                        InputHolder(
+                          onPressed: () async {
+                            widget.recruiterProfile.setJobTitle =
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextFieldInputScreen(
+                                  title: 'Job Title',
+                                  hintText: 'Enter your job title',
+                                  userInput: widget.recruiterProfile.jobTitle,
+                                  keyBoardType: TextInputType.text,
+                                  autoCompleteList: jobTitlesList,
+                                ),
+                              ),
+                            );
+                            setState(() {});
                           },
-                          initialValue: widget.recruiterProfile.jobTitle,
                           title: 'Job Title',
+                          bodyText: widget.recruiterProfile.jobTitle,
                           hintText: 'Enter your job title',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
                           disableBorder: true,
                         ),
                       ],
@@ -493,7 +542,7 @@ class _RecruiterProfileScreenState extends State<RecruiterProfileScreen> {
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(
               height: 6.25.h,
-              child: ResumeBuilderButton(
+              child: MyBottomButton(
                 onPressed: isSaving ? null : saveButtonOnPressed,
                 isHollow: false,
                 child: isSaving

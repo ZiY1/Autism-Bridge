@@ -347,7 +347,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
             child: SizedBox(
               height: 6.25.h,
               child: widget.isAddingNew
-                  ? ResumeBuilderButton(
+                  ? MyBottomButton(
                       child: isSaving
                           ? SizedBox(
                               width: 3.18.h,
@@ -376,7 +376,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
@@ -406,7 +406,7 @@ class _AsdAutismChallengesScreenState extends State<AsdAutismChallengesScreen> {
                           width: 4.w,
                         ),
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isSaving
                                 ? SizedBox(
                                     width: 3.18.h,

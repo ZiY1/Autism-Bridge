@@ -653,7 +653,7 @@ class _AsdEmploymentHistoryScreenState
             child: SizedBox(
               height: 6.25.h,
               child: widget.isAddingNew
-                  ? ResumeBuilderButton(
+                  ? MyBottomButton(
                       child: isSaving
                           ? SizedBox(
                               width: 3.18.h,
@@ -682,7 +682,7 @@ class _AsdEmploymentHistoryScreenState
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isDeleting
                                 ? SizedBox(
                                     width: 3.18.h,
@@ -712,7 +712,7 @@ class _AsdEmploymentHistoryScreenState
                           width: 4.w,
                         ),
                         Expanded(
-                          child: ResumeBuilderButton(
+                          child: MyBottomButton(
                             child: isSaving
                                 ? SizedBox(
                                     width: 3.18.h,

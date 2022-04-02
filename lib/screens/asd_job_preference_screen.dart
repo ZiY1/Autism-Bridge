@@ -603,7 +603,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: ResumeBuilderButton(
+                              child: MyBottomButton(
                                 child: Text(
                                   'Back',
                                   style: TextStyle(
@@ -621,7 +621,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                               width: 4.w,
                             ),
                             Expanded(
-                              child: ResumeBuilderButton(
+                              child: MyBottomButton(
                                 child: isSaving
                                     ? SizedBox(
                                         width: 3.18.h,
@@ -649,7 +649,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                             ),
                           ],
                         )
-                      : ResumeBuilderButton(
+                      : MyBottomButton(
                           child: isSaving
                               ? SizedBox(
                                   width: 3.18.h,
@@ -675,7 +675,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           isHollow: false,
                         )
                   : userJobPreferenceList!.length == 1
-                      ? ResumeBuilderButton(
+                      ? MyBottomButton(
                           child: isSaving
                               ? SizedBox(
                                   width: 3.18.h,
@@ -704,7 +704,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: ResumeBuilderButton(
+                              child: MyBottomButton(
                                 child: isDeleting
                                     ? SizedBox(
                                         width: 3.18.h,
@@ -734,7 +734,7 @@ class _AsdJobPreferenceScreenState extends State<AsdJobPreferenceScreen> {
                               width: 4.w,
                             ),
                             Expanded(
-                              child: ResumeBuilderButton(
+                              child: MyBottomButton(
                                 child: isSaving
                                     ? SizedBox(
                                         width: 3.18.h,

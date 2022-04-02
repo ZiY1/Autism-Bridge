@@ -87,7 +87,6 @@ class _RecruiterManagePostJobScreenState
 
   @override
   Widget build(BuildContext context) {
-    final Widget segEdge = SizedBox(height: 1.h);
     return MyGradientContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -286,7 +285,7 @@ class _RecruiterManagePostJobScreenState
             padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.2.h),
             child: SizedBox(
               height: 6.25.h,
-              child: ResumeBuilderButton(
+              child: MyBottomButton(
                 onPressed: jobPostAddNewBtnOnPressed,
                 isHollow: false,
                 child: Text(

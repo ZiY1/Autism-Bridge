@@ -227,7 +227,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 0.05.h),
+                padding: EdgeInsets.only(left: 0.51.h),
                 child: MyBottomNavBarIndicator(
                   isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 ),
@@ -236,7 +236,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               //   width: 10.92.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 0.6.h),
+                padding: EdgeInsets.only(right: 1.h),
                 child: MyBottomNavBarIndicator(
                   isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
                 ),
@@ -248,7 +248,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                 isSelected: false,
               ),
               Padding(
-                padding: EdgeInsets.only(right: 0.6.h),
+                padding: EdgeInsets.only(right: 0.3.h),
                 child: MyBottomNavBarIndicator(
                   isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 ),
@@ -256,8 +256,11 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               // SizedBox(
               //   width: 11.1.w,
               // ),
-              MyBottomNavBarIndicator(
-                isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+              Padding(
+                padding: EdgeInsets.only(right: 0.3.h),
+                child: MyBottomNavBarIndicator(
+                  isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
+                ),
               ),
             ],
           ),

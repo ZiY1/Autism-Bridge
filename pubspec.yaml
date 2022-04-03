@@ -64,6 +64,8 @@ dependencies:
 
   flutter_typeahead: ^3.2.4
 
+  google_place: ^0.4.7
+
 dev_dependencies:
   # test_api: ^0.4.9
 

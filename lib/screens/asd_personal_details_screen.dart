@@ -4,7 +4,7 @@ import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/personal_details_data.dart';
 import 'package:autism_bridge/models/resume_data.dart';
 import 'package:autism_bridge/screens/asd_job_preference_screen.dart';
-import 'package:autism_bridge/screens/text_field_input_screen.dart';
+import 'package:autism_bridge/screens/google_places_search_screen.dart';
 import 'package:autism_bridge/widgets/my_card_widget.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/resume_builder_button.dart';
@@ -793,14 +793,25 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                         seg,
                         InputHolder(
                           onPressed: () async {
+                            // address = await Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => TextFieldInputScreen(
+                            //       title: 'Address',
+                            //       hintText: 'Enter your address',
+                            //       userInput: address,
+                            //       keyBoardType: TextInputType.text,
+                            //     ),
+                            //   ),
+                            // );
+                            // setState(() {});
                             address = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => TextFieldInputScreen(
+                                builder: (context) => GooglePlacesSearchScreen(
                                   title: 'Address',
                                   hintText: 'Enter your address',
                                   userInput: address,
-                                  keyBoardType: TextInputType.text,
                                 ),
                               ),
                             );

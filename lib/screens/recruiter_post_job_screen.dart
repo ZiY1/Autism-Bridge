@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 import '../color_constants.dart';
 import 'package:autism_bridge/modified_flutter_packages/picker_from_pack.dart';
 import '../regular_helpers.dart';
+import 'google_places_search_screen.dart';
 
 class RecruiterPostJobScreen extends StatefulWidget {
   static const id = 'recruiter_post_job_screen';
@@ -640,11 +641,10 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                             jobAddress = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => TextFieldInputScreen(
+                                builder: (context) => GooglePlacesSearchScreen(
                                   title: 'Job Address',
                                   hintText: 'Enter your job full address',
                                   userInput: jobAddress,
-                                  keyBoardType: TextInputType.text,
                                 ),
                               ),
                             );

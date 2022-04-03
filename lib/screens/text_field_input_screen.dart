@@ -232,10 +232,11 @@ class _TextFieldInputScreenState extends State<TextFieldInputScreen> {
                               ),
                             ),
                           ),
-                          suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                          suggestionsBoxDecoration:
+                              const SuggestionsBoxDecoration(
                             elevation: 0.0,
-                            borderRadius: BorderRadius.circular(kCardRadius),
-                            color: Colors.white,
+                            //borderRadius: BorderRadius.circular(kCardRadius),
+                            color: Colors.transparent,
                           ),
                           onSaved: (value) {
                             userInput = value;

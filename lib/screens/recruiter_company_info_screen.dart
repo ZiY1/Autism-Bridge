@@ -22,6 +22,7 @@ import 'package:sizer/sizer.dart';
 import 'dart:io';
 import '../color_constants.dart';
 import '../firebase_helpers.dart';
+import 'google_places_search_screen.dart';
 
 class RecruiterCompanyInfoScreen extends StatefulWidget {
   static const id = 'recruiter_company_info_screen';
@@ -511,12 +512,11 @@ class _RecruiterCompanyInfoScreenState
                                 await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => TextFieldInputScreen(
+                                builder: (context) => GooglePlacesSearchScreen(
                                   title: 'Company Address',
                                   hintText: 'Enter your company address',
                                   userInput: widget
                                       .recruiterCompanyInfo.companyAddress,
-                                  keyBoardType: TextInputType.text,
                                 ),
                               ),
                             );

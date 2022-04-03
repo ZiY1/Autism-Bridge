@@ -53,7 +53,7 @@ class _AsdJobBodyState extends State<AsdJobBody> {
             children: [
               Image.asset(
                 'images/undraw_questions.png',
-                scale: 1.8,
+                scale: 2.5,
               ),
               const Text(
                 '― No results found ―',

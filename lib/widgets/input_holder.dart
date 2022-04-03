@@ -88,13 +88,15 @@ class InputHolder extends StatelessWidget {
                             color: Colors.grey.shade400,
                           ),
                         )
-                      : Text(
-                          bodyText!,
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: const Color(0xFF1F1F39),
+                      : Flexible(
+                          child: Text(
+                            bodyText!,
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: const Color(0xFF1F1F39),
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                   // const Icon(
                   //   Icons.arrow_right_rounded,

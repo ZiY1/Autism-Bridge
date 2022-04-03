@@ -143,7 +143,6 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double navBarIconSize = 3.425;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -158,14 +157,21 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               width: 6.4.h,
               height: 6.4.h,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.15.h, right: 0.1.h),
-                child: Image.asset(
-                  'images/icon_search.png',
-                  scale: 3.3,
+                padding: EdgeInsets.only(
+                    left: 1.8.h, right: 1.85.h, top: 1.8.h, bottom: 1.88.h),
+                child: Image(
+                  image: const AssetImage('images/icon_search.png'),
                   color: bottomNavBarCurrentIndex == 2
                       ? kAutismBridgeBlue
                       : const Color(0xFFB8B8D2),
                 ),
+                // child: Image.asset(
+                //   'images/icon_search.png',
+                //   scale: 3.3,
+                //   color: bottomNavBarCurrentIndex == 2
+                //       ? kAutismBridgeBlue
+                //       : const Color(0xFFB8B8D2),
+                // ),
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFF3D5CFF).withOpacity(0.05),
@@ -218,30 +224,38 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
                 iconPath: 'images/icon_cv.png',
-                scale: 1.625,
+                width: 3.6.h,
+                height: 3.6.h,
               ),
-              MyBottomNavBarIcon(
-                isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
-                onPressed: messageBtnOnPressed,
-                iconPath: 'images/icon_message.png',
-                scale: 3.425,
+              Padding(
+                padding: EdgeInsets.only(top: 0.15.h),
+                child: MyBottomNavBarIcon(
+                  isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
+                  onPressed: messageBtnOnPressed,
+                  iconPath: 'images/icon_message.png',
+                  width: 3.1.h,
+                  height: 3.1.h,
+                ),
               ),
-              Image.asset(
-                'images/icon_search.png',
-                scale: navBarIconSize,
+              Image(
+                image: const AssetImage('images/icon_search.png'),
                 color: Colors.transparent,
+                width: 3.h,
+                height: 3.h,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: homeBtnOnPressed,
                 iconPath: 'images/icon_vr.png',
-                scale: 1.6,
+                width: 3.85.h,
+                height: 3.85.h,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                 onPressed: meBtnOnPressed,
                 iconPath: 'images/icon_me.png',
-                scale: 3.425,
+                width: 3.15.h,
+                height: 3.15.h,
               ),
             ],
           ),
@@ -271,7 +285,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               //   width: 7.35.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 1.9.h),
+                padding: EdgeInsets.only(right: 1.75.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
                   onPressed: searchBtnOnPressed,
@@ -282,7 +296,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               //   width: 8.9.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 2.8.h),
+                padding: EdgeInsets.only(right: 2.7.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                   onPressed: homeBtnOnPressed,
@@ -293,7 +307,7 @@ class _RecruiterHomeScreenState extends State<RecruiterHomeScreen> {
               //   width: 12.2.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 3.5.h),
+                padding: EdgeInsets.only(right: 3.8.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                   onPressed: meBtnOnPressed,

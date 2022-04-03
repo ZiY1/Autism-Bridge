@@ -28,6 +28,18 @@ class AutismBridgeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage('images/welcome_vr_interview.png'), context);
+    precacheImage(const AssetImage('images/icon_job.png'), context);
+    precacheImage(const AssetImage('images/icon_cv.png'), context);
+    precacheImage(const AssetImage('images/icon_message.png'), context);
+    precacheImage(const AssetImage('images/icon_search.png'), context);
+    precacheImage(const AssetImage('images/icon_vr.png'), context);
+    precacheImage(const AssetImage('images/icon_me.png'), context);
+    precacheImage(const AssetImage('images/icon_my_cv.png'), context);
+    precacheImage(const AssetImage('images/icon_job_seek.png'), context);
+    precacheImage(const AssetImage('images/icon_new_job.png'), context);
+    precacheImage(const AssetImage('images/icon_company.png'), context);
+
     return DismissKeyboard(
       child: Sizer(
         builder: (BuildContext context, Orientation orientation,

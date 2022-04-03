@@ -41,8 +41,6 @@ class RecruiterMeScreen extends StatefulWidget {
 class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
   final _auth = FirebaseAuth.instance;
 
-  Image? autismCareImage;
-
   Future<void> editMyProfileOnPressed() async {
     Utils.showProgressIndicator(context);
     try {
@@ -133,12 +131,6 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
       );
       return;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    autismCareImage = Image.asset('images/image_diff_btf.png');
   }
 
   @override
@@ -238,13 +230,10 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
             SizedBox(
               height: 1.5.h,
             ),
-            MyCardWidget(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(kCardRadius),
-                child: FittedBox(
-                  child: Image.asset('images/welcome_vr_interview.png'),
-                  fit: BoxFit.fill,
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(kCardRadius),
+              child: const Image(
+                image: AssetImage('images/welcome_vr_interview.png'),
               ),
             ),
             SizedBox(
@@ -265,9 +254,16 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
                         child: ListTile(
                           title: Row(
                             children: [
-                              Image.asset(
-                                'images/icon_new_job.png',
-                                scale: 1.35,
+                              // Image.asset(
+                              //   'images/icon_new_job.png',
+                              //   scale: 1.35,
+                              // ),
+                              Image(
+                                image: const AssetImage(
+                                  'images/icon_new_job.png',
+                                ),
+                                width: 4.6.h,
+                                height: 4.6.h,
                               ),
                               SizedBox(
                                 width: 2.7.w,
@@ -293,9 +289,16 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
                         child: ListTile(
                           title: Row(
                             children: [
-                              Image.asset(
-                                'images/icon_company.png',
-                                scale: 1.35,
+                              // Image.asset(
+                              //   'images/icon_company.png',
+                              //   scale: 1.35,
+                              // ),
+                              Image(
+                                image: const AssetImage(
+                                  'images/icon_company.png',
+                                ),
+                                width: 4.6.h,
+                                height: 4.6.h,
                               ),
                               SizedBox(
                                 width: 2.7.w,

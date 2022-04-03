@@ -185,7 +185,6 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const double navBarIconSize = 3.425;
     return DefaultTabController(
       length: userJobPreferenceList!.length,
       child: Scaffold(
@@ -202,14 +201,21 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               width: 6.4.h,
               height: 6.4.h,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 0.15.h, right: 0.1.h),
-                child: Image.asset(
-                  'images/icon_search.png',
-                  scale: 3.3,
+                padding: EdgeInsets.only(
+                    left: 1.8.h, right: 1.85.h, top: 1.8.h, bottom: 1.88.h),
+                child: Image(
+                  image: const AssetImage('images/icon_search.png'),
                   color: bottomNavBarCurrentIndex == 2
                       ? kAutismBridgeBlue
                       : const Color(0xFFB8B8D2),
                 ),
+                // child: Image.asset(
+                //   'images/icon_search.png',
+                //   scale: 3.3,
+                //   color: bottomNavBarCurrentIndex == 2
+                //       ? kAutismBridgeBlue
+                //       : const Color(0xFFB8B8D2),
+                // ),
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFF3D5CFF).withOpacity(0.05),
@@ -262,30 +268,35 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
                 isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                 onPressed: jobBtnOnPressed,
                 iconPath: 'images/icon_job.png',
-                scale: 3.425,
+                width: 3.2.h,
+                height: 3.2.h,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 1 ? true : false,
                 onPressed: messageBtnOnPressed,
                 iconPath: 'images/icon_message.png',
-                scale: 3.425,
+                width: 3.1.h,
+                height: 3.1.h,
               ),
-              Image.asset(
-                'images/icon_search.png',
-                scale: navBarIconSize,
+              Image(
+                image: const AssetImage('images/icon_search.png'),
                 color: Colors.transparent,
+                width: 4.h,
+                height: 4.h,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                 onPressed: vrBtnOnPressed,
                 iconPath: 'images/icon_vr.png',
-                scale: 1.6,
+                width: 3.85.h,
+                height: 3.85.h,
               ),
               MyBottomNavBarIcon(
                 isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                 onPressed: meBtnOnPressed,
                 iconPath: 'images/icon_me.png',
-                scale: 3.425,
+                width: 3.15.h,
+                height: 3.15.h,
               ),
             ],
           ),
@@ -293,7 +304,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 3.h),
+                padding: EdgeInsets.only(left: 3.25.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 0 ? true : false,
                   onPressed: jobBtnOnPressed,
@@ -315,7 +326,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               //   width: 7.35.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 0.9.h),
+                padding: EdgeInsets.only(right: 1.2.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 2 ? true : false,
                   onPressed: searchBtnOnPressed,
@@ -326,7 +337,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               //   width: 8.9.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 2.29.h),
+                padding: EdgeInsets.only(right: 2.1.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 3 ? true : false,
                   onPressed: vrBtnOnPressed,
@@ -337,7 +348,7 @@ class _AsdHomeScreenState extends State<AsdHomeScreen> {
               //   width: 12.2.w,
               // ),
               Padding(
-                padding: EdgeInsets.only(right: 3.5.h),
+                padding: EdgeInsets.only(right: 3.85.h),
                 child: MyBottomNavBarLabel(
                   isSelected: bottomNavBarCurrentIndex == 4 ? true : false,
                   onPressed: meBtnOnPressed,

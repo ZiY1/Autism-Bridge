@@ -1,4 +1,5 @@
 import 'package:autism_bridge/icon_constants.dart';
+import 'package:autism_bridge/models/address_info_returns.dart';
 import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
 import 'package:autism_bridge/models/recruiter_job_post.dart';
@@ -81,6 +82,10 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
   double? maxSalary;
 
   String? jobDescription;
+
+  double? lat;
+
+  double? lng;
 
   List<RecruiterJobPost?>? recruiterJobPostList;
 
@@ -238,6 +243,8 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
         minSalary: minSalary,
         maxSalary: maxSalary,
         jobDescription: jobDescription,
+        lat: lat,
+        lng: lng,
       );
 
       // Add in firestore
@@ -276,6 +283,8 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
         minSalary: minSalary,
         maxSalary: maxSalary,
         jobDescription: jobDescription,
+        lat: lat,
+        lng: lng,
       );
 
       try {
@@ -638,7 +647,8 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                         seg,
                         InputHolder(
                           onPressed: () async {
-                            jobAddress = await Navigator.push(
+                            AddressInfoReturns? addressInfoReturns =
+                                await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => GooglePlacesSearchScreen(
@@ -648,7 +658,13 @@ class _RecruiterPostJobScreenState extends State<RecruiterPostJobScreen> {
                                 ),
                               ),
                             );
-                            setState(() {});
+                            if (addressInfoReturns != null) {
+                              lat = addressInfoReturns.lat;
+                              lng = addressInfoReturns.lng;
+                              setState(() {
+                                jobAddress = addressInfoReturns.address;
+                              });
+                            }
                           },
                           title: 'Job Address',
                           bodyText: jobAddress,

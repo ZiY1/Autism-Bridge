@@ -1,3 +1,6 @@
+import 'package:autism_bridge/models/address_info_returns.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:google_place/google_place.dart';
 import 'package:autism_bridge/widgets/my_gradient_container.dart';
 import 'package:autism_bridge/widgets/rounded_icon_container.dart';
@@ -24,8 +27,8 @@ class GooglePlacesSearchScreen extends StatefulWidget {
 }
 
 class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
-  final GooglePlace googlePlace =
-      GooglePlace('AIzaSyCaHYNzsSQ5HllIpifWYFztyIoM8OUzT9M');
+  final String _apiKey = 'AIzaSyCaHYNzsSQ5HllIpifWYFztyIoM8OUzT9M';
+  late final GooglePlace googlePlace;
 
   List<AutocompletePrediction> predictions = [];
 
@@ -33,13 +36,65 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
 
   String? userInput;
 
+  void autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        predictions = result.predictions!;
+      });
+    }
+  }
+
+  void placesPredictionOnTap(int index) async {
+    // debugPrint(predictions[index].placeId);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => DetailsPage(
+    //       placeId: predictions[index].placeId,
+    //       googlePlace: googlePlace,
+    //     ),
+    //   ),
+    // );
+    setState(() {
+      _addressController.text = predictions[index].description!;
+      _addressController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _addressController.text.length));
+    });
+
+    GoogleMapsPlaces _places = GoogleMapsPlaces(
+      apiKey: _apiKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail =
+        await _places.getDetailsByPlaceId(predictions[index].placeId!);
+    double? latTemp = detail.result.geometry?.location.lat;
+    double? lngTemp = detail.result.geometry?.location.lng;
+
+    if (latTemp == null || lngTemp == null) {
+      latTemp = 0.0;
+      lngTemp = 0.0;
+    }
+
+    AddressInfoReturns addressInfoReturns = AddressInfoReturns(
+        address: _addressController.text, lat: latTemp, lng: lngTemp);
+    Navigator.pop(context, addressInfoReturns);
+  }
+
   @override
   void initState() {
     super.initState();
+    googlePlace = GooglePlace(_apiKey);
     userInput = widget.userInput;
     if (userInput != null) {
       _addressController.text = userInput!;
     }
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,35 +122,35 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
             ),
             color: Colors.white,
             onPressed: () {
-              Navigator.pop(context, _addressController.text);
+              Navigator.pop(context);
             },
             margin: EdgeInsets.all(1.35.h),
           ),
           leadingWidth: 14.8.w,
-          actions: [
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 1.85.h),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context, _addressController.text);
-                },
-                child: Container(
-                  width: 14.w,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Save',
-                      style: TextStyle(color: kTitleBlack),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          // actions: [
+          //   Padding(
+          //     padding:
+          //         EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 1.85.h),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         Navigator.pop(context, _addressController.text);
+          //       },
+          //       child: Container(
+          //         width: 14.w,
+          //         decoration: const BoxDecoration(
+          //           color: Colors.white,
+          //           borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          //         ),
+          //         child: const Center(
+          //           child: Text(
+          //             'Save',
+          //             style: TextStyle(color: kTitleBlack),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ],
         ),
         body: SafeArea(
           child: Column(
@@ -113,7 +168,6 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
                   keyboardType: TextInputType.text,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    //helperText: '',
                     filled: true,
                     fillColor: Colors.white,
                     hintText: widget.hintText,
@@ -179,23 +233,7 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
                           style: TextStyle(fontSize: 11.5.sp),
                         ),
                         onTap: () {
-                          // debugPrint(predictions[index].placeId);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => DetailsPage(
-                          //       placeId: predictions[index].placeId,
-                          //       googlePlace: googlePlace,
-                          //     ),
-                          //   ),
-                          // );
-                          setState(() {
-                            _addressController.text =
-                                predictions[index].description!;
-                            _addressController.selection =
-                                TextSelection.fromPosition(TextPosition(
-                                    offset: _addressController.text.length));
-                          });
+                          placesPredictionOnTap(index);
                         },
                       );
                     },
@@ -207,14 +245,5 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
         ),
       ),
     );
-  }
-
-  void autoCompleteSearch(String value) async {
-    var result = await googlePlace.autocomplete.get(value);
-    if (result != null && result.predictions != null && mounted) {
-      setState(() {
-        predictions = result.predictions!;
-      });
-    }
   }
 }

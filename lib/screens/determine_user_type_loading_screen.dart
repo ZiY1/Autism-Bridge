@@ -208,6 +208,8 @@ class _DetermineUserTypeLoadingScreenState
                       companyMaxSize: null,
                       companyAddress: null,
                       companyDescription: null,
+                      lat: null,
+                      lng: null,
                     );
 
                     if (!isFirstTimeIn) {

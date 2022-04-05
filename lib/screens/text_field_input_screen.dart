@@ -45,6 +45,12 @@ class _TextFieldInputScreenState extends State<TextFieldInputScreen> {
   }
 
   @override
+  void dispose() {
+    _typeAheadController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MyGradientContainer(
       child: Scaffold(

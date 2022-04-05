@@ -230,10 +230,12 @@ class _RecruiterMeScreenState extends State<RecruiterMeScreen> {
             SizedBox(
               height: 1.5.h,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(kCardRadius),
-              child: const Image(
-                image: AssetImage('images/welcome_vr_interview.png'),
+            MyCardWidget(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(kCardRadius),
+                child: const Image(
+                  image: AssetImage('images/welcome_vr_interview.png'),
+                ),
               ),
             ),
             SizedBox(

@@ -1,4 +1,5 @@
 import 'package:autism_bridge/icon_constants.dart';
+import 'package:autism_bridge/models/address_info_returns.dart';
 import 'package:autism_bridge/models/auto_complete_data_list.dart';
 import 'package:autism_bridge/models/recruiter_company_info.dart';
 import 'package:autism_bridge/models/recruiter_company_info_picker_list.dart';
@@ -498,17 +499,20 @@ class _RecruiterCompanyInfoScreenState
                           onPressed: showCompanySizeRangePicker,
                           title: 'Company Size',
                           bodyText: widget
-                                  .recruiterCompanyInfo.companyMaxSize!.isEmpty
-                              ? widget.recruiterCompanyInfo.companyMinSize!
-                              : '${widget.recruiterCompanyInfo.companyMinSize!} - ${widget.recruiterCompanyInfo.companyMaxSize!}',
+                                      .recruiterCompanyInfo.companyMaxSize ==
+                                  null
+                              ? null
+                              : widget.recruiterCompanyInfo.companyMaxSize!
+                                      .isEmpty
+                                  ? widget.recruiterCompanyInfo.companyMinSize!
+                                  : '${widget.recruiterCompanyInfo.companyMinSize!} - ${widget.recruiterCompanyInfo.companyMaxSize!}',
                           hintText: 'Select your company size range',
                           disableBorder: false,
                         ),
                         seg,
-                        //TODO: change it to google places autocomplete
                         InputHolder(
                           onPressed: () async {
-                            widget.recruiterCompanyInfo.setCompanyAddress =
+                            AddressInfoReturns? addressInfoReturns =
                                 await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -520,7 +524,16 @@ class _RecruiterCompanyInfoScreenState
                                 ),
                               ),
                             );
-                            setState(() {});
+                            if (addressInfoReturns != null) {
+                              widget.recruiterCompanyInfo.setLat =
+                                  addressInfoReturns.lat;
+                              widget.recruiterCompanyInfo.setLng =
+                                  addressInfoReturns.lng;
+                              setState(() {
+                                widget.recruiterCompanyInfo.setCompanyAddress =
+                                    addressInfoReturns.address;
+                              });
+                            }
                           },
                           title: 'Company Address',
                           bodyText: widget.recruiterCompanyInfo.companyAddress,

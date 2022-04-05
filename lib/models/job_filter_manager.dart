@@ -169,23 +169,28 @@ class JobFilterManager {
       double minSalary = singleJobData['minSalary'];
       double maxSalary = singleJobData['maxSalary'];
       String jobDescription = singleJobData['jobDescription'];
+      double lat = singleJobData['lat'];
+      double lng = singleJobData['lng'];
 
       // Create a RecruiterJobPost class
       RecruiterJobPost recruiterJobPostTemp = RecruiterJobPost(
-          userId: userId,
-          subCollectionId: subCollectionId,
-          employmentType: employmentType,
-          jobName: jobName,
-          jobCategory: jobCategory,
-          jobTitle: jobTitle,
-          jobCity: jobCity,
-          jobState: jobState,
-          jobAddress: jobAddress,
-          minExperience: minExperience,
-          minEducation: minEducation,
-          minSalary: minSalary,
-          maxSalary: maxSalary,
-          jobDescription: jobDescription);
+        userId: userId,
+        subCollectionId: subCollectionId,
+        employmentType: employmentType,
+        jobName: jobName,
+        jobCategory: jobCategory,
+        jobTitle: jobTitle,
+        jobCity: jobCity,
+        jobState: jobState,
+        jobAddress: jobAddress,
+        minExperience: minExperience,
+        minEducation: minEducation,
+        minSalary: minSalary,
+        maxSalary: maxSalary,
+        jobDescription: jobDescription,
+        lat: lat,
+        lng: lng,
+      );
 
       // 2.1 Fetch the corresponding RecruiterCompanyInfo
       // TODO: add exception handling

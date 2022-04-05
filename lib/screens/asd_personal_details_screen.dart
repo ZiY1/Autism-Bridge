@@ -1,3 +1,4 @@
+import 'package:autism_bridge/models/address_info_returns.dart';
 import 'package:autism_bridge/models/asd_user_credentials.dart';
 import 'package:autism_bridge/models/job_preference_data.dart';
 import 'package:autism_bridge/models/job_matching_picker_list.dart';
@@ -69,8 +70,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
 
   String? address;
 
-  String? postalCode;
-
   bool isSaving = false;
 
   DateTime selectedDate = DateTime.now();
@@ -97,7 +96,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       state = personalDetailsTemp.state;
       city = personalDetailsTemp.city;
       address = personalDetailsTemp.address;
-      postalCode = personalDetailsTemp.postalCode;
 
       selectedDate = DateFormat('MM/dd/yyyy').parse(dateOfBirth!);
     }
@@ -194,17 +192,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       );
       return;
     }
-    if (postalCode == null || postalCode!.isEmpty) {
-      Utils.showSnackBar(
-        'Please enter your postal code',
-        const Icon(
-          Icons.error_sharp,
-          color: Colors.red,
-          size: 30.0,
-        ),
-      );
-      return;
-    }
 
     setState(() {
       isSaving = true;
@@ -261,7 +248,6 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
       state: state!,
       city: city!,
       address: address!,
-      postalCode: postalCode!,
     );
 
     // Check if userId's document exists, if no, create one
@@ -805,33 +791,26 @@ class _AsdPersonalDetailsScreenState extends State<AsdPersonalDetailsScreen> {
                             //   ),
                             // );
                             // setState(() {});
-                            address = await Navigator.push(
+                            AddressInfoReturns? addressInfoReturns =
+                                await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => GooglePlacesSearchScreen(
                                   title: 'Address',
-                                  hintText: 'Enter your address',
+                                  hintText: 'Enter your address to search',
                                   userInput: address,
                                 ),
                               ),
                             );
-                            setState(() {});
+                            if (addressInfoReturns != null) {
+                              setState(() {
+                                address = addressInfoReturns.address;
+                              });
+                            }
                           },
                           title: 'Address',
                           bodyText: address,
                           hintText: 'Enter your address',
-                          disableBorder: false,
-                        ),
-                        seg,
-                        ResumeBuilderInputField(
-                          onChanged: (text) {
-                            postalCode = text;
-                          },
-                          initialValue: postalCode,
-                          title: 'Postal Code',
-                          hintText: 'Enter your postal code',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
                           disableBorder: true,
                         ),
                         // InputHolder(

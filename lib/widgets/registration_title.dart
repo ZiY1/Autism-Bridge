@@ -39,7 +39,7 @@ class RegistrationTitle extends StatelessWidget {
                     : IconButton(
                         onPressed: backOnPressed,
                         icon: const Icon(
-                          Icons.close,
+                          Icons.arrow_back_rounded,
                           color: Color(0xFF858597),
                           size: 30.0,
                         ),

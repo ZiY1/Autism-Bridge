@@ -15,7 +15,6 @@ class PersonalDetails {
   final String state;
   final String city;
   final String address;
-  final String postalCode;
 
   PersonalDetails({
     required this.userId,
@@ -29,7 +28,6 @@ class PersonalDetails {
     required this.state,
     required this.city,
     required this.address,
-    required this.postalCode,
   });
 
   static Future<void> createPersonalDetailsInFirestore(
@@ -47,7 +45,6 @@ class PersonalDetails {
       'state': '',
       'city': '',
       'address': '',
-      'postalCode': '',
     });
   }
 
@@ -72,7 +69,6 @@ class PersonalDetails {
         final String state = data['state'];
         final String city = data['city'];
         final String address = data['address'];
-        final String postalCode = data['postalCode'];
         final File profileImage =
             await RegularHelpers.urlToFile(profileImageUrl);
 
@@ -88,7 +84,6 @@ class PersonalDetails {
           state: state,
           city: city,
           address: address,
-          postalCode: postalCode,
         );
       }
     });
@@ -124,7 +119,6 @@ class PersonalDetails {
       'state': state,
       'city': city,
       'address': address,
-      'postalCode': postalCode,
     });
   }
 }

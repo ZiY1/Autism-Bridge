@@ -14,6 +14,8 @@ class RecruiterCompanyInfo {
   String? _companyMaxSize;
   String? _companyAddress;
   String? _companyDescription;
+  double? _lat;
+  double? _lng;
 
   RecruiterCompanyInfo({
     required String userId,
@@ -24,6 +26,8 @@ class RecruiterCompanyInfo {
     required String? companyMaxSize,
     required String? companyAddress,
     required String? companyDescription,
+    required double? lat,
+    required double? lng,
   })  : _userId = userId,
         _companyLogoImage = companyLogoImage,
         _companyLogoImageUrl = companyLogoImageUrl,
@@ -31,7 +35,9 @@ class RecruiterCompanyInfo {
         _companyMinSize = companyMinSize,
         _companyMaxSize = companyMaxSize,
         _companyAddress = companyAddress,
-        _companyDescription = companyDescription;
+        _companyDescription = companyDescription,
+        _lat = lat,
+        _lng = lng;
 
   // getters
   String get userId => _userId;
@@ -49,6 +55,10 @@ class RecruiterCompanyInfo {
   String? get companyAddress => _companyAddress;
 
   String? get companyDescription => _companyDescription;
+
+  double? get lat => _lat;
+
+  double? get lng => _lng;
 
   // setters
   set setCompanyLogoImage(File? companyLogoImage) =>
@@ -71,6 +81,10 @@ class RecruiterCompanyInfo {
   set setCompanyDescription(String? companyDescription) =>
       _companyDescription = companyDescription;
 
+  set setLat(double? lat) => _lat = lat;
+
+  set setLng(double? lng) => _lng = lng;
+
   static Future<void> createRecruiterCompanyInfoInFirestore(
       {required String userId}) async {
     try {
@@ -84,6 +98,8 @@ class RecruiterCompanyInfo {
         'companyMaxSize': '',
         'companyAddress': '',
         'companyDescription': '',
+        'lat': 0.0,
+        'lng': 0.0,
       });
     } on FirebaseException {
       rethrow;
@@ -108,6 +124,8 @@ class RecruiterCompanyInfo {
           final String companyMaxSize = data['companyMaxSize'];
           final String companyAddress = data['companyAddress'];
           final String companyDescription = data['companyDescription'];
+          final double lat = data['lat'];
+          final double lng = data['lng'];
           final File companyLogoImage =
               await RegularHelpers.urlToFile(companyLogoImageUrl);
 
@@ -120,6 +138,8 @@ class RecruiterCompanyInfo {
             companyMaxSize: companyMaxSize,
             companyAddress: companyAddress,
             companyDescription: companyDescription,
+            lng: lng,
+            lat: lat,
           );
         }
       });
@@ -157,6 +177,8 @@ class RecruiterCompanyInfo {
         'companyMaxSize': _companyMaxSize,
         'companyAddress': _companyAddress,
         'companyDescription': _companyDescription,
+        'lat': _lat,
+        'lng': _lng,
       });
     } on FirebaseException {
       rethrow;

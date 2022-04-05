@@ -15,6 +15,8 @@ class RecruiterJobPost {
   double? _minSalary;
   double? _maxSalary;
   String? _jobDescription;
+  double? _lat;
+  double? _lng;
 
   RecruiterJobPost({
     required String userId,
@@ -31,6 +33,8 @@ class RecruiterJobPost {
     required double? minSalary,
     required double? maxSalary,
     required String? jobDescription,
+    required double? lat,
+    required double? lng,
   })  : _userId = userId,
         _subCollectionId = subCollectionId,
         _employmentType = employmentType,
@@ -44,7 +48,9 @@ class RecruiterJobPost {
         _minEducation = minEducation,
         _minSalary = minSalary,
         _maxSalary = maxSalary,
-        _jobDescription = jobDescription;
+        _jobDescription = jobDescription,
+        _lat = lat,
+        _lng = lng;
 
   // getters
   String get userId => _userId;
@@ -75,6 +81,10 @@ class RecruiterJobPost {
 
   String? get jobDescription => _jobDescription;
 
+  double? get lat => _lat;
+
+  double? get lng => _lng;
+
   // setters
   set setEmploymentType(String? employmentType) =>
       _employmentType = employmentType;
@@ -102,6 +112,10 @@ class RecruiterJobPost {
   set setJobDescription(String? jobDescription) =>
       _jobDescription = jobDescription;
 
+  set setLat(double? lat) => _lat = lat;
+
+  set setLng(double? lng) => _lng = lng;
+
   static Future<List<RecruiterJobPost?>> readAllMyJobPostFromFirestore(
       {required String userId}) async {
     List<RecruiterJobPost?> listJobPostTemp = [];
@@ -123,6 +137,8 @@ class RecruiterJobPost {
     double minSalary;
     double maxSalary;
     String jobDescription;
+    double lat;
+    double lng;
 
     try {
       await FirebaseFirestore.instance
@@ -147,6 +163,8 @@ class RecruiterJobPost {
           minSalary = data['minSalary'];
           maxSalary = data['maxSalary'];
           jobDescription = data['jobDescription'];
+          lat = data['lat'];
+          lng = data['lng'];
 
           recruiterJobPostTemp = RecruiterJobPost(
             userId: userId,
@@ -163,6 +181,8 @@ class RecruiterJobPost {
             minSalary: minSalary,
             maxSalary: maxSalary,
             jobDescription: jobDescription,
+            lat: lat,
+            lng: lng,
           );
 
           listJobPostTemp.add(recruiterJobPostTemp);
@@ -196,6 +216,8 @@ class RecruiterJobPost {
         'minSalary': _minSalary,
         'maxSalary': _maxSalary,
         'jobDescription': _jobDescription,
+        'lat': _lat,
+        'lng': _lng,
       });
     } on FirebaseException {
       rethrow;
@@ -222,6 +244,8 @@ class RecruiterJobPost {
         'minSalary': _minSalary,
         'maxSalary': _maxSalary,
         'jobDescription': _jobDescription,
+        'lat': _lat,
+        'lng': _lng,
       });
     } on FirebaseException {
       rethrow;
@@ -249,6 +273,8 @@ class RecruiterJobPost {
         'minSalary': _minSalary,
         'maxSalary': _maxSalary,
         'jobDescription': _jobDescription,
+        'lat': _lat,
+        'lng': _lng,
       });
     } on FirebaseException {
       rethrow;
@@ -275,6 +301,8 @@ class RecruiterJobPost {
         'minSalary': _minSalary,
         'maxSalary': _maxSalary,
         'jobDescription': _jobDescription,
+        'lat': _lat,
+        'lng': _lng,
       });
     } on FirebaseException {
       rethrow;

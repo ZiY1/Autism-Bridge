@@ -180,9 +180,23 @@ class _TextFieldInputScreenState extends State<TextFieldInputScreen> {
                                   pattern.toLowerCase(),
                                 ),
                           ),
-                          itemBuilder: (context, String item) => ListTile(
-                            title: Text(item),
-                          ),
+                          itemBuilder: (context, String item) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  title: Text(item),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 2.0.h, right: 2.5.h),
+                                  child: Divider(
+                                    thickness: 0.95,
+                                    color: Colors.grey[300],
+                                  ),
+                                )
+                              ],
+                            );
+                          },
                           onSuggestionSelected: (String suggestion) {
                             _typeAheadController.text = suggestion;
                             userInput = suggestion;

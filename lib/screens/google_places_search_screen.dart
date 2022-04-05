@@ -223,18 +223,30 @@ class _GooglePlacesSearchScreenState extends State<GooglePlacesSearchScreen> {
                   child: ListView.builder(
                     itemCount: predictions.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: const Icon(
-                          Icons.pin_drop,
-                          color: kRegistrationSubtitleGrey,
-                        ),
-                        title: Text(
-                          predictions[index].description!,
-                          style: TextStyle(fontSize: 11.5.sp),
-                        ),
-                        onTap: () {
-                          placesPredictionOnTap(index);
-                        },
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(
+                              Icons.pin_drop,
+                              color: kRegistrationSubtitleGrey,
+                            ),
+                            title: Text(
+                              predictions[index].description!,
+                              style: TextStyle(fontSize: 11.5.sp),
+                            ),
+                            onTap: () {
+                              placesPredictionOnTap(index);
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 2.0.h, right: 2.5.h),
+                            child: Divider(
+                              height: 2.4.h,
+                              thickness: 0.95,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),

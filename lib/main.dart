@@ -7,7 +7,6 @@ import 'package:autism_bridge/widgets/dismiss_keyboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'widgets/utils.dart';
 import 'package:sizer/sizer.dart';
-import 'package:autism_bridge/misc/SignedEmployerSettingsScreen.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
@@ -82,8 +81,6 @@ class AutismBridgeApp extends StatelessWidget {
               //SignedEmployerHomeScreen.routeName: (context) =>SignedEmployerHomeScreen(),
               // EmployerProfilePage.routeName: (context) =>
               //     const EmployerProfilePage(),
-              EmployerSettingsScreen.routeName: (context) =>
-                  const EmployerSettingsScreen(),
               // AsdResumeBuilderScreen.id: (context) =>
               //     const AsdResumeBuilderScreen(),
               // AsdPersonalDetailsScreen.id: (context) =>

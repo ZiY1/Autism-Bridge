@@ -74,6 +74,10 @@ dependencies:
 
   google_maps_webservice: ^0.0.19
 
+dependency_overrides:
+
+  firebase_core_platform_interface: 4.5.1
+
 dev_dependencies:
   # test_api: ^0.4.9
 

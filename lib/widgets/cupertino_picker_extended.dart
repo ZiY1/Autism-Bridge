@@ -72,11 +72,11 @@ void _animateColumnControllerToItem(
 }
 
 const Widget _leftSelectionOverlay =
-    CupertinoPickerDefaultSelectionOverlay(capRightEdge: false);
+    CupertinoPickerDefaultSelectionOverlay(capStartEdge: false);
 const Widget _centerSelectionOverlay = CupertinoPickerDefaultSelectionOverlay(
-    capLeftEdge: false, capRightEdge: false);
+    capEndEdge: false, capStartEdge: false);
 const Widget _rightSelectionOverlay =
-    CupertinoPickerDefaultSelectionOverlay(capLeftEdge: false);
+    CupertinoPickerDefaultSelectionOverlay(capEndEdge: false);
 
 // Lays out the date picker based on how much space each single column needs.
 //
